@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pat_procedimiento")
@@ -28,6 +30,12 @@ public class PatProcedimiento implements Serializable {
 	private String correccion;
 	private String observacion;
 	private String pacienteInternoExterno;
+	private String loginUsr;
+	
+	@PrePersist
+	public void prePersist() {
+		fechaRegistro = new Date();
+	}
 
 	@Id
 	@Column(name = "id_patologia_procedimiento")
@@ -77,6 +85,7 @@ public class PatProcedimiento implements Serializable {
 		this.folio = folio;
 	}
 
+	@NotNull
 	@Column(name = "id_patologia")
 	public Integer getIdPatologo() {
 		return idPatologo;
@@ -121,4 +130,14 @@ public class PatProcedimiento implements Serializable {
 	public void setPacienteInternoExterno(String pacienteInternoExterno) {
 		this.pacienteInternoExterno = pacienteInternoExterno;
 	}
+
+	@Column(name = "login_usr")
+	public String getLoginUsr() {
+		return loginUsr;
+	}
+
+	public void setLoginUsr(String loginUsr) {
+		this.loginUsr = loginUsr;
+	}
+	
 }

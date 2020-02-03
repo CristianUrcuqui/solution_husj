@@ -12,26 +12,26 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 	
 	private String sipCodigo;
 	private String sipNombre;
-	private String sipcodcup;
+	private String sipCodCup;
 	private String hcsobserv;
 	private Integer hcscanti;
 	private Integer hcsestado;
 	
 	public HcnSolPatDetaDosDTO() {
-	}
+	}	
 
 
-	public HcnSolPatDetaDosDTO(String sipCodigo, String sipNombre, String sipcodcup, String hcsobserv, Integer hcscanti,
+	public HcnSolPatDetaDosDTO(String sipCodigo, String sipNombre, String sipCodCup, String hcsobserv, Integer hcscanti,
 			Integer hcsestado) {		
 		this.sipCodigo = sipCodigo;
 		this.sipNombre = sipNombre;
-		this.sipcodcup = sipcodcup;
+		this.sipCodCup = sipCodCup;
 		this.hcsobserv = hcsobserv;
 		this.hcscanti = hcscanti;
 		this.hcsestado = hcsestado;
 	}
-	
-	
+
+
 	public String getSipCodigo() {
 		return sipCodigo;
 	}
@@ -46,15 +46,18 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 
 	public void setSipNombre(String sipNombre) {
 		this.sipNombre = sipNombre;
+	}	
+	
+
+	public String getSipCodCup() {
+		return sipCodCup;
 	}
 
-	public String getSipcodcup() {
-		return sipcodcup;
+
+	public void setSipCodCup(String sipCodCup) {
+		this.sipCodCup = sipCodCup;
 	}
 
-	public void setSipcodcup(String sipcodcup) {
-		this.sipcodcup = sipcodcup;
-	}
 
 	public String getHcsobserv() {
 		return hcsobserv;

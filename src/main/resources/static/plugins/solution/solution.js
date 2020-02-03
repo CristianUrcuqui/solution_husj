@@ -9,4 +9,4 @@ if (mensajesNotificacion != null){
 	setTimeout(() => {
 		mensajesNotificacion.remove()
 	}, 7000);
-} 
+}

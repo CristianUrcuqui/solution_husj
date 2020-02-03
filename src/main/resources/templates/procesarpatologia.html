@@ -7,6 +7,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head th:replace="layout/layout ::head"></head>
 
 <body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
 <div class="wrapper">
 
   <header th:replace="/layout/layout ::header"></header>
@@ -44,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">
-									<button type="submit" form="formpersonajuridica" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+									<button type="submit" form="procesarpatologia" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
 										<i class="fas fa-save fa-lg mt-1"></i>
 									</button>																		
 								</div>
@@ -82,6 +89,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content">
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
+        
+        <!-- Lista para mostrar los errorer antes del formulario -->
+	        <div class="col-md-12">
+	        	<div th:object="${patProcedimiento}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>
         
         	<!-- detalle 1 -->
         	<div class="card col-md-12">
@@ -148,11 +164,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			  </div>
 			</div>        
         
-         	
-        
-        
-        
-        
+         	 <div class="card card-info col-md-6 m-1">             
+              <!-- form start -->
+              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologia}" th:object="${patProcedimiento}" role="form" method="post">					
+						
+						<div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
+			                <div class="col-sm-5">
+				                <select id="patologoAsignado" th:field="*{idPatologo}"  class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
+		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="patologoReAsignado">Patólogo ReAsignado</label>
+			                <div class="col-sm-5">
+				                <select id="patologoReAsignado" th:field="*{idPatologoReasigando}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
+		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>						
+	                   
+	                   <div class="form-group row mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
+			                <div class="col-sm-5"> 			                   	
+			                   	<textarea id="correcion" th:field="*{correccion}" class="form-control form-control-sm"></textarea>		                   			                   	                    	
+			                </div>
+	                   </div>
+	                   <div class="form-group row">
+			                 <label class="control-label col-sm-3 ml-1" for="observacion">Observación</label>
+			                 <div class="col-sm-5">			                    
+			                    <textarea id="observacion" th:field="*{observacion}" class="form-control form-control-sm"></textarea>
+			                 </div>
+			           </div>           
+                	
+                
+                <!-- /.card-body -->                    
+              </form>
+            </div>
+            <!-- /.card -->       
                 
         </div>
         <!-- /.row -->
@@ -211,6 +264,14 @@ $('#modal-eliminar-personajuridica').on('show.bs.modal', function (e) {
     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
     $('#modal-eliminar-personajuridicaId').val($(this).find('.btn-ok').attr('href'));
 });
+</script>
+
+<script>
+	window.onload = function(){
+		let contenedor = document.getElementById('contenedor_carga');
+		contenedor.style.visibility = 'hidden';
+		contenedor.style.opacity = '0';
+	}
 </script>
 </body>
 </html>
