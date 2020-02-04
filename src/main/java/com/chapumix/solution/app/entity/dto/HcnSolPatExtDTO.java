@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HcnSolPatDTO implements Serializable{
+public class HcnSolPatExtDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,8 +20,7 @@ public class HcnSolPatDTO implements Serializable{
 	private String pacSegNom;
 	private String pacPriApe;
 	private String pacSegApe;
-	private Integer ainConsec;
-	private Integer hcNumFol;
+	private Integer ainConsec;	
 	private Integer oidRips;
 	private String sipCodigo;
 	private String sipNombre;
@@ -83,15 +82,7 @@ public class HcnSolPatDTO implements Serializable{
 
 	public void setAinConsec(Integer ainConsec) {
 		this.ainConsec = ainConsec;
-	}
-
-	public Integer getHcNumFol() {
-		return hcNumFol;
 	}	
-
-	public void setHcNumFol(Integer hcNumFol) {
-		this.hcNumFol = hcNumFol;
-	}
 
 	public Integer getOidRips() {
 		return oidRips;

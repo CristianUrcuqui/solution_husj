@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Procesar Pacientes Internos</h1>
+            <h1 class="m-0 text-dark">Procesar Pacientes Externos</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</button>																		
 								</div>
 								<div class="btn-group btn-group-sm" role="group">
-									<button type="reset" form="formpersonajuridica" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+									<button type="reset" form="procesarpatologia" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
 										<i class="fas fa-times fa-lg mt-1"></i>									
 									</button>
 								</div>																	
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-dark" th:href="@{/procedimientopatologiainterno}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-dark" th:href="@{/procedimientopatologiaexterno}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -106,31 +106,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				  <thead class="thead-light text-center">
 				    <tr>
 				      <th scope="col">PACIENTE</th>
-				      <th scope="col">SERVICIO</th>
-				      <th scope="col">CAMA</th>
+				      <th scope="col">SERVICIO</th>				      
 				      <th scope="col">FECHA SOLICITUD</th>
 				      <th scope="col">HISTORIA</th>
 				      <th scope="col">EDAD</th>
 				      <th scope="col">SEXO</th>
 				      <th scope="col">ASEGURADORA</th>
-				      <th scope="col">INGRESO</th>
-				      <th scope="col">FOLIO</th>
-				      <th scope="col">DX</th>
+				      <th scope="col">INGRESO</th>				      
 				    </tr>
 				  </thead>
 				  <tbody class="detalle">
 				    <tr>
 				      <td th:text="${nombrecompleto}"></td>
-				      <td th:text="${servicio}"></td>
-				      <td th:text="${cama}"></td>
+				      <td th:text="${servicio}"></td>				      
 				      <td th:text="${#dates.format(fechasolicitud, 'dd-MM-yyy h:mm a')}"></td>
 				      <td th:text="${historia}"></td>
 				      <td th:text="${edad}"></td>
 				      <td th:text="${sexo}"></td>
 				      <td th:text="${aseguradora}"></td>
-				      <td th:text="${ingreso}"></td>
-				      <td th:text="${folio}"></td>				      
-				      <td th:text="${dx1}"></td>
+				      <td th:text="${ingreso}"></td>				      
 				    </tr>				    
 				  </tbody>
 				</table>			    
@@ -152,12 +146,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				    </tr>
 				  </thead>
 				  <tbody class="detalle">
-				    <tr>
-				      <td th:text="${cups}"></td>
-				      <td th:text="${desc1}+'-'+${desc2}"></td>
-				      <td th:text="${pieza}"></td>
-				      <td th:text="${cantidad}"></td>
-				      <td th:text="${tipo}"></td>				      
+				    <tr th:each="lprocpat: ${detalles}">
+				      <td th:text="${lprocpat.sipCodCup}"></td>
+				      <td th:text="${lprocpat.sipCodigo+'-'+lprocpat.sipNombre}"></td>
+				      <td th:text="${lprocpat.hcsobserv}"></td>
+				      <td th:text="${lprocpat.hcscanti}"></td>
+				      <td >
+				      	<div th:if="${lprocpat.hcsestado} eq 0">
+						    URGENTE
+						</div>
+						<div th:if="${lprocpat.hcsestado} eq 1">
+						    RUTINARIO
+						</div>
+				      </td>				      
 				    </tr>				    
 				  </tbody>
 				</table>			    
@@ -166,7 +167,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
          	 <div class="card card-info col-md-6 m-1">             
               <!-- form start -->
-              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologia}" th:object="${patProcedimiento}" role="form" method="post">					
+              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologiaexterno}" th:object="${patProcedimiento}" role="form" method="post">					
 						
 						<div class="form-group row required mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
@@ -237,9 +238,9 @@ $(document).ready(function() {
         "pageLength": 25,
     	"order": [],    	
     	"language": {
-            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "lengthMenu": "Mostrar _MENU_ registros por pÃ¡gina",
             "zeroRecords": "Nada Encontrado - Lo sentimos!",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "info": "Mostrando pÃ¡gina _PAGE_ de _PAGES_",
             "search": "Buscar",
             "infoEmpty": "No hay registros disponibles",
             "infoFiltered": "(filtrado de _MAX_ registros totales)",
@@ -248,7 +249,7 @@ $(document).ready(function() {
             "paginate": {
             	      "previous": "Anterior",
             	      "first": "Primera",
-            	      "last": "Última",
+            	      "last": "Ãšltima",
             	      "next": "Siguiente"
             	    }
         },        

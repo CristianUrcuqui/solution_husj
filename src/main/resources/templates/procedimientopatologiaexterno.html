@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Pacientes Internos</h1>
+            <h1 class="m-0 text-dark">Pacientes Externos</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -80,8 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				         	<tr>
 					         	<th>HISTORIA</th>
 					         	<th>PACIENTE</th>
-					         	<th>INGRESO</th>
-					         	<th>FOLIO</th>
+					         	<th>INGRESO</th>					         	
 					         	<th>PROCEDIMIENTO</th>
 					         	<th>FECHA SOLICITUD</th>
 					         	<th>SERVICIO</th>					         	
@@ -92,14 +91,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				         	<tr th:each="lprocpat: ${listprocpat}">
 					         	<td th:text="${lprocpat.pacNumDoc}"></td>
 					         	<td th:text="${lprocpat.pacPriNom+ ' ' +lprocpat.pacSegNom+ ' ' + lprocpat.pacPriApe+ ' ' +lprocpat.pacSegApe}"></td>
-					         	<td th:text="${lprocpat.ainConsec}"></td>
-					         	<td th:text="${lprocpat.hcNumFol}"></td>
+					         	<td th:text="${lprocpat.ainConsec}"></td>					         	
 					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}"></td>
 					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}"></td>
 					         	<td th:text="${lprocpat.gasNombre}"></td>					         						         	
 					         	<td>
 					         		<div class="d-inline" style="font-size: 0.5rem;">
-						         		<a class="btn btn-primary" th:href="@{/procesarpatologiainterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips},folio=${lprocpat.hcNumFol})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
+						         		<a class="btn btn-primary" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
 											<i class="fas fa-share-square fa-xs"></i>
 										</a>												         		
 									</div>										      							      
@@ -130,12 +128,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 $(document).ready(function() {
     $('#datatablelistaprocedimientopatologia').DataTable( {
     	"columnDefs": [
-            { "width": "0.4%", "targets": [0,2,3] },
-            { "width": "10%", "targets": [5] },
-            { "width": "20%", "targets": [1] },
-            { "width": "30%", "targets": [4] },
-            { "width": "20%", "targets": [6] },
-            { "width": "1%", "targets": [7] }
+            { "width": "0.4%", "targets": [0,2] },
+            { "width": "15%", "targets": [1] },
+            { "width": "35%", "targets": [3] },
+            { "width": "10%", "targets": [5] },           
+            { "width": "10%", "targets": [4] },
+            { "width": "1%", "targets": [6] }
             
         ],        
         "pageLength": 25,
