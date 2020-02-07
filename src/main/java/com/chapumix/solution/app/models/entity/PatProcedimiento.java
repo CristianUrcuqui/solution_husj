@@ -86,7 +86,7 @@ public class PatProcedimiento implements Serializable {
 	}
 
 	@NotNull
-	@Column(name = "id_patologia")
+	@Column(name = "id_patologo")
 	public Integer getIdPatologo() {
 		return idPatologo;
 	}

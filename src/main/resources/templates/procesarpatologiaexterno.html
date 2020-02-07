@@ -192,13 +192,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	                   <div class="form-group row mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
 			                <div class="col-sm-5"> 			                   	
-			                   	<textarea id="correcion" th:field="*{correccion}" class="form-control form-control-sm"></textarea>		                   			                   	                    	
+			                   	<textarea id="correcion" th:field="*{correccion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
 			                </div>
 	                   </div>
 	                   <div class="form-group row">
 			                 <label class="control-label col-sm-3 ml-1" for="observacion">Observación</label>
 			                 <div class="col-sm-5">			                    
-			                    <textarea id="observacion" th:field="*{observacion}" class="form-control form-control-sm"></textarea>
+			                    <textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
 			                 </div>
 			           </div>           
                 	

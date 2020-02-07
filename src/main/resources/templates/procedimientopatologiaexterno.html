@@ -95,9 +95,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}"></td>
 					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}"></td>
 					         	<td th:text="${lprocpat.gasNombre}"></td>					         						         	
-					         	<td>
-					         		<div class="d-inline" style="font-size: 0.5rem;">
-						         		<a class="btn btn-primary" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
+					         	<td class="text-center align-middle">
+					         		<div class="d-inline">
+						         		<a class="btn btn-primary btn-sm" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
 											<i class="fas fa-share-square fa-xs"></i>
 										</a>												         		
 									</div>										      							      

@@ -152,12 +152,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				    </tr>
 				  </thead>
 				  <tbody class="detalle">
-				    <tr>
-				      <td th:text="${cups}"></td>
-				      <td th:text="${desc1}+'-'+${desc2}"></td>
-				      <td th:text="${pieza}"></td>
-				      <td th:text="${cantidad}"></td>
-				      <td th:text="${tipo}"></td>				      
+				    <tr th:each="lprocpat: ${detalles}">
+				      <td th:text="${lprocpat.sipCodCup}"></td>
+				      <td th:text="${lprocpat.sipCodigo+'-'+lprocpat.sipNombre}"></td>
+				      <td th:text="${lprocpat.hcsobserv}"></td>
+				      <td th:text="${lprocpat.hcscanti}"></td>
+				      <td >
+				      	<div th:if="${lprocpat.hcsestado} eq 0">
+						    URGENTE
+						</div>
+						<div th:if="${lprocpat.hcsestado} eq 1">
+						    RUTINARIO
+						</div>
+				      </td>					      
 				    </tr>				    
 				  </tbody>
 				</table>			    
@@ -191,13 +198,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	                   <div class="form-group row mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
 			                <div class="col-sm-5"> 			                   	
-			                   	<textarea id="correcion" th:field="*{correccion}" class="form-control form-control-sm"></textarea>		                   			                   	                    	
+			                   	<textarea id="correcion" th:field="*{correccion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
 			                </div>
 	                   </div>
 	                   <div class="form-group row">
 			                 <label class="control-label col-sm-3 ml-1" for="observacion">Observación</label>
 			                 <div class="col-sm-5">			                    
-			                    <textarea id="observacion" th:field="*{observacion}" class="form-control form-control-sm"></textarea>
+			                    <textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
 			                 </div>
 			           </div>           
                 	

@@ -240,6 +240,41 @@ table.dataTable tbody th, table.dataTable tbody td {
 @keyframes girar{
 	from{transform: rotate(0deg);}
 	to{transform: rotate(360deg);}
-}   
-  
+}
+
+/******Estilo los botones de exportacion en el datatable******/
+.btn-app {
+    color: white;
+    box-shadow: none;
+    border-radius: 3px;
+    position: relative;
+    padding: 10px 15px;
+    margin: 0;
+    min-width: 40px;
+    max-width: 80px;  
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    font-size: 12px;
+    transition: all .2s;
+    background-color: steelblue !important;
+}
+
+.btn-app > .fa, .btn-app > .glyphicon, .btn-app > .ion {
+    font-size: 30px;
+    display: block;
+}
+
+.btn-app:hover {
+    border-color: #007BFF;
+    transform: scale(1.1);
+}
+
+.excel {
+    background-color: #3ca23c !important;
+}
+
+.dataTables_length{	
+	position: absolute !important;
+}
  
