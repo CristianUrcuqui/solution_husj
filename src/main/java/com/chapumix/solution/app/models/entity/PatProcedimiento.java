@@ -30,11 +30,16 @@ public class PatProcedimiento implements Serializable {
 	private String correccion;
 	private String observacion;
 	private String pacienteInternoExterno;
-	private String loginUsr;
+	private String loginUsrAlta;
+	private Date fechaAlta;
+	private String loginUsrAct;
+	private Date fechaAltaAct;
+	
 	
 	@PrePersist
 	public void prePersist() {
-		fechaRegistro = new Date();
+		this.fechaRegistro = new Date();
+		this.fechaAlta = new Date();
 	}
 
 	@Id
@@ -131,13 +136,40 @@ public class PatProcedimiento implements Serializable {
 		this.pacienteInternoExterno = pacienteInternoExterno;
 	}
 
-	@Column(name = "login_usr")
-	public String getLoginUsr() {
-		return loginUsr;
+	@Column(name = "login_usr_alta")
+	public String getLoginUsrAlta() {
+		return loginUsrAlta;
 	}
 
-	public void setLoginUsr(String loginUsr) {
-		this.loginUsr = loginUsr;
+	public void setLoginUsrAlta(String loginUsrAlta) {
+		this.loginUsrAlta = loginUsrAlta;
+	}
+
+	@Column(name = "fecha_alta")
+	public Date getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(Date fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	@Column(name = "login_usr_act")
+	public String getLoginUsrAct() {
+		return loginUsrAct;
+	}
+
+	public void setLoginUsrAct(String loginUsrAct) {
+		this.loginUsrAct = loginUsrAct;
+	}
+
+	@Column(name = "fecha_act")
+	public Date getFechaAltaAct() {
+		return fechaAltaAct;
+	}
+
+	public void setFechaAltaAct(Date fechaAltaAct) {
+		this.fechaAltaAct = fechaAltaAct;
 	}
 	
 }

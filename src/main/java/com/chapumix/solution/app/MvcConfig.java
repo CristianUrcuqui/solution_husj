@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer{
 	
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/error_403").setViewName("error_403");
+		registry.addViewController("/error_403").setViewName("error_403");		
 	}
 	
 	//Estos bean se usan para que spring los registre internamente y luego pueda ser usadas en cualquier parte del codigo.

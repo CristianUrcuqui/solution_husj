@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Procesar Pacientes Externos</h1>
+            <h1 class="m-0 text-dark">Editar Patología Procesada</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">
-									<button type="submit" form="procesarpatologia" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+									<button type="submit" form="editarpatologiaprocesada" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
 										<i class="fas fa-save fa-lg mt-1"></i>
 									</button>																		
 								</div>
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-dark" th:href="@{/procedimientopatologiaexterno}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-dark" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -80,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</div>
 			
 	<!-- Linea Separadora Botones - Contenido Principal -->
-	<div class="form-group col-md-12 mt-0 mb-0">
+	<div class="form-group col-12-md mt-0 mb-0">
             <hr>
     </div>	
     
@@ -97,79 +97,69 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
 				</div>
-			</div>
-        
-        	<!-- detalle 1 -->
-        	<div class="card col-md-12">
-			  <div class="card-body p-0">
-			  	<table class="table table-bordered table-sm">
-				  <thead class="thead-light text-center">
-				    <tr>
-				      <th scope="col">PACIENTE</th>
-				      <th scope="col">SERVICIO</th>				      
-				      <th scope="col">FECHA SOLICITUD</th>
-				      <th scope="col">HISTORIA</th>
-				      <th scope="col">EDAD</th>
-				      <th scope="col">SEXO</th>
-				      <th scope="col">ASEGURADORA</th>
-				      <th scope="col">INGRESO</th>				      
-				    </tr>
-				  </thead>
-				  <tbody class="detalle">
-				    <tr>
-				      <td th:text="${nombrecompleto}"></td>
-				      <td th:text="${servicio}"></td>				      
-				      <td th:text="${#dates.format(fechasolicitud, 'dd-MM-yyy h:mm a')}"></td>
-				      <td th:text="${historia}"></td>
-				      <td th:text="${edad}"></td>
-				      <td th:text="${sexo}"></td>
-				      <td th:text="${aseguradora}"></td>
-				      <td th:text="${ingreso}"></td>				      
-				    </tr>				    
-				  </tbody>
-				</table>			    
-			  </div>
-			</div>        
-			
-			
-			<!-- detalle 2 -->
-        	<div class="card col-md-12 mt-0">
-			  <div class="card-body p-0">
-			  	<table class="table table-bordered table-sm">
-				  <thead class="thead-light text-center">
-				    <tr>
-				      <th scope="col">CUPS</th>
-				      <th scope="col">DESCRIPCION</th>
-				      <th scope="col">PIEZA QUIRURGICA</th>
-				      <th scope="col">CANTIDAD</th>
-				      <th scope="col">TIPO</th>
-				    </tr>
-				  </thead>
-				  <tbody class="detalle">
-				    <tr th:each="lprocpat: ${detalles}">
-				      <td th:text="${lprocpat.sipCodCup}"></td>
-				      <td th:text="${lprocpat.sipCodigo+'-'+lprocpat.sipNombre}"></td>
-				      <td th:text="${lprocpat.hcsobserv}"></td>
-				      <td th:text="${lprocpat.hcscanti}"></td>
-				      <td >
-				      	<div th:if="${lprocpat.hcsestado} eq 0">
-						    URGENTE
-						</div>
-						<div th:if="${lprocpat.hcsestado} eq 1">
-						    RUTINARIO
-						</div>
-				      </td>				      
-				    </tr>				    
-				  </tbody>
-				</table>			    
-			  </div>
-			</div>        
+			</div>        				
         
          	 <div class="card card-info col-md-6 m-1">             
               <!-- form start -->
-              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologiaexterno}" th:object="${patProcedimiento}" role="form" method="post">					
+              <form id="editarpatologiaprocesada"  class="form-horizontal" th:action="@{/editarpatologiaprocesada}" th:object="${patProcedimiento}" role="form" method="post">					
 						
-						<div class="form-group row required mt-3">
+					   
+					    
+		               <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="codigo">Código</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${codigo}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="fecha">Fecha Proceso</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${#dates.format(patProcedimiento.fechaRegistro, 'dd-MM-yyy h:mm a')}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for=historia>Historia</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${historia}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>				   
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="paciente">Paciente</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${paciente}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>			   
+					   
+					   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="folio">Folio</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${patProcedimiento.folio}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="procedimineto">Procedimiento</label>
+			                <div class="col-sm-4">
+				                <div class="callout callout-info m-0 p-1">
+					                <p th:text="${procedimiento}"></p>
+					            </div>	                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
 			                <div class="col-sm-5">
 				                <select id="patologoAsignado" th:field="*{idPatologo}"  class="form-control form-control-sm">
@@ -187,7 +177,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
 		                        </select>			                   			                   			                   	                    	
 			                </div>
-	                   </div>						
+	                   </div>
 	                   
 	                   <div class="form-group row mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
@@ -200,7 +190,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			                 <div class="col-sm-5">			                    
 			                    <textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
 			                 </div>
-			           </div>           
+			           </div>                   
+	                   
+					          
                 	
                 
                 <!-- /.card-body -->                    
@@ -238,9 +230,9 @@ $(document).ready(function() {
         "pageLength": 25,
     	"order": [],    	
     	"language": {
-            "lengthMenu": "Mostrar _MENU_ registros por pÃ¡gina",
+            "lengthMenu": "Mostrar _MENU_ registros por página",
             "zeroRecords": "Nada Encontrado - Lo sentimos!",
-            "info": "Mostrando pÃ¡gina _PAGE_ de _PAGES_",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
             "search": "Buscar",
             "infoEmpty": "No hay registros disponibles",
             "infoFiltered": "(filtrado de _MAX_ registros totales)",
@@ -249,7 +241,7 @@ $(document).ready(function() {
             "paginate": {
             	      "previous": "Anterior",
             	      "first": "Primera",
-            	      "last": "Ãšltima",
+            	      "last": "Última",
             	      "next": "Siguiente"
             	    }
         },        

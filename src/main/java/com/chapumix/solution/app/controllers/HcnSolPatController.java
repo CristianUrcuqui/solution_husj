@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,8 +84,12 @@ public class HcnSolPatController {
 	@Value("${app.tituloprocedimintopatologia}")
 	private String tituloprocedimintopatologia;
 	
+	@Value("${app.tituloeditarprocedimientosprocesados}")
+	private String tituloeditarprocedimientosprocesados;
+	
 	@Value("${app.tituloprocedimientosprocesados}")
 	private String tituloprocedimientosprocesados;
+	
 	
 	
 	@Value("${app.enlaceprincipal}")
@@ -108,7 +113,7 @@ public class HcnSolPatController {
 	//////////////*********************************************************//////////////////////////
 
 	//PACIENTES INTERNOS
-	// Este metodo me permite visualizar las solicitud pendientes de patologia de pacientes internos
+	// Este metodo me permite listar todas las solicitudes pendientes de patologia de pacientes internos
 	@GetMapping("/procedimientopatologiainterno")
 	public String listarInterno(Model model) {		
 		ResponseEntity<List<HcnSolPatIntDTO>> respuesta = restTemplate.exchange(URLPatologiasInt, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatIntDTO>>() {});		
@@ -242,7 +247,7 @@ public class HcnSolPatController {
 			patProcedimiento.setIdProcedimiento(this.procedimiento);
 			patProcedimiento.setFolio(this.folio);
 			patProcedimiento.setPacienteInternoExterno("I");
-			patProcedimiento.setLoginUsr(principal.getName());
+			patProcedimiento.setLoginUsrAlta(principal.getName());
 			iPatProcedimientoService.save(patProcedimiento);
 			status.setComplete();
 			flash.addFlashAttribute("success", mensajeFlash);		
@@ -255,7 +260,7 @@ public class HcnSolPatController {
 		//////////////*********************************************************//////////////////////////
 		
 		//PACIENTES EXTERNOS
-		// Este metodo me permite visualizar o cargar la solicitud de patologia de pacientes externos para ser procesada
+		// Este metodo me permite listar todas las solicitudes de patologia de pacientes externos para ser procesada
 		@GetMapping("/procedimientopatologiaexterno")
 		public String listarExterno(Model model) {		
 			ResponseEntity<List<HcnSolPatExtDTO>> respuesta = restTemplate.exchange(URLPatologiasExt, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatExtDTO>>() {});		
@@ -371,7 +376,7 @@ public class HcnSolPatController {
 			patProcedimiento.setIdPaciente(this.oidpaciente);
 			patProcedimiento.setIdProcedimiento(this.procedimiento);					
 			patProcedimiento.setPacienteInternoExterno("E");
-			patProcedimiento.setLoginUsr(principal.getName());
+			patProcedimiento.setLoginUsrAlta(principal.getName());
 			iPatProcedimientoService.save(patProcedimiento);
 			status.setComplete();
 			flash.addFlashAttribute("success", mensajeFlash);		
@@ -381,7 +386,7 @@ public class HcnSolPatController {
 	
 	
 	//PROCEDIMIENTOS PROCESADOS
-	// Este metodo me permite visualizar los procedimientos procesados
+	// Este metodo me permite listar todos los procedimientos procesados
 	@GetMapping("/procedimientopatologiageneral")
 	public String listarGeneral(Model model) {		
 		
@@ -428,7 +433,105 @@ public class HcnSolPatController {
 		model.addAttribute("titulo", utf8(this.tituloprocedimientosprocesados));
 		model.addAttribute("listprocpat", newPatProcedimiento);					
 		return "procedimientopatologiageneral";
-	}			
+	}
+	
+	// Este metodo me permite cargar los datos para editar el procedimiento procesado
+		@RequestMapping(value = "/editarpatologiaprocesada")
+		public String editarGeneral(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash) {		
+			
+			PatProcedimiento patProcedimiento = null;
+						
+			if(id > 0) {			
+				patProcedimiento = iPatProcedimientoService.findById(id);
+				if(patProcedimiento == null) {
+					flash.addFlashAttribute("error", "El ID del procedimiento no existe en la base de datos");
+					return "redirect:/listapersonajuridica";
+				}
+			}else {
+				flash.addFlashAttribute("error", "El ID del procedimiento no puede ser 0");
+				return "redirect:/procedimientopatologiageneral";
+			}		
+			
+			//obtengo el consecutivo
+			String codigo = obtenerAno(patProcedimiento.getFechaRegistro(), patProcedimiento.getId());
+			
+			// proceso API para consultar el paciente.			
+			ResponseEntity<GenPacienDTO> respuestap = restTemplate.exchange(URLPaciente+patProcedimiento.getIdPaciente(), HttpMethod.GET, null, new ParameterizedTypeReference<GenPacienDTO>() {});
+			GenPacienDTO paciente = respuestap.getBody();
+			
+			// proceso API para consultar el procedimiento.			
+			ResponseEntity<GenSeRipsDTO> respuestapr = restTemplate.exchange(URLProcedimiento+patProcedimiento.getIdProcedimiento(), HttpMethod.GET, null, new ParameterizedTypeReference<GenSeRipsDTO>() {});
+			GenSeRipsDTO procedimiento = respuestapr.getBody();
+			
+			// proceso API para select de medicos.
+			ResponseEntity<List<GenMedicoDTO>> respuestac = restTemplate.exchange(URLMedicos, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenMedicoDTO>>() {});
+			List<GenMedicoDTO> medicos = respuestac.getBody();
+						
+			
+			model.put("titulo", utf8(this.tituloeditarprocedimientosprocesados));			
+			model.put("codigo", codigo);
+			model.put("historia", paciente.getPacNumDoc());
+			model.put("paciente", paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim());
+			model.put("procedimiento", procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre());
+			model.put("medicos", medicos);
+			model.put("patProcedimiento", patProcedimiento);	
+			return "editarpatologiaprocesada";
+		}
+		
+		// Este metodo me permite guardar o editar el procedimiento procesado	    
+		@RequestMapping(value = "/editarpatologiaprocesada", method = RequestMethod.POST)
+		public String guardarGeneral(@Valid PatProcedimiento patProcedimiento, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
+				
+			//obtengo el consecutivo
+			String codigo = obtenerAno(patProcedimiento.getFechaRegistro(), patProcedimiento.getId());
+			
+			// proceso API para consultar el paciente.			
+			ResponseEntity<GenPacienDTO> respuestap = restTemplate.exchange(URLPaciente+patProcedimiento.getIdPaciente(), HttpMethod.GET, null, new ParameterizedTypeReference<GenPacienDTO>() {});
+			GenPacienDTO paciente = respuestap.getBody();
+			
+			// proceso API para consultar el procedimiento.			
+			ResponseEntity<GenSeRipsDTO> respuestapr = restTemplate.exchange(URLProcedimiento+patProcedimiento.getIdProcedimiento(), HttpMethod.GET, null, new ParameterizedTypeReference<GenSeRipsDTO>() {});
+			GenSeRipsDTO procedimiento = respuestapr.getBody();
+			
+			// proceso API para select de medicos.
+			ResponseEntity<List<GenMedicoDTO>> respuestac = restTemplate.exchange(URLMedicos, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenMedicoDTO>>() {});
+			List<GenMedicoDTO> medicos = respuestac.getBody();
+			
+			
+			//verificamos si hay errores en los campos requeridos.
+			if(result.hasErrors()) {
+				model.addAttribute("titulo", utf8(this.tituloeditarprocedimientosprocesados));			
+				model.addAttribute("codigo", codigo);
+				model.addAttribute("historia", paciente.getPacNumDoc());
+				model.addAttribute("paciente", paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim());
+				model.addAttribute("procedimiento", procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre());
+				model.addAttribute("medicos", medicos);	
+				return "editarpatologiaprocesada";
+			}
+								
+			String mensajeFlash = (patProcedimiento.getId() != null) ? "El procedimiento procesado fue editado correctamente" : "El procedimiento procesado fue creado correctamente";
+			patProcedimiento.setLoginUsrAct(principal.getName());
+			patProcedimiento.setFechaAltaAct(new Date());
+			iPatProcedimientoService.save(patProcedimiento);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);		
+			return "redirect:procedimientopatologiageneral";
+			}
+	
+	
+	
+	// Este metodo me permite eliminar el procedimiento procesado
+		@RequestMapping(value = "/eliminar/{id}")
+		public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+			if(id > 0) {
+				iPatProcedimientoService.delete(id);			
+				flash.addFlashAttribute("success","La persona fue eliminado correctamente");
+			}
+			return "redirect:/procedimientopatologiageneral";
+		}
+		
+		
+	
 				
 	
 
@@ -488,7 +591,7 @@ public class HcnSolPatController {
 	}	
 	
 	
-	//Se usa para obtener el año de una fecha
+	//Se usa para obtener el consecutivo formado por el año de la fecha de registro y el id
 	private String obtenerAno(Date fechaRegistro, Long id) {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(fechaRegistro);

@@ -21,9 +21,11 @@ public class PatProcedimientoDTO implements Serializable {
 	private String patologoReasignado;
 	private String correccion;
 	private String observacion;
-	private String pacienteInternoExterno;		
+	private String pacienteInternoExterno;
 	
-	
+	public PatProcedimientoDTO() {		
+	}
+
 	public PatProcedimientoDTO(Long id, String codigo, Date fechaAsignacion, String historia, String paciente,
 			String procedimiento, Integer folio, String patologo, String patologoReasignado, String correccion,
 			String observacion, String pacienteInternoExterno) {		

@@ -41,6 +41,6 @@ public class PatProcedimientoServiceImpl implements IPatProcedimientoService{
 	public void delete(Long id) {
 		iPatProcedimientoDao.deleteById(id);
 		
-	}	
+	}
 
 }

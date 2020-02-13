@@ -277,4 +277,9 @@ table.dataTable tbody th, table.dataTable tbody td {
 .dataTables_length{	
 	position: absolute !important;
 }
+
+.ui-datepicker-trigger{
+	height: 30px !important;
+	width: 30px !important;
+}
  
