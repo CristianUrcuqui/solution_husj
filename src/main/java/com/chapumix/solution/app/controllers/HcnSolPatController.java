@@ -169,13 +169,7 @@ public class HcnSolPatController {
 		List<HcnSolPatDetaDosDTO> dinamicab = respuestab.getBody();
 
 		if (dinamicab != null) {
-			//String tipo = convertirTipo(dinamicab.getHcsestado());
-			model.put("detalles", dinamicab);
-			/*model.put("desc1", dinamicab.getSipCodigo());
-			model.put("desc2", dinamicab.getSipNombre());
-			model.put("pieza", dinamicab.getHcsobserv());
-			model.put("cantidad", dinamicab.getHcscanti());
-			model.put("tipo", tipo);*/
+			model.put("detalles", dinamicab);			
 		}
 		
 		
@@ -191,7 +185,7 @@ public class HcnSolPatController {
 	}
 		
 		
-		// Este metodo me permite guardar el proceso de patologia	    
+		//Este metodo me permite guardarla solicitud de patologia de pacientes interno para ser procesada    
 		@RequestMapping(value = "/procesarpatologiainterno", method = RequestMethod.POST)
 		public String guardarPatologiaInterno(@Valid PatProcedimiento patProcedimiento, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 	    				
@@ -219,17 +213,13 @@ public class HcnSolPatController {
 				}
 				
 				// proceso API para buscar la segunda descripcion de la solicitud.
-				ResponseEntity<HcnSolPatDetaDosDTO> respuestab = restTemplate.exchange(URLDescripcion + this.oidpaciente + '/' + this.procedimiento + '/' + this.folio, HttpMethod.GET, null,new ParameterizedTypeReference<HcnSolPatDetaDosDTO>() {});
-				HcnSolPatDetaDosDTO dinamicab = respuestab.getBody();
+				System.out.println(URLDescripcion + this.oidpaciente + '/' + this.procedimiento + '/' + this.folio);
+				ResponseEntity<List<HcnSolPatDetaDosDTO>> respuestab = restTemplate.exchange(URLDescripcion + this.oidpaciente + '/' + this.procedimiento + '/' + this.folio, HttpMethod.GET, null,new ParameterizedTypeReference<List<HcnSolPatDetaDosDTO>>() {});
+				List<HcnSolPatDetaDosDTO> dinamicab = respuestab.getBody();
 				
-				if (dinamicab != null) {
-				String tipo = convertirTipo(dinamicab.getHcsestado());
-				model.addAttribute("cups", dinamicab.getSipCodCup());
-				model.addAttribute("desc1", dinamicab.getSipCodigo());
-				model.addAttribute("desc2", dinamicab.getSipNombre());
-				model.addAttribute("pieza", dinamicab.getHcsobserv());
-				model.addAttribute("cantidad", dinamicab.getHcscanti());
-				model.addAttribute("tipo", tipo);
+				if (dinamicab != null) {		
+					model.addAttribute("detalles", dinamicab);			
+					
 				}
 				
 				// proceso API para select de medicos.
@@ -353,7 +343,7 @@ public class HcnSolPatController {
 								
 				}
 	
-			// proceso API para buscar la segunda descripcion de la solicitud.
+			// proceso API para buscar la segunda descripcion de la solicitud.			
 			ResponseEntity<List<HcnSolPatDetaDosDTO>> respuestab = restTemplate.exchange(URLDescripcionExt + oidpaciente + '/' + procedimiento, HttpMethod.GET, null,new ParameterizedTypeReference<List<HcnSolPatDetaDosDTO>>() {});
 			List<HcnSolPatDetaDosDTO> dinamicab = respuestab.getBody();
 	

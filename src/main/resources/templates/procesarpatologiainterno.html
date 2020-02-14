@@ -28,8 +28,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
      <div th:replace="/layout/layout ::mensajes"></div>
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Procesar Pacientes Internos</h1>
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Procesar Pacientes Internos</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -230,49 +230,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <div th:replace="/layout/layout ::scripts"></div>
 
-<script>
-$(document).ready(function() {
-    $('#datatablelistaprocedimientopatologia').DataTable( {
-    	"columnDefs": [
-            { "width": "0.4%", "targets": [0,2,3] },
-            { "width": "10%", "targets": [5] },
-            { "width": "15%", "targets": [1] },
-            { "width": "30%", "targets": [4] },
-            { "width": "10%", "targets": [6] }
-            
-        ],        
-        "pageLength": 25,
-    	"order": [],    	
-    	"language": {
-            "lengthMenu": "Mostrar _MENU_ registros por página",
-            "zeroRecords": "Nada Encontrado - Lo sentimos!",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "search": "Buscar",
-            "infoEmpty": "No hay registros disponibles",
-            "infoFiltered": "(filtrado de _MAX_ registros totales)",
-            
-            
-            "paginate": {
-            	      "previous": "Anterior",
-            	      "first": "Primera",
-            	      "last": "Última",
-            	      "next": "Siguiente"
-            	    }
-        },        
-    	"pagingType": "full_numbers",    	
-    } );
-} );
+<script>	
+	$('[data-toggle="tooltip"]').tooltip();
 </script>
-<script>
-	$('a').tooltip('update');
-</script>
-<script>
-$('#modal-eliminar-personajuridica').on('show.bs.modal', function (e) {
-    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    $('#modal-eliminar-personajuridicaId').val($(this).find('.btn-ok').attr('href'));
-});
-</script>
-
 <script>
 	window.onload = function(){
 		let contenedor = document.getElementById('contenedor_carga');

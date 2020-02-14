@@ -9,7 +9,6 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	
 	private String sipCodigo;
 	private String sipNombre;
 	private String sipCodCup;
@@ -17,9 +16,8 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 	private Integer hcscanti;
 	private Integer hcsestado;
 	
-	public HcnSolPatDetaDosDTO() {
-	}	
-
+	public HcnSolPatDetaDosDTO() {		
+	}
 
 	public HcnSolPatDetaDosDTO(String sipCodigo, String sipNombre, String sipCodCup, String hcsobserv, Integer hcscanti,
 			Integer hcsestado) {		
@@ -30,7 +28,6 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 		this.hcscanti = hcscanti;
 		this.hcsestado = hcsestado;
 	}
-
 
 	public String getSipCodigo() {
 		return sipCodigo;
@@ -46,18 +43,15 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 
 	public void setSipNombre(String sipNombre) {
 		this.sipNombre = sipNombre;
-	}	
-	
+	}
 
 	public String getSipCodCup() {
 		return sipCodCup;
 	}
 
-
 	public void setSipCodCup(String sipCodCup) {
 		this.sipCodCup = sipCodCup;
 	}
-
 
 	public String getHcsobserv() {
 		return hcsobserv;
@@ -81,6 +75,6 @@ public class HcnSolPatDetaDosDTO implements Serializable{
 
 	public void setHcsestado(Integer hcsestado) {
 		this.hcsestado = hcsestado;
-	}
+	}	
 
 }

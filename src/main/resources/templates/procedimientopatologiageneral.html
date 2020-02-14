@@ -27,8 +27,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
      <div th:replace="/layout/layout ::mensajes"></div>
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Procedimientos Procesados</h1>
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Procedimientos Procesados</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -226,7 +226,10 @@ $(document).ready(function() {
                      text:      '<i class="fas fa-file-excel"></i>Excel',
                      /*title:'Titulo de tabla en excel',*/
                      titleAttr: 'Excel',
-                     className: 'btn btn-app export excel',                     
+                     className: 'btn btn-app export excel',
+                     exportOptions: {
+                         columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+                     }                     
                  },
 
                  ]   
