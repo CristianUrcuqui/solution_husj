@@ -111,19 +111,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
       
 
       <!-- Sidebar Menu -->      
-      <nav class="mt-2">
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="nav-item has-treeview menu-open">
-            <a href="#" th:class="${principal} ? 'nav-link active' : 'nav-link'">
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${patologia} ? 'nav-link active' : 'nav-link'">
               <i class="fas fa-bug nav-icon"></i>
               <p>
                 Patología
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="nav nav-treeview">
               <li class="nav-item">
                 <a th:href="@{/indexpatologia}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
@@ -143,7 +143,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview menu-open">
-            <a href="#" th:class="${principal} ? 'nav-link active' : 'nav-link'">
+            <a href="#" th:class="${ajustes} ? 'nav-link active' : 'nav-link'">
               <i class="fas fa-cogs nav-icon"></i>
               <p>
                 Ajustes
@@ -152,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
               <li class="nav-item">
-                <a th:href="@{/parametropatologia(seccion=patologia)}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
+                <a th:href="@{/parametropatologia(seccion=patologia)}" th:class="${enlace2} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
                   <p>Procedimiento Patología</p>
                 </a>
@@ -160,7 +160,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
             <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
               <li class="nav-item">
-                <a th:href="@{/usuariolistado}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
+                <a th:href="@{/usuariolistado}" th:class="${enlace3} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
                   <p>Usuarios</p>
                 </a>

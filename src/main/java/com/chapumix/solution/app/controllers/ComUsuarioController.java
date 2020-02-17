@@ -25,13 +25,19 @@ public class ComUsuarioController {
 	@Value("${app.titulousuarios}")
 	private String titulousuarios;
 	
+	@Value("${app.enlaceprincipalajustes}")
+	private String enlaceprincipalajustes;
+	
+	@Value("${app.enlace3}")
+	private String enlace3;
+	
 	
 	@GetMapping("/usuariolistado")
 	public String listar(Model model) {					
 		model.addAttribute("titulo", utf8(this.titulousuarios));
 		model.addAttribute("listusuario", iComUsuarioService.findAll());
-		//model.addAttribute("principal", enlaceprincipal);
-		//model.addAttribute("enlace1", enlace1);		
+		model.addAttribute("ajustes", enlaceprincipalajustes);
+		model.addAttribute("enlace3", enlace3);		
 		return "usuariolistado";
 	}
 	

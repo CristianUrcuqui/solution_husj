@@ -100,8 +100,11 @@ public class HcnSolPatController {
 	@Value("${app.tituloprocedimientosprocesados}")
 	private String tituloprocedimientosprocesados;	
 	
-	@Value("${app.enlaceprincipal}")
-	private String enlaceprincipal;
+	@Value("${app.enlaceprincipalpatologia}")
+	private String enlaceprincipalpatologia;	
+	
+	@Value("${app.enlace1}")
+	private String enlace1;
 	
 	
 	
@@ -149,7 +152,8 @@ public class HcnSolPatController {
 	  model.addAttribute("internos", dinamicaa.size());
 	  model.addAttribute("externos", dinamicab.size());
 	  model.addAttribute("procesados", patProcedimientoa.size());
-	  model.addAttribute("principal", enlaceprincipal);
+	  model.addAttribute("patologia", enlaceprincipalpatologia);
+	  model.addAttribute("enlace1", enlace1);
 	  return "indexpatologia";
 	}
 	
@@ -186,7 +190,9 @@ public class HcnSolPatController {
 		});		
 		
 		model.addAttribute("titulo", utf8(this.titulopacientesinternos));
-		model.addAttribute("listprocpat", dinamica);					
+		model.addAttribute("listprocpat", dinamica);
+		model.addAttribute("patologia", enlaceprincipalpatologia);
+		model.addAttribute("enlace1", enlace1);
 		return "procedimientopatologiainterno";
 	}
 	
@@ -219,7 +225,9 @@ public class HcnSolPatController {
 			model.put("aseguradora", dinamicaa.getGdeNombre());
 			model.put("ingreso", dinamicaa.getAinConsec());
 			model.put("folio", dinamicaa.getHcNumFol());
-			model.put("dx", dinamicaa.getDiaCodigo() + "-" + dinamicaa.getDiaNombre());			
+			model.put("dx", dinamicaa.getDiaCodigo() + "-" + dinamicaa.getDiaNombre());
+			model.put("patologia", enlaceprincipalpatologia);
+			model.put("enlace1", enlace1);
 			
 		}
 
@@ -228,7 +236,9 @@ public class HcnSolPatController {
 		List<HcnSolPatDetaDosDTO> dinamicab = respuestab.getBody();
 
 		if (dinamicab != null) {
-			model.put("detalles", dinamicab);			
+			model.put("detalles", dinamicab);
+			model.put("patologia", enlaceprincipalpatologia);
+			model.put("enlace1", enlace1);
 		}
 		
 		
@@ -238,7 +248,9 @@ public class HcnSolPatController {
 		
 		model.put("medicos", medicos);
 		model.put("titulo", utf8(this.tituloprocesarpacientesinternos));		
-		model.put("patProcedimiento", patProcedimiento);		
+		model.put("patProcedimiento", patProcedimiento);
+		model.put("patologia", enlaceprincipalpatologia);
+		model.put("enlace1", enlace1);
 		return "procesarpatologiainterno";
 
 	}
@@ -269,6 +281,8 @@ public class HcnSolPatController {
 				model.addAttribute("ingreso", dinamicaa.getAinConsec());
 				model.addAttribute("folio", dinamicaa.getHcNumFol());
 				model.addAttribute("dx", dinamicaa.getDiaCodigo() + "-" + dinamicaa.getDiaNombre());
+				model.addAttribute("patologia", enlaceprincipalpatologia);
+				model.addAttribute("enlace1", enlace1);
 				}
 				
 				// proceso API para buscar la segunda descripcion de la solicitud.
@@ -287,7 +301,9 @@ public class HcnSolPatController {
 				
 				model.addAttribute("medicos", medicos);				
 				model.addAttribute("titulo", utf8(this.tituloprocesarpacientesinternos));
-				model.addAttribute("patProcedimiento", patProcedimiento);											
+				model.addAttribute("patProcedimiento", patProcedimiento);
+				model.addAttribute("patologia", enlaceprincipalpatologia);
+				model.addAttribute("enlace1", enlace1);
 				return "procesarpatologiainterno";
 			}
 			
@@ -335,7 +351,9 @@ public class HcnSolPatController {
 			});		
 			
 			model.addAttribute("titulo", utf8(this.titulopacientesexternos));
-			model.addAttribute("listprocpat", dinamica);			
+			model.addAttribute("listprocpat", dinamica);
+			model.addAttribute("patologia", enlaceprincipalpatologia);
+			model.addAttribute("enlace1", enlace1);
 			return "procedimientopatologiaexterno";
 		}
 		
@@ -364,7 +382,9 @@ public class HcnSolPatController {
 				model.put("edad", edad);
 				model.put("sexo", sexo);
 				model.put("aseguradora", dinamicaa.get(0).getGdeNombre());
-				model.put("ingreso", dinamicaa.get(0).getAinConsec());							
+				model.put("ingreso", dinamicaa.get(0).getAinConsec());
+				model.put("patologia", enlaceprincipalpatologia);
+				model.put("enlace1", enlace1);
 				
 			}
 
@@ -374,6 +394,8 @@ public class HcnSolPatController {
 
 			if (dinamicab != null) {				
 				model.put("detalles", dinamicab);
+				model.put("patologia", enlaceprincipalpatologia);
+				model.put("enlace1", enlace1);
 			}
 			
 			
@@ -383,7 +405,9 @@ public class HcnSolPatController {
 			
 			model.put("medicos", medicos);
 			model.put("titulo", utf8(this.tituloprocesarpacientesexternos));		
-			model.put("patProcedimiento", patProcedimiento);		
+			model.put("patProcedimiento", patProcedimiento);
+			model.put("patologia", enlaceprincipalpatologia);
+			model.put("enlace1", enlace1);
 			return "procesarpatologiaexterno";
 
 		}
@@ -410,7 +434,9 @@ public class HcnSolPatController {
 					model.addAttribute("edad", edad);
 					model.addAttribute("sexo", sexo);
 					model.addAttribute("aseguradora", dinamicaa.get(0).getGdeNombre());
-					model.addAttribute("ingreso", dinamicaa.get(0).getAinConsec());							
+					model.addAttribute("ingreso", dinamicaa.get(0).getAinConsec());
+					model.addAttribute("patologia", enlaceprincipalpatologia);
+					model.addAttribute("enlace1", enlace1);
 								
 				}
 	
@@ -420,6 +446,8 @@ public class HcnSolPatController {
 	
 			if (dinamicab != null) {				
 				model.addAttribute("detalles", dinamicab);
+				model.addAttribute("patologia", enlaceprincipalpatologia);
+				model.addAttribute("enlace1", enlace1);
 			}
 							
 							
@@ -429,7 +457,9 @@ public class HcnSolPatController {
 							
 			model.addAttribute("medicos", medicos);
 			model.addAttribute("titulo", utf8(this.tituloprocesarpacientesexternos));		
-			model.addAttribute("patProcedimiento", patProcedimiento);		
+			model.addAttribute("patProcedimiento", patProcedimiento);
+			model.addAttribute("patologia", enlaceprincipalpatologia);
+			model.addAttribute("enlace1", enlace1);
 			return "procesarpatologiaexterno";
 			}
 						
@@ -484,8 +514,7 @@ public class HcnSolPatController {
 			}
 			
 			String anoActual = obtenerAno(pat.getFechaRegistro(), pat.getId());
-			String pacienteInternoExterno = pacienteIntExt(pat.getPacienteInternoExterno());
-			
+			String pacienteInternoExterno = pacienteIntExt(pat.getPacienteInternoExterno());			
 			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getFolio(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
 			newPatProcedimiento.add(dto);
 			
@@ -497,7 +526,9 @@ public class HcnSolPatController {
 				
 		model.addAttribute("medicos", medicos);			
 		model.addAttribute("titulo", utf8(this.tituloprocedimientosprocesados));
-		model.addAttribute("listprocpat", newPatProcedimiento);					
+		model.addAttribute("listprocpat", newPatProcedimiento);
+		model.addAttribute("patologia", enlaceprincipalpatologia);
+		model.addAttribute("enlace1", enlace1);
 		return "procedimientopatologiageneral";
 	}
 	
@@ -540,7 +571,9 @@ public class HcnSolPatController {
 			model.put("paciente", paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim());
 			model.put("procedimiento", procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre());
 			model.put("medicos", medicos);
-			model.put("patProcedimiento", patProcedimiento);	
+			model.put("patProcedimiento", patProcedimiento);
+			model.put("patologia", enlaceprincipalpatologia);
+			model.put("enlace1", enlace1);
 			return "editarpatologiaprocesada";
 		}
 		
@@ -571,7 +604,9 @@ public class HcnSolPatController {
 				model.addAttribute("historia", paciente.getPacNumDoc());
 				model.addAttribute("paciente", paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim());
 				model.addAttribute("procedimiento", procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre());
-				model.addAttribute("medicos", medicos);	
+				model.addAttribute("medicos", medicos);
+				model.addAttribute("patologia", enlaceprincipalpatologia);
+				model.addAttribute("enlace1", enlace1);
 				return "editarpatologiaprocesada";
 			}
 								

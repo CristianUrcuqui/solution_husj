@@ -35,6 +35,13 @@ public class ComParametroPatologiaController {
 	@Value("${app.tituloparametrospatologia}")
 	private String tituloparametrospatologia;
 	
+	@Value("${app.enlaceprincipalajustes}")
+	private String enlaceprincipalajustes;
+	
+	@Value("${app.enlace2}")
+	private String enlace2;
+	
+	
 	
 	// Este metodo me permite visualizar o cargar la solicitud de patologia de pacientes externos para ser procesada
 	@RequestMapping(value = "/parametropatologia")
@@ -43,6 +50,8 @@ public class ComParametroPatologiaController {
 		comParametroPatologia = iComParametroPatologiaService.findByName(seccion);	
 		model.put("titulo", utf8(this.tituloparametrospatologia));		
 		model.put("comParametroPatologia", comParametroPatologia);
+		model.put("ajustes", enlaceprincipalajustes);
+		model.put("enlace2", enlace2);
 		status.setComplete();
 		return "parametropatologia";
 
@@ -61,7 +70,9 @@ public class ComParametroPatologiaController {
 		
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloparametrospatologia));			
-			model.addAttribute("comParametroPatologia", comParametroPatologia);			
+			model.addAttribute("comParametroPatologia", comParametroPatologia);
+			model.addAttribute("ajustes", enlaceprincipalajustes);
+			model.addAttribute("enlace2", enlace2);
 			return "parametropatologia";
 		}
 
