@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Pacientes Externos</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Usuarios Sistema</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -45,12 +45,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="content-header py-0">
 			  <div class="container-fluid">
 				<div class="row">
+				<!-- Toolbar Botones -->
+				
+					<!-- Toolbar Botones Izquierdo-->
+					<div class="col-sm-6">						
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<a class="btn btn-primary" th:href="@{/formpersonajuridica}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
+										<i class="fas fa-plus fa-lg mt-1"></i>
+									</a>																		
+								</div>																									
+							</div>
+						</div>
+					 </div>
+						
 					<!-- Toolbar Botones Derecho-->
-					  <div class="col-sm-12">			
+					  <div class="col-sm-6">			
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexpatologia}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-primary" th:href="@{/index}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -75,30 +90,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
          <div class="col-md-12">
 	         <div class="card">
 		         <div class="card-body">
-			         <table id="datatablelistaprocedimientopatologia" class="table table-striped table-bordered table-hover table-condensed" style="width: 100%">
+			         <table id="datatablelistausuario" class="table table-striped table-bordered table-hover table-condensed" style="width: 100%">
 			         	<thead>
 				         	<tr>
-					         	<th>HISTORIA</th>
-					         	<th>PACIENTE</th>
-					         	<th>INGRESO</th>					         	
-					         	<th>PROCEDIMIENTO</th>
-					         	<th>FECHA SOLICITUD</th>
-					         	<th>SERVICIO</th>					         	
+					         	<th>USUARIO</th>
+					         	<th>NOMBRES Y APELLIDOS</th>
+					         	<th>ESTADO</th>					         	
 					         	<th></th>					         	
 				         	</tr>
 			         	</thead>
 			         	<tbody>			         		
-				         	<tr th:each="lprocpat: ${listprocpat}">
-					         	<td th:text="${lprocpat.pacNumDoc}"></td>
-					         	<td th:text="${lprocpat.pacPriNom+ ' ' +lprocpat.pacSegNom+ ' ' + lprocpat.pacPriApe+ ' ' +lprocpat.pacSegApe}"></td>
-					         	<td th:text="${lprocpat.ainConsec}"></td>					         	
-					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}"></td>
-					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}"></td>
-					         	<td th:text="${lprocpat.gasNombre}"></td>					         						         	
+				         	<tr th:each="lprocpat: ${listusuario}">
+					         	<td th:text="${lprocpat.usuario}"></td>
+					         	<td th:text="${lprocpat.nombreCompleto}"></td>
+					         	 <td class="text-center align-middle">
+							      	<div th:if="${lprocpat.estado} eq true">
+									    <h6><small class="badge badge-success"><i class="fas fa-thumbs-up"></i> Activo</small></h6>
+									</div>
+									<div th:if="${lprocpat.estado} eq false">
+									    <h6><small class="badge badge-danger"><i class="fas fa-thumbs-down"></i> Inactivo</small></h6>
+									</div>
+							      </td>	        						         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
-						         		<a class="btn btn-primary btn-sm" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
-											<i class="fas fa-share-square fa-xs"></i>
+						         		<a class="btn btn-primary btn-sm"  th:href="@{/formpersonajuridica/} + ${lprocpat.id}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
+											<i class="fas fa-user-edit fa-xs"></i>
 										</a>												         		
 									</div>										      							      
 								</td>													         	
@@ -126,15 +142,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
 $(document).ready(function() {
-    $('#datatablelistaprocedimientopatologia').DataTable( {
+    $('#datatablelistausuario').DataTable( {
     	"columnDefs": [
             { "width": "5%", "targets": [0] },
             { "width": "20%", "targets": [1] },
-            { "width": "10%", "targets": [2] },            
-            { "width": "44%", "targets": [3] },
-            { "width": "10%", "targets": [4] },
-            { "width": "10%", "targets": [5] },          
-            { "width": "1%", "targets": [6] }
+            { "width": "1%", "targets": [2] },
+            { "width": "1%", "targets": [3] }
+            
             
         ],        
         "pageLength": 25,

@@ -2,6 +2,8 @@ package com.chapumix.solution.app.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -43,7 +45,9 @@ import com.chapumix.solution.app.entity.dto.HcnSolPatDetaDosDTO;
 import com.chapumix.solution.app.entity.dto.HcnSolPatDetaTresDTO;
 import com.chapumix.solution.app.entity.dto.HcnSolPatDetaUnoDTO;
 import com.chapumix.solution.app.entity.dto.HcnSolPatExtDTO;
+import com.chapumix.solution.app.models.entity.ComParametroPatologia;
 import com.chapumix.solution.app.models.entity.PatProcedimiento;
+import com.chapumix.solution.app.models.service.IComParametroPatologiaService;
 import com.chapumix.solution.app.models.service.IPatProcedimientoService;
 
 @Controller
@@ -70,6 +74,9 @@ public class HcnSolPatController {
 	private IPatProcedimientoService iPatProcedimientoService;
 	
 	@Autowired
+	private IComParametroPatologiaService iComParametroPatologiaService;
+	
+	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Value("${app.tituloprocesarpacientesinternos}")
@@ -79,7 +86,10 @@ public class HcnSolPatController {
 	private String tituloprocesarpacientesexternos;
 	
 	@Value("${app.titulopacientesinternos}")
-	private String titulopacientesinternos;	
+	private String titulopacientesinternos;
+	
+	@Value("${app.titulopacientesexternos}")
+	private String titulopacientesexternos;	
 	
 	@Value("${app.tituloprocedimintopatologia}")
 	private String tituloprocedimintopatologia;
@@ -88,35 +98,84 @@ public class HcnSolPatController {
 	private String tituloeditarprocedimientosprocesados;
 	
 	@Value("${app.tituloprocedimientosprocesados}")
-	private String tituloprocedimientosprocesados;
-	
-	
+	private String tituloprocedimientosprocesados;	
 	
 	@Value("${app.enlaceprincipal}")
 	private String enlaceprincipal;
 	
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
+	
+	
+	/* ----------------------------------------------------------
+     * INDEX PATOLOGIA
+     * ---------------------------------------------------------- */
 	
 	//INDEX PATOLOGIA
 	@GetMapping("/indexpatologia")
-	public String index(Model model) {
+	public String index(Model model) throws ParseException {
+	 
+		ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+		if(comParametroPatologia == null) {
+			crearParametro(comParametroPatologia);
+			comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+		}				
+	  
+	  //obtengo un string de la fecha para agregarlo a la URL del API	
+	  String fechaParametroI = convertirFechaParametro(comParametroPatologia.getFechaSolicitudInterno());		
+	  // obtengo el numero de pacientes internos por procesar	
+	  ResponseEntity<List<HcnSolPatIntDTO>> respuestaa = restTemplate.exchange(URLPatologiasInt+"/"+fechaParametroI, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatIntDTO>>() {});		
+	  List<HcnSolPatIntDTO> dinamicaa = respuestaa.getBody();
+	  List<PatProcedimiento> patProcedimientoa = iPatProcedimientoService.findAll();
+		
+	  //esta parte me permite cruzar entre las patologias de pacientes internos de dinamica y las patologias procesadas en Solution
+		patProcedimientoa.forEach(p ->{
+			Predicate<HcnSolPatIntDTO> condicion = dina -> dina.getOidPaciente().equals(p.getIdPaciente()) && dina.getOidRips().equals(p.getIdProcedimiento()) && dina.getHcNumFol().equals(p.getFolio());	         
+			dinamicaa.removeIf(condicion);
+		});	
+	  
+	  //obtengo un string de la fecha para agregarlo a la URL del API	
+	  String fechaParametroE = convertirFechaParametro(comParametroPatologia.getFechaSolicitudExterno());	
+	  // obtengo el numero de pacientes externos por procesar
+	  ResponseEntity<List<HcnSolPatExtDTO>> respuestab = restTemplate.exchange(URLPatologiasExt+"/"+fechaParametroE, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatExtDTO>>() {});		
+	  List<HcnSolPatExtDTO> dinamicab = respuestab.getBody();
+	  List<PatProcedimiento> patProcedimientob = iPatProcedimientoService.findAll();
+	  
+	  //esta parte me permite cruzar entre las patologias de pacientes externos de dinamica y las patologias procesadas en Solution
+	  	patProcedimientob.forEach(p ->{
+	  		Predicate<HcnSolPatExtDTO> condicion = dina -> dina.getOidPaciente().equals(p.getIdPaciente()) && dina.getOidRips().equals(p.getIdProcedimiento());	         
+	  		dinamicab.removeIf(condicion);
+	  });	  
+	  
 	  model.addAttribute("titulo", utf8(this.tituloprocedimintopatologia));
+	  model.addAttribute("internos", dinamicaa.size());
+	  model.addAttribute("externos", dinamicab.size());
+	  model.addAttribute("procesados", patProcedimientoa.size());
 	  model.addAttribute("principal", enlaceprincipal);
 	  return "indexpatologia";
 	}
 	
 	
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
 
-	//PACIENTES INTERNOS
+	/* ----------------------------------------------------------
+     * PACIENTES INTERNOS
+     * ---------------------------------------------------------- */
+
+	
 	// Este metodo me permite listar todas las solicitudes pendientes de patologia de pacientes internos
 	@GetMapping("/procedimientopatologiainterno")
-	public String listarInterno(Model model) {		
-		ResponseEntity<List<HcnSolPatIntDTO>> respuesta = restTemplate.exchange(URLPatologiasInt, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatIntDTO>>() {});		
+	public String listarInterno(Model model) {
+		
+		//creo el parametro "patologia" en caso de que no exista.		
+		ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+		if(comParametroPatologia == null) {
+			crearParametro(comParametroPatologia);
+			comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+		}				
+			  
+		//obtengo un string de la fecha para agregarlo a la URL del API	
+		String fechaParametro = convertirFechaParametro(comParametroPatologia.getFechaSolicitudInterno());
+		
+		
+		ResponseEntity<List<HcnSolPatIntDTO>> respuesta = restTemplate.exchange(URLPatologiasInt+"/"+fechaParametro, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatIntDTO>>() {});		
 		List<HcnSolPatIntDTO> dinamica = respuesta.getBody();
 		List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
 		
@@ -245,15 +304,27 @@ public class HcnSolPatController {
 		}
 		
 		
-		//////////////*********************************************************//////////////////////////
-		//////////////*********************************************************//////////////////////////
-		//////////////*********************************************************//////////////////////////
 		
-		//PACIENTES EXTERNOS
+		/* ----------------------------------------------------------
+	     * PACIENTES EXTERNOS
+	     * ---------------------------------------------------------- */		
+		
 		// Este metodo me permite listar todas las solicitudes de patologia de pacientes externos para ser procesada
 		@GetMapping("/procedimientopatologiaexterno")
-		public String listarExterno(Model model) {		
-			ResponseEntity<List<HcnSolPatExtDTO>> respuesta = restTemplate.exchange(URLPatologiasExt, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatExtDTO>>() {});		
+		public String listarExterno(Model model) {
+			
+			//creo el parametro "patologia" en caso de que no exista.		
+			ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+			if(comParametroPatologia == null) {
+				crearParametro(comParametroPatologia);
+				comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
+			}				
+				  
+			//obtengo un string de la fecha para agregarlo a la URL del API	
+			String fechaParametro = convertirFechaParametro(comParametroPatologia.getFechaSolicitudExterno());
+			
+			
+			ResponseEntity<List<HcnSolPatExtDTO>> respuesta = restTemplate.exchange(URLPatologiasExt+"/"+fechaParametro, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatExtDTO>>() {});		
 			List<HcnSolPatExtDTO> dinamica = respuesta.getBody();
 			List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
 			
@@ -263,7 +334,7 @@ public class HcnSolPatController {
 				dinamica.removeIf(condicion);
 			});		
 			
-			model.addAttribute("titulo", utf8(this.tituloprocesarpacientesexternos));
+			model.addAttribute("titulo", utf8(this.titulopacientesexternos));
 			model.addAttribute("listprocpat", dinamica);			
 			return "procedimientopatologiaexterno";
 		}
@@ -373,9 +444,14 @@ public class HcnSolPatController {
 			return "redirect:procedimientopatologiaexterno";
 		}
 		
+		
+		
+		
+		
+		/* ----------------------------------------------------------
+	     * PROCEDIMIENTOS PROCESADOS
+	     * ---------------------------------------------------------- */		
 	
-	
-	//PROCEDIMIENTOS PROCESADOS
 	// Este metodo me permite listar todos los procedimientos procesados
 	@GetMapping("/procedimientopatologiageneral")
 	public String listarGeneral(Model model) {		
@@ -511,27 +587,114 @@ public class HcnSolPatController {
 	
 	
 	// Este metodo me permite eliminar el procedimiento procesado
-		@RequestMapping(value = "/eliminar/{id}")
+		@RequestMapping(value = "/eliminarpatologiaprocesada/{id}")
 		public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 			if(id > 0) {
 				iPatProcedimientoService.delete(id);			
-				flash.addFlashAttribute("success","La persona fue eliminado correctamente");
+				flash.addFlashAttribute("success","La procedimiento fue eliminado correctamente");
 			}
 			return "redirect:/procedimientopatologiageneral";
 		}
 		
 		
-	
+		
+	// Este metodo me permite listar por fechas y por el patologo todos los procedimientos procesados
+	@RequestMapping("/buscarpatologiageneral")
+	public String listarGeneralFiltro(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, @RequestParam(value = "especialista", required = false) String especialista, RedirectAttributes flash) throws ParseException {		
+			
+		List<PatProcedimiento> patProcedimiento = new ArrayList<>();
+		List<PatProcedimientoDTO> newPatProcedimiento = new ArrayList<>();
+		String errorFechas  = "";
+			
+		//valida si la fecha inicial, la fecha final y el especialista no estan vacios
+		if(fechaInicial.equals("") && fechaFinal.equals("") && especialista.equals("")) {				
+			errorFechas = "Debes establecer una fecha inicial y fecha final";
+			model.addAttribute("error", errorFechas);
+		}
+		
+		//valida si la fecha inicial no esta vacio
+		if(fechaInicial.equals("") && !fechaFinal.equals("")) {				
+			errorFechas = "Debes establecer una fecha inicial y fecha final";
+			model.addAttribute("error", errorFechas);
+		}
+		
+		//valida si la fecha final no esta vacio
+		if(!fechaInicial.equals("") && fechaFinal.equals("")) {				
+			errorFechas = "Debes establecer una fecha inicial y fecha final";
+			model.addAttribute("error", errorFechas);
+		}
+			
+		//consulta por la fecha inicial y la fecha final sin contar con el especialista
+		if(!fechaInicial.equals("") && !fechaFinal.equals("") && especialista.equals("")) {
+			Date fechaI = convertirfecha(fechaInicial);
+			Date fechaF = convertirfecha(fechaFinal);				
+			patProcedimiento = iPatProcedimientoService.findByStartDateBetween(fechaI, fechaF);
+		}
+		
+		//consulta por el especialista sin contar con la fecha inicial y la fecha final
+		if(fechaInicial.equals("") && fechaFinal.equals("") && !especialista.equals("")) {
+			patProcedimiento = iPatProcedimientoService.findByIdPatologo(Integer.parseInt(especialista), Integer.parseInt(especialista));
+		}
+		
+		//consulta la fecha inicial, la fecha final y el especialista. 
+		if(!fechaInicial.equals("") && !fechaFinal.equals("") && !especialista.equals("")) {
+			Date fechaI = convertirfecha(fechaInicial);
+			Date fechaF = convertirfecha(fechaFinal);	
+			patProcedimiento = iPatProcedimientoService.findByStartDateBetweenIdPatologo(fechaI, fechaF, Integer.parseInt(especialista), Integer.parseInt(especialista));
+		}
+		
+		
+			
+			
+		patProcedimiento.forEach(pat ->{			
+			// proceso API para consultar el paciente.			
+			ResponseEntity<GenPacienDTO> respuestap = restTemplate.exchange(URLPaciente+pat.getIdPaciente(), HttpMethod.GET, null, new ParameterizedTypeReference<GenPacienDTO>() {});
+			GenPacienDTO paciente = respuestap.getBody();
 				
-	
+			// proceso API para consultar el procedimiento.			
+			ResponseEntity<GenSeRipsDTO> respuestapr = restTemplate.exchange(URLProcedimiento+pat.getIdProcedimiento(), HttpMethod.GET, null, new ParameterizedTypeReference<GenSeRipsDTO>() {});
+			GenSeRipsDTO procedimiento = respuestapr.getBody();
+				
+			// proceso API para consultar el medico patologo.			
+			ResponseEntity<GenMedicoDTO> respuestam = restTemplate.exchange(URLMedico+pat.getIdPatologo(), HttpMethod.GET, null, new ParameterizedTypeReference<GenMedicoDTO>() {});
+			GenMedicoDTO medico = respuestam.getBody();
+				
+			// proceso API para consultar el medico patologo reasignado.
+				
+			if(pat.getIdPatologoReasigando() != null) {
+			ResponseEntity<GenMedicoDTO> respuestama = restTemplate.exchange(URLMedico+pat.getIdPatologoReasigando(), HttpMethod.GET, null, new ParameterizedTypeReference<GenMedicoDTO>() {});
+			this.medicoa = respuestama.getBody();
+			}else {
+				this.medicoa.setGmeCodigo("");
+				this.medicoa.setGmeNomCod("");
+			}
+				
+			String anoActual = obtenerAno(pat.getFechaRegistro(), pat.getId());
+			String pacienteInternoExterno = pacienteIntExt(pat.getPacienteInternoExterno());
+				
+			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getFolio(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
+			newPatProcedimiento.add(dto);
+				
+		});
+			
+		// proceso API para select de medicos.
+		ResponseEntity<List<GenMedicoDTO>> respuestac = restTemplate.exchange(URLMedicos, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenMedicoDTO>>() {});
+		List<GenMedicoDTO> medicos = respuestac.getBody();
+					
+		model.addAttribute("medicos", medicos);			
+		model.addAttribute("titulo", utf8(this.tituloprocedimientosprocesados));
+		model.addAttribute("listprocpat", newPatProcedimiento);		
+		//flash.addFlashAttribute("error", errorFechas);
+		return "procedimientopatologiageneral";
+	}
+		
+		
+		
 
-
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
-	//////////////*********************************************************//////////////////////////
+		/* ----------------------------------------------------------
+	     * METODOS ADICIONALES 
+	     * ---------------------------------------------------------- */
 								
-	//METODOS ADICIONALES 
-
 	//Se usa para codificacion ISO-8859-1 a UTF-8  
 	private String utf8(String input) {
 		String output = "";
@@ -571,13 +734,6 @@ public class HcnSolPatController {
 		return "M";{			
 		}
 		return "F";
-	}
-	
-	private String convertirTipo(Integer hcsestado) {
-		if(hcsestado == 0) {
-			return "URGENTE";
-		}
-		return "RUTINARIO";
 	}	
 	
 	
@@ -601,6 +757,28 @@ public class HcnSolPatController {
 		}
 		return "EXTERNO";
 	}
+
+	
+	private Date convertirfecha(String fecha) throws ParseException {
+		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(fecha);  
+		return fechaTranformada;
+	}
+	
+
+	private void crearParametro(ComParametroPatologia comParametroPatologia) {
+		ComParametroPatologia comParametroPatologia2 =  new ComParametroPatologia();
+		comParametroPatologia2.setNombre("patologia");
+		comParametroPatologia2.setFechaSolicitudInterno(new Date());
+		comParametroPatologia2.setFechaSolicitudExterno(new Date());
+		iComParametroPatologiaService.save(comParametroPatologia2);			
+	}
+	
+	private String convertirFechaParametro(Date fechaSolicitudInterno) {
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		String strDate = dateFormat.format(fechaSolicitudInterno);  
+		return strDate;
+	}
+
 
 
 }

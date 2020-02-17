@@ -21,6 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- DataTables -->
   <link rel="stylesheet" th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables/extensions/Buttons/css/buttons.bootstrap4.min.css}">
+  <!-- Sweetalert2 -->
+  <link rel="stylesheet" th:href="@{/plugins/sweetalert2/sweetalert2.min.css}">
   <!-- Theme style -->
   <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">  
   <!-- Theme solution -->
@@ -109,11 +111,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       
 
       <!-- Sidebar Menu -->      
-      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="mt-2">
+      <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="nav-item has-treeview menu-open">
             <a href="#" th:class="${principal} ? 'nav-link active' : 'nav-link'">
               <i class="fas fa-bug nav-icon"></i>
               <p>
@@ -126,6 +128,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a th:href="@{/indexpatologia}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
                   <p>Procedimiento Patología</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+      
+      
+      <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${principal} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-cogs nav-icon"></i>
+              <p>
+                Ajustes
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/parametropatologia(seccion=patologia)}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Procedimiento Patología</p>
+                </a>
+              </li>                         
+            </ul>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/usuariolistado}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Usuarios</p>
                 </a>
               </li>                         
             </ul>
@@ -205,7 +242,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 4 -->
 <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <!-- SweetAlert2 -->	
-<script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
+<script th:src="@{/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
 <!-- DataTables -->
 <script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
 <script th:src="@{/plugins/datatables/dataTables.bootstrap4.js}"></script>

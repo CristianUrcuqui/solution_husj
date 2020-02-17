@@ -52,6 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/procedimientopatologiainterno}">
 			      <div class="card-counter primary">
+			      	<h3 th:text=${internos}></h3>
 			        <i class="fas fa-hospital-alt"></i>			        
 			        <span class="count-name">Pacientes Internos</span>
 			      </div>
@@ -62,6 +63,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/procedimientopatologiaexterno}">
 			      <div class="card-counter danger">
+			      	<h3 th:text=${externos}></h3>
 			        <i class="fas fa-clinic-medical"></i>			        
 			        <span class="count-name">Pacientes Externos</span>
 			      </div>
@@ -72,6 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/procedimientopatologiageneral}">
 			      <div class="card-counter success">
+			      	<h3 th:text=${procesados}></h3>
 			        <i class="fas fa-search-plus"></i>			        
 			        <span class="count-name">Consulta General</span>
 			      </div>

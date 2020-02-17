@@ -11,6 +11,7 @@
 	<groupId>com.chapumix</groupId>
 	<artifactId>solution</artifactId>
 	<version>1.0</version>
+	<packaging>jar</packaging>
 	<name>spring-solution</name>
 	<description>Solution</description>	
 
@@ -68,6 +69,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+			        <executable>true</executable>
+			    </configuration>
 			</plugin>
 		</plugins>
 	</build>

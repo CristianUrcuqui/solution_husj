@@ -1,5 +1,6 @@
 package com.chapumix.solution.app.models.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,24 @@ public class PatProcedimientoServiceImpl implements IPatProcedimientoService{
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<PatProcedimiento> findByStartDateBetween(Date fechaInicial, Date fechaFinal) {
+		return iPatProcedimientoDao.findByStartDateBetween(fechaInicial, fechaFinal);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<PatProcedimiento> findByIdPatologo(Integer patologoAsigna, Integer patologoReAsigna) {
+		return iPatProcedimientoDao.findByIdPatologo(patologoAsigna, patologoReAsigna);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<PatProcedimiento> findByStartDateBetweenIdPatologo(Date fechaInicial, Date fechaFinal, Integer patologoAsigna, Integer patologoReAsigna) {
+		return iPatProcedimientoDao.findByStartDateBetweenIdPatologo(fechaInicial, fechaFinal, patologoAsigna, patologoReAsigna);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public PatProcedimiento findById(Long id) {
 		return iPatProcedimientoDao.findById(id).orElse(null);
 	}
@@ -42,5 +61,6 @@ public class PatProcedimientoServiceImpl implements IPatProcedimientoService{
 		iPatProcedimientoDao.deleteById(id);
 		
 	}
+	
 
 }

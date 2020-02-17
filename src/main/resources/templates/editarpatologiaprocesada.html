@@ -4,7 +4,7 @@ This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layout ::head"></head>
+<head th:replace="layout/layout.html ::head"></head>
 
 <body class="hold-transition sidebar-mini">
 
@@ -16,16 +16,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <div class="wrapper">
 
-  <header th:replace="/layout/layout ::header"></header>
+  <header th:replace="/layout/layout.html ::header"></header>
 
-  <aside th:replace="/layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+  <aside th:replace="/layout/layout.html ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
 
   <!-- INICIO CONTENIDO -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
-     <div th:replace="/layout/layout ::mensajes"></div>
+     <div th:replace="/layout/layout.html ::mensajes"></div>
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
@@ -101,9 +101,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
          	 <div class="card card-info col-md-6 m-1">             
               <!-- form start -->
-              <form id="editarpatologiaprocesada"  class="form-horizontal" th:action="@{/editarpatologiaprocesada}" th:object="${patProcedimiento}" role="form" method="post">					
-						
-					   
+              <form id="editarpatologiaprocesada"  class="form-horizontal" th:action="@{/editarpatologiaprocesada}" th:object="${patProcedimiento}" role="form" method="post">					   
 					    
 		               <div class="form-group row required mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="codigo">Código</label>
@@ -210,54 +208,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- FIN CONTENIDO -->
 
  <!-- Main Footer -->
-  <footer th:replace="/layout/layout ::footer" class="main-footer"></footer>
+  <footer th:replace="/layout/layout.html ::footer" class="main-footer"></footer>
 </div>
 <!-- ./wrapper -->
 
-<div th:replace="/layout/layout ::scripts"></div>
+<div th:replace="/layout/layout.html ::scripts"></div>
 
 <script>
-$(document).ready(function() {
-    $('#datatablelistaprocedimientopatologia').DataTable( {
-    	"columnDefs": [
-            { "width": "0.4%", "targets": [0,2,3] },
-            { "width": "10%", "targets": [5] },
-            { "width": "15%", "targets": [1] },
-            { "width": "30%", "targets": [4] },
-            { "width": "10%", "targets": [6] }
-            
-        ],        
-        "pageLength": 25,
-    	"order": [],    	
-    	"language": {
-            "lengthMenu": "Mostrar _MENU_ registros por página",
-            "zeroRecords": "Nada Encontrado - Lo sentimos!",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "search": "Buscar",
-            "infoEmpty": "No hay registros disponibles",
-            "infoFiltered": "(filtrado de _MAX_ registros totales)",
-            
-            
-            "paginate": {
-            	      "previous": "Anterior",
-            	      "first": "Primera",
-            	      "last": "Última",
-            	      "next": "Siguiente"
-            	    }
-        },        
-    	"pagingType": "full_numbers",    	
-    } );
-} );
+	$('[data-toggle="tooltip"]').tooltip();
 </script>
-<script>
-	$('a').tooltip('update');
-</script>
-<script>
-$('#modal-eliminar-personajuridica').on('show.bs.modal', function (e) {
-    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    $('#modal-eliminar-personajuridicaId').val($(this).find('.btn-ok').attr('href'));
-});
-</script>
+
 
 <script>
 	window.onload = function(){

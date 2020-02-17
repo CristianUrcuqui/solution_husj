@@ -1,6 +1,5 @@
 package com.chapumix.solution.app;
 
-import org.aspectj.weaver.ast.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,6 +28,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/procesarpatologiaexterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/procesarpatologiainterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/editarpatologiaprocesada/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/eliminarpatologiaprocesada/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
+		.antMatchers("/parametropatologia/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()
