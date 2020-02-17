@@ -4,7 +4,7 @@ This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layout.html ::head"></head>
+<head th:replace="layout/layout ::head"></head>
 
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -15,16 +15,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   		</div>
   	</div>
 
-  <header th:replace="/layout/layout.html ::header"></header>
+  <header th:replace="layout/layout ::header"></header>
 
-  <aside th:replace="/layout/layout.html ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
 
   <!-- INICIO CONTENIDO -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
-     <div th:replace="/layout/layout.html ::mensajes"></div>
+     <div th:replace="layout/layout ::mensajes"></div>
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
@@ -118,11 +118,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- FIN CONTENIDO -->
 
  <!-- Main Footer -->
-  <footer th:replace="/layout/layout.html ::footer" class="main-footer"></footer>
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
 </div>
 <!-- ./wrapper -->
 
-<div th:replace="/layout/layout.html ::scripts"></div>
+<div th:replace="layout/layout ::scripts"></div>
 
 <script>
 $(document).ready(function() {
