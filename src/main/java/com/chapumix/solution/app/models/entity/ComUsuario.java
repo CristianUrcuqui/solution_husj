@@ -11,7 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -97,8 +98,10 @@ public class ComUsuario implements Serializable {
 		this.estado = estado;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)//Esto significa que un usuario puede tener muchos roles
-	@JoinColumn(name = "usuarios_id")
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="usuarios_roles"
+		,joinColumns=@JoinColumn(name="usuarios_id")
+		,inverseJoinColumns=@JoinColumn(name="roles_id"))
 	public List<ComRole> getRoles() {
 		return roles;
 	}

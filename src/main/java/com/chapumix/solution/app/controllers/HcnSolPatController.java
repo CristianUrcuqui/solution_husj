@@ -542,7 +542,7 @@ public class HcnSolPatController {
 				patProcedimiento = iPatProcedimientoService.findById(id);
 				if(patProcedimiento == null) {
 					flash.addFlashAttribute("error", "El ID del procedimiento no existe en la base de datos");
-					return "redirect:/listapersonajuridica";
+					return "redirect:/procedimientopatologiageneral";
 				}
 			}else {
 				flash.addFlashAttribute("error", "El ID del procedimiento no puede ser 0");

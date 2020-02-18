@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Usuarios Sistema</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Roles Usuario</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -45,10 +45,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="content-header py-0">
 			  <div class="container-fluid">
 				<div class="row">
-				<!-- Toolbar Botones -->					
+				<!-- Toolbar Botones -->
+				
+					<!-- Toolbar Botones Izquierdo-->
+					<div class="col-sm-6">						
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<a class="btn btn-primary" th:href="@{/rolform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
+										<i class="fas fa-plus fa-lg mt-1"></i>
+									</a>																		
+								</div>																									
+							</div>
+						</div>
+					 </div>
 						
 					<!-- Toolbar Botones Derecho-->
-					  <div class="col-sm-12">			
+					  <div class="col-sm-6">			
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
@@ -77,33 +90,52 @@ scratch. This page gets rid of all links and provides the needed markup only.
          <div class="col-md-12">
 	         <div class="card">
 		         <div class="card-body">
-			         <table id="datatablelistausuario" class="table table-striped table-bordered table-hover table-condensed" style="width: 100%">
+			         <table id="datatablelistarol" class="table table-striped table-bordered table-hover table-condensed" style="width: 100%">
 			         	<thead>
 				         	<tr>
-					         	<th>USUARIO</th>
-					         	<th>NOMBRES Y APELLIDOS</th>
-					         	<th>ESTADO</th>					         	
+					         	<th>Rol</th>					         					         	
 					         	<th></th>					         	
 				         	</tr>
 			         	</thead>
 			         	<tbody>			         		
-				         	<tr th:each="lprocpat: ${listusuario}">
-					         	<td th:text="${lprocpat.usuario}"></td>
-					         	<td th:text="${lprocpat.nombreCompleto}"></td>
-					         	 <td class="text-center align-middle">
-							      	<div th:if="${lprocpat.estado} eq true">
-									    <h6><small class="badge badge-success"><i class="fas fa-thumbs-up"></i> Activo</small></h6>
-									</div>
-									<div th:if="${lprocpat.estado} eq false">
-									    <h6><small class="badge badge-danger"><i class="fas fa-thumbs-down"></i> Inactivo</small></h6>
-									</div>
-							      </td>	        						         						         	
+				         	<tr th:each="lprocpat: ${listrol}">
+					         	<td th:text="${lprocpat.nombre}"></td>					         	       						         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
-						         		<a class="btn btn-primary btn-sm"  th:href="@{/usuarioform(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
+						         		<a class="btn btn-primary btn-sm"  th:href="@{/rolform(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
 											<i class="fas fa-user-edit fa-xs"></i>
 										</a>												         		
-									</div>										      							      
+									</div>
+									<div class="d-inline">
+						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-rol" th:attr="data-target='#modal-eliminar-rol'+${lprocpat.id}" data-placement="top" title="Eliminar" role="button">
+	                                    	<i class="far fa-trash-alt fa-xs"></i>
+	                                    </a>							         		
+									</div>
+									
+									<!-- modal-content -->
+									<div class="modal fade" th:id="modal-eliminar-rol+${lprocpat.id}">
+									        <div class="modal-dialog modal-sm">
+									          <div class="modal-content">
+									            <div class="modal-header">
+									              <h4 class="modal-title">Rol Usuario</h4>
+									              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									                <span aria-hidden="true">&times;</span>
+									              </button>
+									            </div>
+									            <div class="modal-body">
+									              <p>Estas seguro que quieres eliminar?</p>
+									            </div>
+									            <div class="modal-footer justify-content-between">
+									              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									              <a th:href="@{/eliminarrol/{id}(id=${lprocpat.id})}">
+									                <span class="btn btn-danger" value="delete">Eliminar</span>
+									              </a>
+									            </div>
+									          </div>
+									          <!-- /.modal-content -->
+									        </div>
+									        <!-- /.modal-dialog -->
+								      </div><!-- /.modal -->											      							      
 								</td>													         	
 				         	</tr>
 			         	</tbody>	         	
@@ -129,13 +161,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
 $(document).ready(function() {
-    $('#datatablelistausuario').DataTable( {
+    $('#datatablelistarol').DataTable( {
     	"columnDefs": [
-            { "width": "5%", "targets": [0] },
-            { "width": "20%", "targets": [1] },
-            { "width": "1%", "targets": [2] },
-            { "width": "1%", "targets": [3] }
-            
+            { "width": "85%", "targets": [0] },
+            { "width": "5%", "targets": [1] }           
             
         ],        
         "pageLength": 25,

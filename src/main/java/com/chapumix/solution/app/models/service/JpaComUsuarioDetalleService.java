@@ -38,7 +38,10 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 	private IComUsuarioDao comUsuarioDao;*/
 	
 	@Autowired
-	private IComUsuarioDao comUsuarioDao;	
+	private IComUsuarioDao comUsuarioDao;
+	
+	@Autowired
+	private IComRoleService iComRoleService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -116,7 +119,7 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 			
 			int i = 0;
 			for(Map.Entry<String, Object> entry : map.entrySet()) {
-				System.out.println(entry.getKey() + " = " + entry.getValue());
+				//System.out.println(entry.getKey() + " = " + entry.getValue());
 				if(entry.getValue() != null) {
 					this.lista.add(i, entry.getValue().toString());
 				}else {
@@ -161,8 +164,9 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 				comUsuarioDao.save(usuarioGuardar);
 				
 			}else {
-				ComUsuario usuarioGuardar1 = new ComUsuario();
+				ComUsuario usuarioGuardar1 = new ComUsuario();				
 				ComRole role = new ComRole();
+				role = iComRoleService.findById(3L);
 				List<ComRole> roles = new ArrayList<>();
 				String nombreCorto = recortar(lista.get(3).toString());					
 				
@@ -171,7 +175,7 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 				usuarioGuardar1.setNombreCompleto(lista.get(3).toString()); //nombre completo
 				usuarioGuardar1.setNombreCorto(nombreCorto); //nombre corto 
 				usuarioGuardar1.setContrasena(passwordEncoder.encode(password)); //contraseña nueva
-				role.setNombre("ROLE_TMP");
+				role.setNombre(role.getNombre());
 				roles.add(role);
 				usuarioGuardar1.setRoles(roles);
 				

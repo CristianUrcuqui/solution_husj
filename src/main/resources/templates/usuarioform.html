@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</button>																		
 								</div>
 								<div class="btn-group btn-group-sm" role="group">
-									<button type="reset" form="procesarpatologia" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+									<button type="reset" form="editarusuario" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
 										<i class="fas fa-times fa-lg mt-1"></i>									
 									</button>
 								</div>																	
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-dark" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-dark" th:href="@{/usuariolistado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
         <!-- Lista para mostrar los errorer antes del formulario -->
 	        <div class="col-md-12">
-	        	<div th:object="${patProcedimiento}" th:remove="tag">
+	        	<div th:object="${comUsuario}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
 						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
@@ -101,58 +101,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
          	 <div class="card card-info col-md-6 m-1">             
               <!-- form start -->
-              <form id="editarusuario"  class="form-horizontal" th:action="@{/editarusuario}" th:object="${patProcedimiento}" role="form" method="post">					   
-					    
-		               <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="codigo">Código</label>
-			                <div class="col-sm-4">
-				                <div class="callout callout-info m-0 p-1">
-					                <p th:text="${codigo}"></p>
-					            </div>	                   			                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="fecha">Fecha Proceso</label>
-			                <div class="col-sm-4">
-				                <div class="callout callout-info m-0 p-1">
-					                <p th:text="${#dates.format(patProcedimiento.fechaRegistro, 'dd-MM-yyy h:mm a')}"></p>
-					            </div>	                   			                   			                   	                    	
-			                </div>
-	                   </div>                   
-	                   
-	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
-			                <div class="col-sm-5">
-				                <select id="patologoAsignado" th:field="*{idPatologo}"  class="form-control form-control-sm">
-		                          <option value="" selected="selected">Seleccione</option>
-		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
-		                        </select>			                   			                   			                   	                    	
+              <form id="editarusuario"  class="form-horizontal" th:action="@{/usuarioform}" th:object="${comUsuario}" role="form" method="post">					   
+					   
+					   
+					   <div class="form-group row mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="usuario">Usuario</label>
+			                <div class="col-sm-5">              	
+			                   	<input id="usuario" type="text" th:field="*{usuario}" class="form-control form-control-sm" readonly>	                   			                   	                    	
 			                </div>
 	                   </div>
 	                   
 	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="patologoReAsignado">Patólogo ReAsignado</label>
-			                <div class="col-sm-5">
-				                <select id="patologoReAsignado" th:field="*{idPatologoReasigando}" class="form-control form-control-sm">
-		                          <option value="" selected="selected">Seleccione</option>
-		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
-		                        </select>			                   			                   			                   	                    	
+	                   		<label class="control-label col-sm-3 ml-1" for="nombre">Nombre Completo</label>
+			                <div class="col-sm-5">              	
+			                   	<input id="nombre" type="text" th:field="*{nombreCompleto}" class="form-control form-control-sm" readonly>	                   			                   	                    	
 			                </div>
 	                   </div>
 	                   
 	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
-			                <div class="col-sm-5"> 			                   	
-			                   	<textarea id="correcion" th:field="*{correccion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
+	                   		<label class="control-label col-sm-3 ml-1" for="roles">Roles</label>
+			                <div class="col-sm-5">
+				                <select id="roles" th:field="*{roles}" class="form-control form-control-sm" multiple>
+		                          <option value="" selected="selected">Seleccione</option>
+		                          <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>		                          
+		                        </select>			                   			                   			                   	                    	
 			                </div>
-	                   </div>
-	                   <div class="form-group row">
-			                 <label class="control-label col-sm-3 ml-1" for="observacion">Observación</label>
-			                 <div class="col-sm-5">			                    
-			                    <textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
-			                 </div>
-			           </div>                   
+	                   </div>  
+		               
+		                           
 	                   
 					          
                 	
