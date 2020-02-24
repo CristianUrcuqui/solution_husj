@@ -130,16 +130,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
 $(document).ready(function() {
     $('#datatablelistausuario').DataTable( {
-    	"columnDefs": [
-            { "width": "5%", "targets": [0] },
-            { "width": "20%", "targets": [1] },
-            { "width": "1%", "targets": [2] },
-            { "width": "1%", "targets": [3] }
-            
-            
-        ],        
+    	"responsive": true,   
         "pageLength": 25,
-    	"order": [],    	
+    	"order": [],
+    	"columnDefs": [      	  
+      	  { "width": "6%", "targets": [2] },
+      	  { "width": "6%", "targets": [3] }
+           
+            
+        ],
     	"language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",
             "zeroRecords": "Nada Encontrado - Lo sentimos!",

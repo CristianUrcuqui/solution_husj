@@ -23,12 +23,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" th:href="@{/plugins/datatables/extensions/Buttons/css/buttons.bootstrap4.min.css}">
   <!-- Sweetalert2 -->
   <link rel="stylesheet" th:href="@{/plugins/sweetalert2/sweetalert2.min.css}">
+  <!-- Datatable Plugins -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css}">
   <!-- Theme style -->
   <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">  
   <!-- Theme solution -->
   <link rel="stylesheet" th:href="@{/plugins/solution/solution.css}">
   <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">  
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  
+      
 </head>
 <body class="hold-transition sidebar-mini">	
 
@@ -235,6 +239,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <footer th:fragment="footer" class="main-footer">    
     <!-- Default to the left -->
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
+    
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 0.4.8
+    </div>
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -254,6 +262,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- DataTables -->
 <script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
 <script th:src="@{/plugins/datatables/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js}"></script>
 <!-- DataTables Buton -->
 <script th:src="@{/plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js}"></script>
 <script th:src="@{/plugins/datatables/extensions/Buttons/js/buttons.bootstrap4.min.js}"></script>

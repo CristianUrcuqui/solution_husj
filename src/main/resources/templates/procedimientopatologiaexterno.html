@@ -98,7 +98,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
 						         		<a class="btn btn-primary btn-sm" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
-											<i class="fas fa-share-square fa-xs"></i>
+											<i class="fas fa-mortar-pestle fa-xs"></i>
 										</a>												         		
 									</div>										      							      
 								</td>													         	
@@ -126,18 +126,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
 $(document).ready(function() {
-    $('#datatablelistaprocedimientopatologia').DataTable( {
-    	"columnDefs": [
-            { "width": "5%", "targets": [0] },
-            { "width": "20%", "targets": [1] },
-            { "width": "10%", "targets": [2] },            
-            { "width": "44%", "targets": [3] },
-            { "width": "10%", "targets": [4] },
-            { "width": "10%", "targets": [5] },          
-            { "width": "1%", "targets": [6] }
-            
-        ],        
+    $('#datatablelistaprocedimientopatologia').DataTable( {    	        
         "pageLength": 25,
+        "responsive": true,
     	"order": [],    	
     	"language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",

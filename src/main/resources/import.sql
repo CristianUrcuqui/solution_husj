@@ -9,4 +9,4 @@ INSERT INTO `usuarios_roles` (`usuarios_id`, `roles_id`) VALUES ('1', '1');
 
 
 /* Creamos parametro fecha por defecto para procedimiento patologia*/
-INSERT INTO `com_parametro_patologia` (fecha_solicitud_externo, fecha_solicitud_interno, nombre) VALUES ('2020-02-15', '2020-02-15', 'patologia');
+#INSERT INTO `com_parametro_patologia` (fecha_solicitud_externo, fecha_solicitud_interno, nombre) VALUES ('2020-02-15', '2020-02-15', 'patologia');

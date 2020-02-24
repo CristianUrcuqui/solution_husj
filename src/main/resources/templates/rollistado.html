@@ -162,12 +162,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
 $(document).ready(function() {
     $('#datatablelistarol').DataTable( {
-    	"columnDefs": [
-            { "width": "85%", "targets": [0] },
-            { "width": "5%", "targets": [1] }           
+    	"columnDefs": [            
+            { "width": "8%", "targets": [1] }           
             
         ],        
         "pageLength": 25,
+        "responsive": true, 
     	"order": [],    	
     	"language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",
