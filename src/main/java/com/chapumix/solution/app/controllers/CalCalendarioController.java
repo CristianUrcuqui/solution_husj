@@ -1,17 +1,10 @@
 package com.chapumix.solution.app.controllers;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.input.BOMInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -33,10 +24,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.chapumix.solution.app.entity.dto.CalCalendarioDTO;
-import com.chapumix.solution.app.entity.dto.HcnSolPatIntDTO;
 import com.chapumix.solution.app.models.entity.CalCalendario;
 import com.chapumix.solution.app.models.service.ICalCalendarioService;
-import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -173,7 +162,7 @@ public class CalCalendarioController {
 			return output;
 		}
 		
-	//Se usa para convertir una cadena a fecha con formato
+	//Se usa para convertir una string cadena a fecha Date con formato
 	private Date convertirfecha(String fecha) throws ParseException {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);  
 		return fechaTranformada;

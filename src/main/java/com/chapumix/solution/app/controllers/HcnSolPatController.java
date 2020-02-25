@@ -795,7 +795,7 @@ public class HcnSolPatController {
 	}
 
 	
-	//Se usa para convertir una cadena a fecha con formato
+	//Se usa para convertir una cadena String a fecha Date con formato
 	private Date convertirfecha(String fecha) throws ParseException {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(fecha);  
 		return fechaTranformada;
@@ -810,6 +810,7 @@ public class HcnSolPatController {
 		iComParametroPatologiaService.save(comParametroPatologia2);			
 	}
 	
+	//Se usa para convertir una fecha Date con un String con formato
 	private String convertirFechaParametro(Date fechaSolicitudInterno) {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		String strDate = dateFormat.format(fechaSolicitudInterno);  
