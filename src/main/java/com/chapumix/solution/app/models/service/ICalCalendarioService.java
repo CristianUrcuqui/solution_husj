@@ -8,6 +8,8 @@ public interface ICalCalendarioService {
 	
 	public List<CalCalendario> findAll();
 	
+	public List<CalCalendario> findUserByDate();
+	
 	public CalCalendario findByNumeroIdentificacion(String identificacion);
 
 	public void save(CalCalendario calCalendario);

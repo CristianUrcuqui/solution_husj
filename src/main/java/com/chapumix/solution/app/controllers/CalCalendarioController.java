@@ -45,6 +45,9 @@ public class CalCalendarioController {
 	@Value("${app.tituloempleados}")
 	private String tituloempleados;
 	
+	@Value("${app.titulohoy}")
+	private String titulohoy;
+	
 	@Value("${app.enlaceprincipalcalidad}")
 	private String enlaceprincipalcalidad;
 	
@@ -79,6 +82,17 @@ public class CalCalendarioController {
 		model.addAttribute("enlace5", enlace5);		
 		return "empleadocumple";
 	}
+	
+	
+	// Este metodo me permite listar todos los empleados que cumplen años hoy
+		@GetMapping("/empleadohoy")
+		public String listarHoy(Model model) {					
+			model.addAttribute("titulo", utf8(this.titulohoy));
+			model.addAttribute("listempleado", iCalCalendarioService.findUserByDate());
+			model.addAttribute("calidad", enlaceprincipalcalidad);
+			model.addAttribute("enlace5", enlace5);		
+			return "empleadohoy";
+		}
 	
 	// Este metodo me permite visualizar o cargar el formulario del empleado para cargar el archivo
 	@GetMapping("/cumplecarform")

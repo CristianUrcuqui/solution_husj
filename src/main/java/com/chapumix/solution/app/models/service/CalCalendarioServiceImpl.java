@@ -21,6 +21,11 @@ public class CalCalendarioServiceImpl implements ICalCalendarioService{
 	public List<CalCalendario> findAll() {
 		return (List<CalCalendario>) calCalendarioDao.findAll();
 	}
+	
+	@Override
+	public List<CalCalendario> findUserByDate() {
+		return calCalendarioDao.findUserByDate();
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
@@ -45,6 +50,6 @@ public class CalCalendarioServiceImpl implements ICalCalendarioService{
 	@Transactional
 	public void delete(Long id) {
 		calCalendarioDao.deleteById(id);	
-	}	
+	}
 
 }
