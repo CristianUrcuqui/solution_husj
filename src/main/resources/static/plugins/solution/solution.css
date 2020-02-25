@@ -228,3 +228,10 @@ table.dataTable tbody th, table.dataTable tbody td {
 .dataTables_length{	
 	position: absolute !important;
 }
+
+
+
+/******Estilo para el input file******/
+.custom-file-input ~ .custom-file-label::after {
+    content: "Elegir";
+}

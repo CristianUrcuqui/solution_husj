@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Procedimiento Patología</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Cumpleaños Empleados</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -40,52 +40,67 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->    
+    <!-- /.content-header -->
+    
+    
+   			<!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<!-- Toolbar Botones Derecho-->
+					  <div class="col-sm-12">			
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn btn-primary" th:href="@{/indexcalidad}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>						  				
+					</div>
+				</div>
+			</div>
+        
 
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
+        
         	<div class="container">
 			  <div class="row">
 			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/procedimientopatologiainterno}">
+			      <a id="link" th:href="@{/empleadocumple}">
 			      <div class="card-counter primary">
 			      	<h3 th:text=${internos}></h3>
-			        <i class="fas fa-hospital-alt"></i>			        
-			        <span class="count-name">Pacientes Internos</span>
+			        <i class="fas fa-user-tie"></i>			        
+			        <span class="count-name">Empleados</span>
 			      </div>
 			      </a>
 			    </div>
 			
 			    
 			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/procedimientopatologiaexterno}">
+			      <a id="link" th:href="@{/cumplecarform}">
 			      <div class="card-counter danger">
 			      	<h3 th:text=${externos}></h3>
-			        <i class="fas fa-clinic-medical"></i>			        
-			        <span class="count-name">Pacientes Externos</span>
+			        <i class="fas fa-upload"></i>			        
+			        <span class="count-name">Cargar Empleados</span>
 			      </div>
 			      </a>
-			    </div>
-			    
+			    </div>			    
 			
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/procedimientopatologiageneral}">
-			      <div class="card-counter success">
-			      	<h3 th:text=${procesados}></h3>
-			        <i class="fas fa-search-plus"></i>			        
-			        <span class="count-name">Consulta General</span>
-			      </div>
-			      </a>
-			    </div>			    			    
+			  		    			    
 			  </div><!-- /.row-card -->
 			</div><!-- /.container-card -->
+        
+        		
 			
 			                
-        </div>
-        <!-- /.row -->
+        </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->

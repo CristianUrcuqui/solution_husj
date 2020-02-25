@@ -113,6 +113,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
       
+	      <!--   ----------------------------------------------------------
+	     * MENU PATOLOGIA
+	     * ---------------------------------------------------------- */-->	
+      
 
       <!-- Sidebar Menu -->      
       <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="mt-2">
@@ -139,6 +143,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
+      
+      <!--   ----------------------------------------------------------
+	     * MENU CALIDAD HUMANIZACION
+	     * ---------------------------------------------------------- */-->
+	     
+	     
+	  <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_CALIDAD')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${calidad} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-certificate"></i>
+              <p>
+                Calidad
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_CALIDAD')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/indexcalidad}" th:class="${enlace5} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Calidad Humanización</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->   
+	     
+	     
+	     
+	 <!--   ----------------------------------------------------------
+	     * MENU AJSUTES
+	     * ---------------------------------------------------------- */-->	    	
       
       
       <!-- Sidebar Menu -->      

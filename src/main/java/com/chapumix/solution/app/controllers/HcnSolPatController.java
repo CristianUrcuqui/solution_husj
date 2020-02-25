@@ -786,6 +786,7 @@ public class HcnSolPatController {
 		return ano;
 	}
 	
+	//Se usa para convertir una cadena a INTERNO o EXTERNO
 	private String pacienteIntExt(String pacienteInternoExterno) {
 		if(pacienteInternoExterno.equals("I")) {
 			return "INTERNO";
@@ -794,6 +795,7 @@ public class HcnSolPatController {
 	}
 
 	
+	//Se usa para convertir una cadena a fecha con formato
 	private Date convertirfecha(String fecha) throws ParseException {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(fecha);  
 		return fechaTranformada;
