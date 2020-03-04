@@ -41,12 +41,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.content-header -->
     
-    		<!-- TOOLBAR BOTONES -->
+    		<!-- TOOLBAR BOTONES -->    		
+    		
 			<div class="content-header py-0">
 			  <div class="container-fluid">
 				<div class="row">
+				
+					<!-- Toolbar Botones Izquierdo-->
+					<div class="col-sm-6">						
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<a class="btn btn-primary" th:href="@{/empleadoform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
+										<i class="fas fa-plus fa-lg mt-1"></i>
+									</a>																		
+								</div>																									
+							</div>
+						</div>
+					</div>
+				
 					<!-- Toolbar Botones Derecho-->
-					  <div class="col-sm-12">			
+					  <div class="col-sm-6">			
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
@@ -82,6 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<th>FECHA NACIMIENTO</th>
 					         	<th>E-MAIL</th>					         	
 					         	<th>ENVIADO</th>
+					         	<th></th>
 					         					         	
 				         	</tr>
 			         	</thead>
@@ -97,7 +113,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<div th:if="${lemplead.enviado} eq false">
 									    <h6><small class="badge badge-danger"><i class="fas fa-thumbs-down"></i>No Enviado</small></h6>
 									</div>
-							    </td>				         													         	
+							    </td>
+							    <td class="text-center align-middle">
+					         		<div class="d-inline">
+						         		<a class="btn btn-primary btn-sm"  th:href="@{/empleadoforme(id=${lemplead.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
+											<i class="fas fa-user-edit fa-xs"></i>
+										</a>												         		
+									</div>
+									<div class="d-inline">
+						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-empleado" th:attr="data-target='#modal-eliminar-empleado'+${lemplead.id}" data-placement="top" title="Eliminar" role="button">
+	                                    	<i class="far fa-trash-alt fa-xs"></i>
+	                                    </a>							         		
+									</div>
+									
+									<!-- modal-content -->
+									<div class="modal fade" th:id="modal-eliminar-empleado+${lemplead.id}">
+									        <div class="modal-dialog modal-sm">
+									          <div class="modal-content">
+									            <div class="modal-header">
+									              <h4 class="modal-title">Empleado</h4>
+									              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									                <span aria-hidden="true">&times;</span>
+									              </button>
+									            </div>
+									            <div class="modal-body">
+									              <p>Estas seguro que quieres eliminar?</p>
+									            </div>
+									            <div class="modal-footer justify-content-between">
+									              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									              <a th:href="@{/eliminarempleado/{id}(id=${lemplead.id})}">
+									                <span class="btn btn-danger" value="delete">Eliminar</span>
+									              </a>
+									            </div>
+									          </div>
+									          <!-- /.modal-content -->
+									        </div>
+									        <!-- /.modal-dialog -->
+								      </div><!-- /.modal -->											      							      
+								</td>				         													         	
 				         	</tr>
 			         	</tbody>	         	
 			         </table>
@@ -125,9 +178,10 @@ $(document).ready(function() {
     $('#datatablelistaempleado').DataTable( {    	        
         "pageLength": 50,
         "responsive": true,
-    	"order": [],
+        "order": [3, 'asc'],
     	"columnDefs": [        	  
-      	  { "width": "6%", "targets": [3] }
+      	  { "width": "6%", "targets": [3] },
+      	{ "width": "7%", "targets": [4] }
            
             
         ],    	
@@ -153,6 +207,7 @@ $(document).ready(function() {
 </script>
 <script>
 	$('[data-toggle="tooltip"]').tooltip();
+	$('a').tooltip('update');
 </script>
 <script>
 	window.onload = function(){

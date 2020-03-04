@@ -73,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-           	<div class="card card-info col-md-6 m-1">             
+           	<div class="card card-info col-md-5 m-1">             
               <!-- form start -->
               <form id="editarempleado"  class="form-horizontal" th:action="@{/uploadcsv}" enctype="multipart/form-data" role="form" method="post">					   
 					   
@@ -93,8 +93,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			           
 			           	<blockquote class="mt-5">
 		                	<p>El fichero CSV debe tener el siguiente formato:</p>
-		                	<small>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado
-								   xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</small>
+		                	<p class="m-0 p-0"><small>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado</small></p>
+							<p class="m-0 p-0"><small> xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</small></p>
 		                </blockquote>
 		              	
 	                                
@@ -121,6 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
 	$('[data-toggle="tooltip"]').tooltip();
+	$('a').tooltip('update');
 </script>
 
 

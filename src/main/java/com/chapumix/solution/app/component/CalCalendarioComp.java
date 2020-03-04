@@ -65,7 +65,7 @@ public class CalCalendarioComp {
     public SMTPTransport t;
 	
 	//metodo que se ejecuta de forma automatica todos los dias a la 1:00 AM
-    @Scheduled(cron = "0 13 16 * * ?", zone="America/Bogota")
+    @Scheduled(cron = "0 00 07 * * ?", zone="America/Bogota")
 	public void cronCumpSch() {
 	    
 			//buscamos todos los empleados en base de datos

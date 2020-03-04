@@ -8,10 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "cal_calendario")
@@ -25,8 +30,13 @@ public class CalCalendario implements Serializable {
 	private Date fechaNacimiento;
 	private String correo;
 	private Boolean enviado;
-		
+	
 	public CalCalendario() {		
+	}
+	
+	@PrePersist
+	public void prePersist() {
+		this.enviado = false;		
 	}
 	
 
@@ -41,19 +51,7 @@ public class CalCalendario implements Serializable {
 		this.id = id;
 	}
 	
-	@NotNull
-	@Column(name = "numero_identificacion", unique = true)
-	public String getNumeroIdentificacion() {
-		return numeroIdentificacion;
-	}
-
-
-	public void setNumeroIdentificacion(String numeroIdentificacion) {
-		this.numeroIdentificacion = numeroIdentificacion;
-	}
-
-
-	@NotNull
+	@NotEmpty
 	@Column(name = "nombre_completo")
 	public String getNombreCompleto() {
 		return nombreCompleto;
@@ -63,9 +61,21 @@ public class CalCalendario implements Serializable {
 	public void setNombreCompleto(String nombreCompleto) {
 		this.nombreCompleto = nombreCompleto;
 	}
+	
+	@NotEmpty
+	@Column(name = "numero_identificacion", unique = true)
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
+	}
+
+
+	public void setNumeroIdentificacion(String numeroIdentificacion) {
+		this.numeroIdentificacion = numeroIdentificacion;
+	}	
 
 
 	@NotNull
+	@DateTimeFormat(pattern = "dd-mm-yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_nacimiento")
 	public Date getFechaNacimiento() {
@@ -77,7 +87,8 @@ public class CalCalendario implements Serializable {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-
+	@NotEmpty
+	@Email
 	@Column(name = "correo")
 	public String getCorreo() {
 		return correo;
@@ -88,7 +99,7 @@ public class CalCalendario implements Serializable {
 		this.correo = correo;
 	}
 
-
+	
 	@Column(name = "enviado")
 	public Boolean getEnviado() {
 		return enviado;
