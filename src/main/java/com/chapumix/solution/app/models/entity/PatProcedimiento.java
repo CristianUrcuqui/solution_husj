@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,8 +26,10 @@ public class PatProcedimiento implements Serializable {
 	private Integer idPaciente;
 	private Integer idProcedimiento;
 	private Integer folio;
+	private Date fechaSolicitud;
 	private Integer idPatologo;
 	private Integer idPatologoReasigando;
+	private String tipoMuestra;
 	private String correccion;
 	private String observacion;
 	private String pacienteInternoExterno;
@@ -88,13 +91,24 @@ public class PatProcedimiento implements Serializable {
 
 	public void setFolio(Integer folio) {
 		this.folio = folio;
+	}	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "fecha_solicitud")
+	public Date getFechaSolicitud() {
+		return fechaSolicitud;
 	}
+
+	public void setFechaSolicitud(Date fechaSolicitud) {
+		this.fechaSolicitud = fechaSolicitud;
+	}
+		
 
 	@NotNull
 	@Column(name = "id_patologo")
 	public Integer getIdPatologo() {
 		return idPatologo;
-	}
+	}	
 
 	public void setIdPatologo(Integer idPatologo) {
 		this.idPatologo = idPatologo;
@@ -107,6 +121,16 @@ public class PatProcedimiento implements Serializable {
 
 	public void setIdPatologoReasigando(Integer idPatologoReasigando) {
 		this.idPatologoReasigando = idPatologoReasigando;
+	}
+	
+	@NotEmpty
+	@Column(name = "tipo_muestra")
+	public String getTipoMuestra() {
+		return tipoMuestra;
+	}
+
+	public void setTipoMuestra(String tipoMuestra) {
+		this.tipoMuestra = tipoMuestra;
 	}
 
 	@Column(name = "correccion")

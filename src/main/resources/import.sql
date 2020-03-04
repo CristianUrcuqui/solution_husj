@@ -4,12 +4,13 @@ INSERT INTO `com_usuario` (usuario, contrasena, estado, nombre_completo, nombre_
 INSERT INTO `com_role` (`nombre`) VALUES ('ROLE_ADMIN');
 INSERT INTO `com_role` (`nombre`) VALUES ('ROLE_PATOLOGIA');
 INSERT INTO `com_role` (`nombre`) VALUES ('ROLE_TMP');
+INSERT INTO `com_role` (`nombre`) VALUES ('ROLE_CALIDAD');
 
 INSERT INTO `usuarios_roles` (`usuarios_id`, `roles_id`) VALUES ('1', '1');
 
 
 /* Creamos parametro fecha por defecto para procedimiento patologia*/
-#INSERT INTO `com_parametro_patologia` (fecha_solicitud_externo, fecha_solicitud_interno, nombre) VALUES ('2020-02-15', '2020-02-15', 'patologia');
+INSERT INTO `com_parametro_patologia` (fecha_solicitud_externo, fecha_solicitud_interno, nombre) VALUES ('2020-02-15', '2020-02-15', 'patologia');
 
 
 /* Creamos empleado para cumpleaños*/

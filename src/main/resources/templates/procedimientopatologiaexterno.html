@@ -80,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				         	<tr>
 					         	<th>HISTORIA</th>
 					         	<th>PACIENTE</th>
-					         	<th>INGRESO</th>					         	
+					         	<th>INGRESO</th>					         						         	
 					         	<th>PROCEDIMIENTO</th>
 					         	<th>FECHA SOLICITUD</th>
 					         	<th>SERVICIO</th>					         	
@@ -91,13 +91,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				         	<tr th:each="lprocpat: ${listprocpat}">
 					         	<td th:text="${lprocpat.pacNumDoc}"></td>
 					         	<td th:text="${lprocpat.pacPriNom+ ' ' +lprocpat.pacSegNom+ ' ' + lprocpat.pacPriApe+ ' ' +lprocpat.pacSegApe}"></td>
-					         	<td th:text="${lprocpat.ainConsec}"></td>					         	
+					         	<td th:text="${lprocpat.ainConsec}"></td>					         							         	
 					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}"></td>
 					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}"></td>
 					         	<td th:text="${lprocpat.gasNombre}"></td>					         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
-						         		<a class="btn btn-primary btn-sm" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
+						         		<a class="btn btn-primary btn-sm" th:href="@{/procesarpatologiaexterno(oidpaciente=${lprocpat.oidPaciente},procedimiento=${lprocpat.oidRips},fechasolicitud=${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm:ss a')})}" data-toggle="tooltip" data-placement="top" title="Procesar" role="button">
 											<i class="fas fa-mortar-pestle fa-xs"></i>
 										</a>												         		
 									</div>										      							      
@@ -152,6 +152,7 @@ $(document).ready(function() {
 </script>
 <script>
 	$('[data-toggle="tooltip"]').tooltip();
+	$('a').tooltip('update');
 </script>
 <script>
 	window.onload = function(){

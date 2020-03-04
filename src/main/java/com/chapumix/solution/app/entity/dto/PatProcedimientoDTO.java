@@ -16,7 +16,7 @@ public class PatProcedimientoDTO implements Serializable {
 	private String historia;
 	private String paciente;
 	private String procedimiento;
-	private Integer folio;
+	private String tipoMuestra;	
 	private String patologo;
 	private String patologoReasignado;
 	private String correccion;
@@ -24,10 +24,10 @@ public class PatProcedimientoDTO implements Serializable {
 	private String pacienteInternoExterno;
 	
 	public PatProcedimientoDTO() {		
-	}
+	}	
 
 	public PatProcedimientoDTO(Long id, String codigo, Date fechaAsignacion, String historia, String paciente,
-			String procedimiento, Integer folio, String patologo, String patologoReasignado, String correccion,
+			String procedimiento, String tipoMuestra, String patologo, String patologoReasignado, String correccion,
 			String observacion, String pacienteInternoExterno) {		
 		this.id = id;
 		this.codigo = codigo;
@@ -35,13 +35,15 @@ public class PatProcedimientoDTO implements Serializable {
 		this.historia = historia;
 		this.paciente = paciente;
 		this.procedimiento = procedimiento;
-		this.folio = folio;
+		this.tipoMuestra = tipoMuestra;
 		this.patologo = patologo;
 		this.patologoReasignado = patologoReasignado;
 		this.correccion = correccion;
 		this.observacion = observacion;
 		this.pacienteInternoExterno = pacienteInternoExterno;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -90,14 +92,14 @@ public class PatProcedimientoDTO implements Serializable {
 
 	public void setProcedimiento(String procedimiento) {
 		this.procedimiento = procedimiento;
+	}	
+
+	public String getTipoMuestra() {
+		return tipoMuestra;
 	}
 
-	public Integer getFolio() {
-		return folio;
-	}
-
-	public void setFolio(Integer folio) {
-		this.folio = folio;
+	public void setTipoMuestra(String tipoMuestra) {
+		this.tipoMuestra = tipoMuestra;
 	}
 
 	public String getPatologo() {

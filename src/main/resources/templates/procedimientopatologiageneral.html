@@ -129,7 +129,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<th>HISTORIA</th>
 					         	<th>PACIENTE</th>
 					         	<th>PROCEDIMIENTO</th>
-					         	<th>FOLIO</th>
+					         	<th>TIPO DE MUESTRA</th>
 					         	<th>PATOLOGO</th>
 					         	<th>PATOLOGO REASIGNADO</th>
 					         	<th>CORRECION</th>
@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${lprocpat.historia}"></td>
 					         	<td th:text="${lprocpat.paciente}"></td>
 					         	<td th:text="${lprocpat.procedimiento}"></td>
-					         	<td th:text="${lprocpat.folio}"></td>
+					         	<td th:text="${lprocpat.tipoMuestra}"></td>
 					         	<td th:text="${lprocpat.patologo}"></td>
 					         	<td th:text="${lprocpat.patologoReasignado}"></td>
 					         	<td th:text="${lprocpat.correccion}"></td>
@@ -271,9 +271,9 @@ $(document).ready(function() {
     table.buttons().container().appendTo( '#botonxls' );     
 } );
 </script>
-<script>
-	$('a').tooltip('update');
-	$('[data-toggle="tooltip"]').tooltip();	
+<script>	
+	$('[data-toggle="tooltip"]').tooltip();
+	$('a').tooltip('update');	
 </script>
 <script>
 	window.onload = function(){

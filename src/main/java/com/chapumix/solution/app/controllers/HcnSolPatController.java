@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 import javax.validation.Valid;
@@ -58,6 +59,7 @@ public class HcnSolPatController {
 	private int folio;
 	private int oidpaciente;
 	private int procedimiento;
+	private Date fechasolicitud;
 	private Logger logger = LoggerFactory.getLogger(HcnSolPatIntDTO.class);	
 	public static final String URLPatologiasInt = "http://localhost:9000/api/patologiasints";
 	public static final String URLPatologiasExt = "http://localhost:9000/api/patologiasexts";	
@@ -327,7 +329,7 @@ public class HcnSolPatController {
 		
 		// Este metodo me permite listar todas las solicitudes de patologia de pacientes externos para ser procesada
 		@GetMapping("/procedimientopatologiaexterno")
-		public String listarExterno(Model model) {
+		public String listarExterno(Model model) throws ParseException {
 			
 			//creo el parametro "patologia" en caso de que no exista.		
 			ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
@@ -346,8 +348,11 @@ public class HcnSolPatController {
 			
 			//esta parte me permite cruzar entre las patologias de dinamica y las patologias procesadas en Solution
 			patProcedimiento.forEach(p ->{
-				Predicate<HcnSolPatExtDTO> condicion = dina -> dina.getOidPaciente().equals(p.getIdPaciente()) && dina.getOidRips().equals(p.getIdProcedimiento());	         
-				dinamica.removeIf(condicion);
+					String fechaSolicitudSolution = convertirFechaSolution(p.getFechaSolicitud());
+					String fechaSolicitudDinamica = convertirFechaSolution(this.fechasolicitud);
+					Predicate<HcnSolPatExtDTO> condicion = dina -> dina.getOidPaciente().equals(p.getIdPaciente()) && dina.getOidRips().equals(p.getIdProcedimiento()) && fechaSolicitudDinamica.equals(fechaSolicitudSolution);			
+					dinamica.removeIf(condicion);
+											
 			});		
 			
 			model.addAttribute("titulo", utf8(this.titulopacientesexternos));
@@ -359,12 +364,13 @@ public class HcnSolPatController {
 		
 		// Este metodo me permite visualizar o cargar la solicitud de patologia de pacientes externos para ser procesada
 		@RequestMapping(value = "/procesarpatologiaexterno")
-		public String crearExterno(@RequestParam(value = "oidpaciente", required = false) Integer oidpaciente, @RequestParam(value = "procedimiento", required = false) Integer procedimiento, Map<String, Object> model, RedirectAttributes flash) {
+		public String crearExterno(@RequestParam(value = "oidpaciente", required = false) Integer oidpaciente, @RequestParam(value = "procedimiento", required = false) Integer procedimiento, @RequestParam(value = "fechasolicitud", required = false) String fechasolicitud, Map<String, Object> model, RedirectAttributes flash) throws ParseException {
 			PatProcedimiento patProcedimiento = new PatProcedimiento();
 
 			//obtenemos los valores para luego guardar la solicitud			
 			this.oidpaciente = oidpaciente;
 			this.procedimiento = procedimiento;
+			this.fechasolicitud = convertirFechaParametro(fechasolicitud); 
 			
 			// proceso API para buscar la primera descripcion de la solicitud.
 			ResponseEntity<List<HcnSolPatDetaTresDTO>> respuestaa = restTemplate.exchange(URLDescripcion + oidpaciente, HttpMethod.GET, null,new ParameterizedTypeReference<List<HcnSolPatDetaTresDTO>>() {});
@@ -464,7 +470,8 @@ public class HcnSolPatController {
 			}
 						
 			String mensajeFlash = (patProcedimiento.getId() != null) ? "La solicitud de patología fue editada correctamente" : "La solicitud de patología fue creada correctamente";
-			patProcedimiento.setIdPaciente(this.oidpaciente);
+			patProcedimiento.setIdPaciente(this.oidpaciente);			
+			patProcedimiento.setFechaSolicitud(this.fechasolicitud);
 			patProcedimiento.setIdProcedimiento(this.procedimiento);					
 			patProcedimiento.setPacienteInternoExterno("E");
 			patProcedimiento.setLoginUsrAlta(principal.getName());
@@ -515,7 +522,7 @@ public class HcnSolPatController {
 			
 			String anoActual = obtenerAno(pat.getFechaRegistro(), pat.getId());
 			String pacienteInternoExterno = pacienteIntExt(pat.getPacienteInternoExterno());			
-			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getFolio(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
+			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getTipoMuestra(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
 			newPatProcedimiento.add(dto);
 			
 		});
@@ -707,7 +714,7 @@ public class HcnSolPatController {
 			String anoActual = obtenerAno(pat.getFechaRegistro(), pat.getId());
 			String pacienteInternoExterno = pacienteIntExt(pat.getPacienteInternoExterno());
 				
-			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getFolio(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
+			PatProcedimientoDTO dto = new PatProcedimientoDTO(pat.getId(), anoActual, pat.getFechaRegistro(), paciente.getPacNumDoc(), paciente.getPacPriNom().trim()+" "+paciente.getPacSegNom().trim()+" "+paciente.getPacPriApe().trim()+" "+paciente.getPacSegApe().trim(), procedimiento.getSipCodigo()+"-"+procedimiento.getSipNombre(), pat.getTipoMuestra(), medico.getGmeCodigo()+" "+medico.getGmeNomCod(), this.medicoa.getGmeCodigo()+" "+this.medicoa.getGmeNomCod(), pat.getCorreccion(), pat.getObservacion(), pacienteInternoExterno);
 			newPatProcedimiento.add(dto);
 				
 		});
@@ -801,6 +808,12 @@ public class HcnSolPatController {
 		return fechaTranformada;
 	}
 	
+	//Se usa para convertir parametro fecha solicitud de String a fecha Date con formato
+	private Date convertirFechaParametro(String fecha) throws ParseException {
+		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa").parse(fecha);		
+		return fechaTranformada;
+	}	
+	
 
 	private void crearParametro(ComParametroPatologia comParametroPatologia) {
 		ComParametroPatologia comParametroPatologia2 =  new ComParametroPatologia();
@@ -816,7 +829,12 @@ public class HcnSolPatController {
 		String strDate = dateFormat.format(fechaSolicitudInterno);  
 		return strDate;
 	}
-
-
+	
+	//Se usa para convertir una fecha Date con un String con formato
+	private String convertirFechaSolution(Date fecha) {
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String strDate = dateFormat.format(fecha);  
+		return strDate;
+	}
 
 }
