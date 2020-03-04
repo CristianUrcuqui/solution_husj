@@ -832,9 +832,13 @@ public class HcnSolPatController {
 	
 	//Se usa para convertir una fecha Date con un String con formato
 	private String convertirFechaSolution(Date fecha) {
+		if(fecha != null) {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String strDate = dateFormat.format(fecha);  
 		return strDate;
+		}else {
+			return "";
+		}
 	}
 
 }
