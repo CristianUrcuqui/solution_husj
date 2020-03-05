@@ -75,7 +75,7 @@ public class CalCalendario implements Serializable {
 
 
 	@NotNull
-	@DateTimeFormat(pattern = "dd-mm-yyyy")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_nacimiento")
 	public Date getFechaNacimiento() {

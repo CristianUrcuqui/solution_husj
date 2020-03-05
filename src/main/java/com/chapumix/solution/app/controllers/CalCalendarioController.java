@@ -136,8 +136,8 @@ public class CalCalendarioController {
 			flash.addFlashAttribute("error", "El ID del empleado no puede ser 0");
 			return "redirect:/empleadocumple";
 		}
-		Date fechaCumpleanos = convertirfechaEmpleado(calCalendario.getFechaNacimiento().toString()); 
-		calCalendario.setFechaNacimiento(fechaCumpleanos);
+		//Date fechaCumpleanos = convertirfechaEmpleado(calCalendario.getFechaNacimiento().toString()); 
+		//calCalendario.setFechaNacimiento(fechaCumpleanos);
 		model.put("titulo", utf8(this.tituloempleados));
 		model.put("calCalendario", calCalendario);		
 		model.put("enlace5", enlace5);
@@ -252,12 +252,6 @@ public class CalCalendarioController {
 	private Date convertirfecha(String fecha) throws ParseException {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);  
 		return fechaTranformada;
-	}
-	
-	//Se usa para convertir una string cadena a fecha Date con formato
-	private Date convertirfechaEmpleado(String fecha) throws ParseException {
-		Date fechaTranformada = new SimpleDateFormat("yyyy-mm-dd").parse(fecha);  
-		return fechaTranformada;
-	}
+	}	
 
 }
