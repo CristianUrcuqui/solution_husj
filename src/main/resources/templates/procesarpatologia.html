@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-dark" th:href="@{/procedimientopatologiainterno}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-dark" th:href="@{/procedimientopatologia}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -173,7 +173,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
          	 <div class="card card-info col-md-6 m-1">             
               <!-- form start -->
-              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologiainterno}" th:object="${patProcedimiento}" role="form" method="post">					
+              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologia}" th:object="${patProcedimiento}" role="form" method="post">					
 						
 						<div class="form-group row required mt-3">
 	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
@@ -192,6 +192,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                          <option value="" selected="selected">Seleccione</option>
 		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
 		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="muestra">Tipo de Muestra</label>
+			                <div class="col-sm-5"> 			                   	
+			                   	<textarea id="muestra" th:field="*{tipoMuestra}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
 			                </div>
 	                   </div>						
 	                   

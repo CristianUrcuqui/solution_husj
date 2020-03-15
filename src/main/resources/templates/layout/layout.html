@@ -178,7 +178,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	     
 	     
 	 <!--   ----------------------------------------------------------
-	     * MENU AJSUTES
+	     * MENU AJUSTES
 	     * ---------------------------------------------------------- */-->	    	
       
       
@@ -210,15 +210,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Roles</p>
                 </a>
               </li>                         
-            </ul>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
-              <li class="nav-item">
-                <a th:href="@{/parametropatologia(seccion=patologia)}" th:class="${enlace2} ? 'nav-link active' : 'nav-link'">
-                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
-                  <p>Procedimiento Patología</p>
-                </a>
-              </li>                         
-            </ul>            
+            </ul>                       
           </li>          
         </ul>
       </nav>
@@ -282,7 +274,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.6.11
+      <b>Version</b> 0.7.0
     </div>
   </footer>
 </div>

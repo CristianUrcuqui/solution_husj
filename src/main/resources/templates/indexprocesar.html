@@ -40,7 +40,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->    
+    <!-- /.content-header -->
+    
+     <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<!-- Toolbar Botones Derecho-->
+					  <div class="col-sm-12">			
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn btn-primary" th:href="@{/indexpatologia}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>						  				
+					</div>
+				</div>
+			</div>    
+        
 
     <!-- Main content -->
     <div class="content">
@@ -49,22 +70,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
         	<div class="container">
 			  <div class="row">
+			    <div class="col-md-2 grow">
+			      <a id="link" th:href="@{/procedimientopatologia}">
+			      <div class="card-counter primary">
+			      	<h3 th:text=${procesar}></h3>
+			        <i class="fas fa-hospital-alt"></i>			        
+			        <span class="count-name">Pacientes</span>
+			      </div>
+			      </a>
+			    </div>			    
+			
+			    <div class="col-md-2 grow">
+			      <a id="link" th:href="@{/procedimientopatologiageneral}">
+			      <div class="card-counter success">
+			      	<h3 th:text=${procesados}></h3>
+			        <i class="fas fa-search-plus"></i>			        
+			        <span class="count-name">Consulta General</span>
+			      </div>
+			      </a>
+			    </div>
 			    
-			    
-			    <div class="container">
-				    <div class="row">
-					    <div class="col-md-2 grow">
-					      <a id="link" th:href="@{/indexprocesar}">
-					      <div class="card-counter primary">			      	
-					        <i class="fas fa-mortar-pestle"></i>			        
-					        <span class="count-name">Procedimientos</span>
-					      </div>
-					      </a>
-					    </div>
-					</div>
-				</div>	    
-			    
-			    				    			    
+			    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="col-md-2 grow">
+			      <a id="link" th:href="@{/parametropatologia(seccion=patologia)}">
+			      <div class="card-counter info">
+			      	
+			      	<i class="fas fa-cogs mt-5"></i>			        
+			        <span class="count-name">Ajustes</span>
+			      </div>
+			      </a>
+			    </div>				    			    
 			  </div><!-- /.row-card -->
 			</div><!-- /.container-card -->
 			

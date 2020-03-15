@@ -33,13 +33,13 @@ public class ComParametroPatologiaController {
 	private IComParametroPatologiaService iComParametroPatologiaService;
 	
 	@Value("${app.tituloparametrospatologia}")
-	private String tituloparametrospatologia;
+	private String tituloparametrospatologia;	
 	
-	@Value("${app.enlaceprincipalajustes}")
-	private String enlaceprincipalajustes;
+	@Value("${app.enlaceprincipalpatologia}")
+	private String enlaceprincipalpatologia;	
 	
-	@Value("${app.enlace2}")
-	private String enlace2;
+	@Value("${app.enlace1}")
+	private String enlace1;
 	
 	
 	
@@ -50,8 +50,8 @@ public class ComParametroPatologiaController {
 		comParametroPatologia = iComParametroPatologiaService.findByName(seccion);	
 		model.put("titulo", utf8(this.tituloparametrospatologia));		
 		model.put("comParametroPatologia", comParametroPatologia);
-		model.put("ajustes", enlaceprincipalajustes);
-		model.put("enlace2", enlace2);
+		model.put("patologia", enlaceprincipalpatologia);
+		model.put("enlace1", enlace1);	
 		status.setComplete();
 		return "parametropatologia";
 
@@ -71,8 +71,8 @@ public class ComParametroPatologiaController {
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloparametrospatologia));			
 			model.addAttribute("comParametroPatologia", comParametroPatologia);
-			model.addAttribute("ajustes", enlaceprincipalajustes);
-			model.addAttribute("enlace2", enlace2);
+			model.addAttribute("patologia", enlaceprincipalpatologia);
+			model.addAttribute("enlace1", enlace1);			
 			return "parametropatologia";
 		}
 

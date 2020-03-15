@@ -29,7 +29,7 @@ public class CalHumanizacionController {
      * INDEX CALIDAD HUMANIZACION
      * ---------------------------------------------------------- */
 	
-	
+	//INDEX CALIDAD HUMANIZACION
 	@GetMapping("/indexcalidad")
 	public String index(Model model) {
 		model.addAttribute("titulo", utf8(this.titulocalidad));
