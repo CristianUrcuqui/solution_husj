@@ -137,17 +137,15 @@ public class HcnSolPatController {
 		  List<HcnSolPatDTO> dinamica = respuesta.getBody();	  
 		  
 		  
-			// esta parte me permite cruzar entre las patologias de pacientes de dinamica y las patologias procesadas en Solution
-			patProcedimiento.forEach(p -> {
-				// Clono la lista para hacer el recorrido del listado de dinamica para que me pueda dejar usar el metodo removeIf y no genere expecion
+		// esta parte me permite cruzar entre las patologias de pacientes de dinamica y las patologias procesadas en Solution
+			patProcedimiento.forEach(p -> {			
+				//Clono la lista para hacer el recorrido del listado de dinamica para que me pueda dejar usar el metodo removeIf y no genere expecion
 				List<HcnSolPatDTO> cloneList = new ArrayList<HcnSolPatDTO>(dinamica);
-				cloneList.forEach(c -> {
-					String fechaSolicitudSolution = convertirFechaSolution(p.getFechaSolicitud());
-					String fechaSolicitudDinamica = convertirFechaSolution(c.getHcsfecsol());
-					Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && fechaSolicitudDinamica.equals(fechaSolicitudSolution);
+				cloneList.forEach(c -> {									
+					Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento());
 					dinamica.removeIf(condicion);
 				});
-			}); 	  
+			});	  
 		  
 		  
 		  model.addAttribute("titulo", utf8(this.tituloprocedimintopatologia));
@@ -189,9 +187,7 @@ public class HcnSolPatController {
 			//Clono la lista para hacer el recorrido del listado de dinamica para que me pueda dejar usar el metodo removeIf y no genere expecion
 			List<HcnSolPatDTO> cloneList = new ArrayList<HcnSolPatDTO>(dinamica);
 			cloneList.forEach(c -> {
-				String fechaSolicitudSolution = convertirFechaSolution(p.getFechaSolicitud());
-				String fechaSolicitudDinamica = convertirFechaSolution(c.getHcsfecsol());
-				Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && fechaSolicitudDinamica.equals(fechaSolicitudSolution);
+				Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento());
 				dinamica.removeIf(condicion);
 			});
 		});
@@ -704,16 +700,6 @@ public class HcnSolPatController {
 		return strDate;
 	}
 	
-	//Se usa para convertir una fecha Date con un String con formato
-	private String convertirFechaSolution(Date fecha) {
-		if(fecha != null) {
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String strDate = dateFormat.format(fecha);  
-		return strDate;
-		}else {
-			return "";
-		}
-	}
 	
 	//Se usa para consultar en la API REST la primera descripcion en caso de que la primera consulta de la descripcion sea null de la solicitud.
 	private void descripcionUnoPatologia(Map<String, Object> model, Integer oidpaciente) {
