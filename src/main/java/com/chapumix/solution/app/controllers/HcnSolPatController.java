@@ -241,6 +241,7 @@ public class HcnSolPatController {
 				
 			}						
 		}else {
+			this.folio = 0;
 			descripcionUnoPatologia(model, oidpaciente);
 			
 			// proceso API para buscar la segunda descripcion de la solicitud.
@@ -340,8 +341,8 @@ public class HcnSolPatController {
 			patProcedimiento.setIdPaciente(this.oidpaciente);
 			patProcedimiento.setIdProcedimiento(this.procedimiento);			
 			patProcedimiento.setFechaSolicitud(this.fechasolicitud);
-			if(this.folio.equals(0)) {
-				patProcedimiento.setPacienteInternoExterno("E");				
+			if(this.folio == 0) {
+				patProcedimiento.setPacienteInternoExterno("E");
 			}else {
 				patProcedimiento.setPacienteInternoExterno("I");
 				patProcedimiento.setFolio(this.folio);
