@@ -24,11 +24,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import com.chapumix.solution.app.models.entity.CalCalendario;
 import com.chapumix.solution.app.models.service.ICalCalendarioService;
 import com.sun.mail.smtp.SMTPTransport;
@@ -42,6 +46,8 @@ public class CalCalendarioComp {
 	@Autowired
 	private ResourceLoader loader;
 	
+	private Logger logger = LoggerFactory.getLogger(CalCalendarioComp.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private static final String SMTP_SERVER = "correo.dongee.com";
     private static final String USERNAME = "humanizacion@hospitalsanjose.gov.co";
     private static final String PASSWORD = "Migracion2018";
@@ -65,9 +71,11 @@ public class CalCalendarioComp {
     public SMTPTransport t;
 	
 	//metodo que se ejecuta de forma automatica todos los dias a la 7:00 AM
-    @Scheduled(cron = "0 00 07 * * ?", zone="America/Bogota")
-	public void cronCumpSch() {
+    @Scheduled(cron = "00 00 07 * * *", zone="America/Bogota")    
+    public void cronCumpSch() {
 	    
+    	    //verificamos la hora y fecha de ejecucion
+    		logger.info("Hora y fecha de ejecución      = {}", dateFormat.format(new Date()));
 			//buscamos todos los empleados en base de datos
     		List<CalCalendario> listEmpleado = iCalCalendarioService.findAll();
 			if(listEmpleado != null) {
