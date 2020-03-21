@@ -2,7 +2,6 @@ package com.chapumix.solution.app.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

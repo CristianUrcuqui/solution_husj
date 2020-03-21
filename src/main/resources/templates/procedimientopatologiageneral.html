@@ -125,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	<thead>
 				         	<tr>
 					         	<th>CODIGO</th>
-					         	<th>FECHA ASIGNACION</th>
+					         	<th>FECHA REGISTRO</th>
 					         	<th>HISTORIA</th>
 					         	<th>PACIENTE</th>
 					         	<th>PROCEDIMIENTO</th>
@@ -215,7 +215,7 @@ $(document).ready(function() {
     var table = $('#datatablelistaprocedimientopatologia').DataTable( {
     	"pageLength": 25,
     	"responsive": true,
-    	"order": [0, 'desc'],
+    	"ordering": false,    	
     	"pagingType": "full_numbers",
     	dom: 'Blfrtip',    	
     	 "buttons": {
@@ -244,7 +244,8 @@ $(document).ready(function() {
                  ]   
           },
           "columnDefs": [        	  
-        	  { "width": "6%", "targets": [11] }
+        	  { "width": "6%", "targets": [11] },
+        	  
              
               
           ],
