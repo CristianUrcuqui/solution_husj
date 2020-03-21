@@ -43,9 +43,7 @@ import com.chapumix.solution.app.entity.dto.HcnSolPatDTO;
 import com.chapumix.solution.app.entity.dto.PatProcedimientoDTO;
 import com.chapumix.solution.app.entity.dto.HcnSolPatDetaDosDTO;
 import com.chapumix.solution.app.entity.dto.HcnSolPatDetaUnoDTO;
-import com.chapumix.solution.app.models.entity.ComParametroPatologia;
 import com.chapumix.solution.app.models.entity.PatProcedimiento;
-import com.chapumix.solution.app.models.service.IComParametroPatologiaService;
 import com.chapumix.solution.app.models.service.IPatProcedimientoService;
 
 @Controller
@@ -56,8 +54,7 @@ public class HcnSolPatController {
 	private Integer folio;
 	private int oidpaciente;
 	private int procedimiento;	
-	private Date fechasolicitud;
-	private HcnSolPatDetaUnoDTO cloneDetalle = new HcnSolPatDetaUnoDTO();
+	private Date fechasolicitud;	
 	private Logger logger = LoggerFactory.getLogger(HcnSolPatDTO.class);	
 	public static final String URLPatologias = "http://localhost:9000/api/patologias";	
 	public static final String URLDescripcion = "http://localhost:9000/api/patologias/detalles/";
@@ -71,10 +68,7 @@ public class HcnSolPatController {
 	
 	
 	@Autowired
-	private IPatProcedimientoService iPatProcedimientoService;
-	
-	@Autowired
-	private IComParametroPatologiaService iComParametroPatologiaService;
+	private IPatProcedimientoService iPatProcedimientoService;	
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -118,22 +112,14 @@ public class HcnSolPatController {
 
 	//INDEX PPROCESAR
 		@GetMapping("/indexprocesar")
-		public String indexProcesar(Model model) throws ParseException {
-		 
-			ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
-			if(comParametroPatologia == null) {
-				crearParametro(comParametroPatologia);
-				comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
-			}				
+		public String indexProcesar(Model model) throws ParseException {					
 			
 		  
 		  //obtengo todos los procedimientos procesados en  solution	
 		  List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
 		  
-		  //obtengo un string de la fecha para agregarlo a la URL del API	
-		  String fechaParametro = convertirFechaParametro(comParametroPatologia.getFechaSolicitudInterno());		
 		  // obtengo el numero de pacientes internos por procesar	
-		  ResponseEntity<List<HcnSolPatDTO>> respuesta = restTemplate.exchange(URLPatologias+"/"+fechaParametro, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatDTO>>() {});		
+		  ResponseEntity<List<HcnSolPatDTO>> respuesta = restTemplate.exchange(URLPatologias, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatDTO>>() {});		
 		  List<HcnSolPatDTO> dinamica = respuesta.getBody();	  
 		  
 		  
@@ -164,22 +150,13 @@ public class HcnSolPatController {
 	
 	// Este metodo me permite listar todas las solicitudes pendientes de patologia
 	@GetMapping("/procedimientopatologia")
-	public String listarProcedimientos(Model model) {
-		
-		//creo el parametro "patologia" en caso de que no exista.		
-		ComParametroPatologia comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
-		if(comParametroPatologia == null) {
-			crearParametro(comParametroPatologia);
-			comParametroPatologia = iComParametroPatologiaService.findByName("patologia");
-		}				
+	public String listarProcedimientos(Model model) {						
 			  
 		//obtengo todos los procedimientos procesados en  solution	
-		  List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
-		  
-		  //obtengo un string de la fecha para agregarlo a la URL del API	
-		  String fechaParametro = convertirFechaParametro(comParametroPatologia.getFechaSolicitudInterno());		
+		  List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();		  
+		  		
 		  // obtengo el numero de pacientes por procesar	
-		  ResponseEntity<List<HcnSolPatDTO>> respuesta = restTemplate.exchange(URLPatologias+"/"+fechaParametro, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatDTO>>() {});		
+		  ResponseEntity<List<HcnSolPatDTO>> respuesta = restTemplate.exchange(URLPatologias, HttpMethod.GET, null, new ParameterizedTypeReference<List<HcnSolPatDTO>>() {});		
 		  List<HcnSolPatDTO> dinamica = respuesta.getBody();		 
 				  
 		// esta parte me permite cruzar entre las patologias de pacientes de dinamica y las patologias procesadas en Solution
@@ -366,7 +343,8 @@ public class HcnSolPatController {
 	@GetMapping("/procedimientopatologiageneral")
 	public String listarGeneral(Model model) {		
 		
-		List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
+		//List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAll();
+		List<PatProcedimiento> patProcedimiento = iPatProcedimientoService.findAllProcedimientos();
 		List<PatProcedimientoDTO> newPatProcedimiento = new ArrayList<>();
 		
 		
@@ -684,22 +662,6 @@ public class HcnSolPatController {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa").parse(fecha);		
 		return fechaTranformada;
 	}	
-	
-
-	private void crearParametro(ComParametroPatologia comParametroPatologia) {
-		ComParametroPatologia comParametroPatologia2 =  new ComParametroPatologia();
-		comParametroPatologia2.setNombre("patologia");
-		comParametroPatologia2.setFechaSolicitudInterno(new Date());
-		comParametroPatologia2.setFechaSolicitudExterno(new Date());
-		iComParametroPatologiaService.save(comParametroPatologia2);			
-	}
-	
-	//Se usa para convertir una fecha Date con un String con formato
-	private String convertirFechaParametro(Date fechaSolicitudInterno) {
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		String strDate = dateFormat.format(fechaSolicitudInterno);  
-		return strDate;
-	}
 	
 	
 	//Se usa para consultar en la API REST la primera descripcion en caso de que la primera consulta de la descripcion sea null de la solicitud.

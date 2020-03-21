@@ -10,11 +10,15 @@ import com.chapumix.solution.app.models.entity.PatProcedimiento;
 
 public interface IPatProcedimientoDao extends CrudRepository<PatProcedimiento, Long>{
 	
-		//query personalizado para consultar las procedimientos realizados por fechas
+		//query personalizado para consultar los 5 ultimos dias procedimientos
+		@Query(value = "SELECT * FROM pat_procedimiento WHERE fecha_registro >= DATE_SUB(CURDATE(), INTERVAL 5 DAY) ORDER BY id_patologia_procedimiento DESC", nativeQuery = true)
+		List<PatProcedimiento> findAllProcedimientos();
+	
+		//query personalizado para consultar los procedimientos realizados por fechas
 		@Query("SELECT p FROM PatProcedimiento p WHERE p.fechaRegistro BETWEEN ?1 AND ?2")
 		List<PatProcedimiento> findByStartDateBetween(Date fechaInicial, Date fechaFinal);
 		
-		//query personalizado para consultar las procedimientos por medico o especialista
+		//query personalizado para consultar los procedimientos por medico o especialista
 		@Query("SELECT p FROM PatProcedimiento p WHERE p.idPatologo = ?1 OR p.idPatologoReasigando = ?2")
 		List<PatProcedimiento> findByIdPatologo(Integer patologoAsigna, Integer patologoReAsigna);
 		

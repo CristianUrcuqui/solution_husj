@@ -24,6 +24,12 @@ public class PatProcedimientoServiceImpl implements IPatProcedimientoService{
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<PatProcedimiento> findAllProcedimientos() {		
+		return iPatProcedimientoDao.findAllProcedimientos();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public List<PatProcedimiento> findByStartDateBetween(Date fechaInicial, Date fechaFinal) {
 		return iPatProcedimientoDao.findByStartDateBetween(fechaInicial, fechaFinal);
 	}
@@ -61,6 +67,5 @@ public class PatProcedimientoServiceImpl implements IPatProcedimientoService{
 		iPatProcedimientoDao.deleteById(id);
 		
 	}
-	
 
 }

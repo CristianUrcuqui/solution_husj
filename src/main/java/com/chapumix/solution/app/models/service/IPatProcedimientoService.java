@@ -9,6 +9,8 @@ public interface IPatProcedimientoService {
 	
 	public List<PatProcedimiento> findAll();
 	
+	public List<PatProcedimiento> findAllProcedimientos();
+	
 	public List<PatProcedimiento> findByStartDateBetween(Date fechaInicial, Date FechaFinal);
 	
 	public List<PatProcedimiento> findByIdPatologo(Integer patologoAsigna, Integer patologoReAsigna);
