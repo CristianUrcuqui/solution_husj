@@ -127,7 +127,7 @@ public class HcnSolPatController {
 				//Clono la lista para hacer el recorrido del listado de dinamica para que me pueda dejar usar el metodo removeIf y no genere expecion
 				List<HcnSolPatDTO> cloneList = new ArrayList<HcnSolPatDTO>(dinamica);
 				cloneList.forEach(c -> {									
-					Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento());
+					Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento()) && s.getHcNumFol() == p.getFolio();
 					dinamica.removeIf(condicion);
 				});
 			});	  
@@ -162,8 +162,8 @@ public class HcnSolPatController {
 		patProcedimiento.forEach(p -> {			
 			//Clono la lista para hacer el recorrido del listado de dinamica para que me pueda dejar usar el metodo removeIf y no genere expecion
 			List<HcnSolPatDTO> cloneList = new ArrayList<HcnSolPatDTO>(dinamica);
-			cloneList.forEach(c -> {
-				Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento());
+			cloneList.forEach(c -> {								
+				Predicate<HcnSolPatDTO> condicion = s -> s.getOidPaciente().equals(p.getIdPaciente()) && s.getOidRips().equals(p.getIdProcedimiento()) && s.getHcNumFol() == p.getFolio();		
 				dinamica.removeIf(condicion);
 			});
 		});
