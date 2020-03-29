@@ -98,6 +98,30 @@
 <script th:src="@{/dist/js/adminlte.min.js}"></script>
 <!-- Solution JS -->
 <script th:src="@{/plugins/solution/solution.js}"></script>
+
+<!--  <script>
+		function actualizar(){location.reload(true);}
+		//Función para actualizar cada 4 segundos(4000 milisegundos)
+		setInterval("actualizar()",4000);
+</script>
+-->
+
+<script> 
+	var totalCount = 7;
+	function ChangeIt() 
+	{
+	var num = Math.ceil( Math.random() * totalCount );
+	document.body.background = '../../dist/img/fondo'+num+'.jpg';
+	document.body.style.backgroundRepeat = "no-repeat";// Background repeat
+	document.body.style.backgroundSize = "cover";
+	document.body.style.height = "100%";	
+	}
+</script>
+
+<script type="text/javascript"> 
+	ChangeIt();
+</script> 
+
 </body>
 </html>
 

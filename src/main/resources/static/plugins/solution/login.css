@@ -33,15 +33,16 @@
 html,body{
     
     font-family: 'Numans', sans-serif;
-    background-image: url(../../dist/img/fondo.jpg);    
-    background-size: cover;
+    /*background-image: url(../../dist/img/fondo.jpg);*/
+    /*background-image: url(http://placeimg.com/1000/900/nature);*/        
+    /*background-size: cover;
     background-repeat: no-repeat;
-    height: 100%;
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadein 2s; /* Firefox < 16 */
-    -ms-animation: fadein 2s; /* Internet Explorer */
-    -o-animation: fadein 2s; /* Opera < 12.1 */
-    animation: fadein 2s;
+    height: 100%;*/
+    /*-webkit-animation: fadein 2s;*/ /* Safari, Chrome and Opera > 12.1 */
+    /*-moz-animation: fadein 2s;*/ /* Firefox < 16 */
+    /*-ms-animation: fadein 2s;*/ /* Internet Explorer */
+    /*-o-animation: fadein 2s;*/ /* Opera < 12.1 */
+    /*animation: fadein 2s;*/
     
 }
 

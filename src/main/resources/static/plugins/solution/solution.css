@@ -131,6 +131,19 @@ table.dataTable tbody th, table.dataTable tbody td {
     font-size: 15px;
   }
   
+  .card-counter .count-namev2{
+    position: absolute;
+    text-align: right;
+    top: 73px;
+    right: 20px;
+    line-height: 1; 
+    font-style: italic;
+    text-transform: capitalize;
+    opacity: 0.5;
+    display: block;
+    font-size: 15px;
+  }
+  
   /******Estilo para animacion de los cards******/
   .grow { 
   	transition: all .2s ease-in-out; 
