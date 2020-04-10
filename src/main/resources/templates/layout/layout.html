@@ -113,38 +113,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
       
-	      <!--   ----------------------------------------------------------
-	     * MENU PATOLOGIA
-	     * ---------------------------------------------------------- */-->	
       
-
-      <!-- Sidebar Menu -->      
-      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
-            <a href="#" th:class="${patologia} ? 'nav-link active' : 'nav-link'">
-              <i class="fas fa-bug nav-icon"></i>
-              <p>
-                Patología
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="nav nav-treeview">
-              <li class="nav-item">
-                <a th:href="@{/indexpatologia}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
-                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
-                  <p>Menú Principal</p>
-                </a>
-              </li>                         
-            </ul>
-          </li>          
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-      
-      <!--   ----------------------------------------------------------
+       <!--   ----------------------------------------------------------
 	     * MENU CALIDAD HUMANIZACION
 	     * ---------------------------------------------------------- */-->
 	     
@@ -176,13 +146,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- /.sidebar-menu -->
       
       
+      <!--   ----------------------------------------------------------
+	     * MENU ESTADISTICA
+	     * ---------------------------------------------------------- */-->
+	     
+	     
+	  <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${estadistica} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-file-contract"></i>
+              <p>
+                Estadística
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/indexestadistica}" th:class="${enlace7} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Menú Principal</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->   
+     
+      
+      
        <!--   ----------------------------------------------------------
 	     * MENU MEDICINA INTERNA
 	     * ---------------------------------------------------------- */-->
 	     
 	     
 	  <!-- Sidebar Menu -->      
-      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEDICINA')" class="mt-2">
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEDICINA_INTERNA', 'ROLE_ENFERMERA')" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -194,9 +197,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEDICINA')" class="nav nav-treeview">
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEDICINA_INTERNA', 'ROLE_ENFERMERA')" class="nav nav-treeview">
               <li class="nav-item">
                 <a th:href="@{/indexmedicinainterna}" th:class="${enlace6} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Menú Principal</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+      
+      
+       <!--   ----------------------------------------------------------
+	     * MENU PATOLOGIA
+	     * ---------------------------------------------------------- */-->	
+      
+
+      <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${patologia} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-bug nav-icon"></i>
+              <p>
+                Patología
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATOLOGIA')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/indexpatologia}" th:class="${enlace1} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
                   <p>Menú Principal</p>
                 </a>
@@ -306,7 +341,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.7.7
+      <b>Version</b> 0.7.9
     </div>
   </footer>
 </div>

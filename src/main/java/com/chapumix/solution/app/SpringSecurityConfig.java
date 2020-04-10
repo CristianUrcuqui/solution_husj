@@ -23,15 +23,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/dist/**", "/plugins/**").permitAll() //rutas permitidas
 		.antMatchers("/indexpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procedimientopatologiainterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procedimientopatologiaexterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/indexprocesar/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/procedimientopatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procesarpatologiaexterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procesarpatologiainterno/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
+		.antMatchers("/procesarpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/editarpatologiaprocesada/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
 		.antMatchers("/eliminarpatologiaprocesada/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/parametropatologia/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
 		.antMatchers("/usuarioform/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
 		.antMatchers("/usuariolistado/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
 		.antMatchers("/rolform/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
@@ -40,6 +38,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/indexcalendario/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
 		.antMatchers("/empleadocumple/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
 		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
+		.antMatchers("/indexmedicinainterna/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y MEDICINA_INTERNA, se puede usar con mas rutas
+		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, MEDICINA_INTERNA, ENFERMERAS se puede usar con mas rutas
+		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
+		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA", "MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()

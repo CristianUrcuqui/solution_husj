@@ -1,12 +1,14 @@
 //variables
-let mensajesNotificacion = document.querySelector('.alert');
-
+let nodes = document.querySelectorAll('.alert-success, .alert-danger')
 
 
 
 //funciones, metodos, validaciones
-if (mensajesNotificacion != null){
+if (nodes != null){
 	setTimeout(() => {
-		mensajesNotificacion.remove()
+		for(let i = 0, j = nodes.length; i < j; i++) {
+		    nodes[i].remove()
+		}	
 	}, 7000);
 }
+

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+     <div th:replace="layout/layout ::mensajes"></div>
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Parámetro Certificado</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="submit" form="parametrocertificado" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+										<i class="fas fa-save fa-lg mt-1"></i>
+									</button>																		
+								</div>
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="reset" form="parametrocertificado" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+										<i class="fas fa-times fa-lg mt-1"></i>									
+									</button>
+								</div>																	
+							</div>
+						</div>
+					  </div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn btn-dark" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-md-12 mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->
+        
+        <!-- Lista para mostrar los errorer antes del formulario -->
+	        <div class="col-md-12">
+	        	<div th:object="${estSerial}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>	
+			
+        
+         	 <div class="col-md-6 m-1">
+         	 	<div class="card card-primary">
+         	 	<div class="card-header p-1">	              
+	              <h3 class="card-title">Consecutivos</h3>	              
+	            </div>             
+              <!-- form start -->
+              <form id="parametrocertificado"  class="form-horizontal" th:action="@{/parametrocertificado}" th:object="${estSerial}" role="form" method="post">					
+						
+					   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="tipoCertificado">Tipo Certificado</label>
+			                <div class="col-sm-5">
+				                <select id="tipoCertificado" th:field="*{estTipoCertificado}"  class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tip : ${tipos}" th:value="${tip.id}" th:text="${tip.tipoCertificado}"></option>	                          
+		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>
+					   
+					   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="inicial">Serial Inicia</label>
+			                <div class="col-sm-5"> 			                   	
+			                   	<input id="inicial" th:field="*{serialInicial}" class="form-control form-control-sm"></input>		                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="final">Serial Final</label>
+			                <div class="col-sm-5"> 			                   	
+			                   	<input id="final" th:field="*{serialFinal}" class="form-control form-control-sm"></input>		                   			                   	                    	
+			                </div>
+	                   </div>						
+	                   
+	                          
+                	
+                
+                <!-- /.card-body -->                    
+              </form>
+             </div>
+             <!-- /.card -->
+            </div>
+            <!-- /.col -->       
+                
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+
+<script>	
+	$('[data-toggle="tooltip"]').tooltip();
+	$('a').tooltip('update');
+</script>
+<script>
+	window.onload = function(){
+		let contenedor = document.getElementById('contenedor_carga');
+		contenedor.style.visibility = 'hidden';
+		contenedor.style.opacity = '0';
+	}
+</script>
+<script>
+$(function(){
+    $('input[type="text"]').change(function(){
+        this.value = $.trim(this.value);
+    });
+});
+	
+</script>
+</body>
+</html>

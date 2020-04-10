@@ -75,7 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          <div class="col-md-12">
 	         <div class="card">
 		         <div class="card-body">
-			         <table id="datatablelistaprocedimientopatologia" class="table table-striped table-bordered table-hover table-condensed" style="width: 100%">
+			         <table id="datatablelistaprocedimientopatologia" class="table table-striped table-sm table-bordered table-hover table-condensed" style="width: 100%">
 			         	<thead>
 				         	<tr>
 					         	<th>HISTORIA</th>
@@ -137,8 +137,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 $(document).ready(function() {
     $('#datatablelistaprocedimientopatologia').DataTable( {
     	"pageLength": 25,
-        "responsive": true,
-    	"order": [],    	
+        "responsive": true,        
+        "order": [],    	
     	"language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",
             "zeroRecords": "Nada Encontrado - Lo sentimos!",

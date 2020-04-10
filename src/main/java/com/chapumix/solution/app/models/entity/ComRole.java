@@ -12,7 +12,6 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "com_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"nombre"})})
-//@Table(name = "com_role")
 public class ComRole implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -61,7 +61,7 @@ public class ComRolController {
 	@GetMapping("/rolform")
 	public String crear(Map<String, Object> model) {
 		ComRole comRole = new ComRole();		
-		model.put("titulo", utf8(this.utf8(this.titulorol)));
+		model.put("titulo", utf8(this.titulorol));
 		model.put("comRole", comRole);		
 		model.put("ajustes", enlaceprincipalajustes);
 		model.put("enlace4", enlace4);
