@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+     <div th:replace="layout/layout ::mensajes"></div>
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Certificado</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="submit" form="editarcertificado" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+										<i class="fas fa-save fa-lg mt-1"></i>
+									</button>																		
+								</div>
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="reset" form="editarcertificado" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+										<i class="fas fa-times fa-lg mt-1"></i>									
+									</button>
+								</div>																	
+							</div>
+						</div>
+					  </div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn btn-dark" th:href="@{/certificadoestadistica}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->
+        
+        <!-- Lista para mostrar los errorer antes del formulario -->
+	         <div class="col-sm-12">
+	        	<div th:object="${estCertificado}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>        				
+        
+         	 <div class="card card-info col-sm-5 m-1 animacion">             
+              <!-- form start -->
+              <form id="editarcertificado"  class="form-horizontal" th:action="@{/certificadoform}" th:object="${estCertificado}" role="form" method="post">					   
+					   
+					   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="tipoCertificado">Tipo Certificado</label>
+			                <div class="col-sm-5">
+				                <select id="tipoCertificado" th:field="*{estSerial.estTipoCertificado}"  class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tip : ${tipos}" th:value="${tip.id}" th:text="${tip.tipoCertificado}"></option>	                          
+		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>
+					   
+					   <div class="form-group row required mt-3 serial">
+	                   		<label class="control-label col-sm-3 ml-1" for="serial">Serial</label>
+			                <div class="col-sm-5">              	
+			                   	<input id="serial" type="text" th:field="*{estSerial.serial}" class="form-control form-control-sm" readonly>	                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
+	                   <div class="form-group row required mt-3 paciente">
+	                   		<label class="control-label col-sm-3 ml-1" for="paciente">Paciente</label>
+			                <div class="col-sm-5">              	
+			                   	<input id="paciente" type="text" name="buscar_paciente" th:field="*{docPaciente}" class="form-control form-control-sm">			                   			                   					                   			                  	                   			                   	                    	
+			                </div>             
+	                   </div>
+	                   <div class="external-event bg-success pacienteinfo p-0 text-center"></div>
+	                                
+                <!-- /.card-body -->                               
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+<script>
+		//inicializar, animar y procesar selector y cajas de texto registro tipo certificado-serial	
+		$('.serial').hide('fast');
+		$('.paciente').hide('fast');		
+		$('#tipoCertificado').change(function() {									
+			sendAjaxRequestNuevo();
+		});
+		
+		function sendAjaxRequestNuevo() {							
+			let id = $('#tipoCertificado').val();			
+			//console.log(id);			
+		   if(id > 0){
+			    //usamos fetch api para obtener resultados de controlador
+		    	fetch('/cargarSerial?id='+id)
+		    		//es algo asi como conectarse y en que formato devolver los datos
+			    	.then(function(res){
+			    		if(res.ok){
+			    			//me devuelve los datos del primer then
+			    			res.text().then(function(serial){
+			    				if(serial != 0){
+			    					$('.serial').show('fast');
+					    			$('.paciente').show('fast');
+						    		$('#serial').val(serial); 
+			    				}else{
+			    					$('.serial').show('fast');
+					    			$('#serial').val('No hay serial disponible');
+					    			$('.paciente').hide('fast');
+			    				}			    				
+			    			})
+			    		}		    						    			
+		    		})		    		
+		    		//en caso de que ocurra un error el fetch api
+		            .catch(function(error){
+		                console.log(error);
+		            });
+		    }else{
+		    	$('.serial').hide('fast');
+		    	$('.paciente').hide('fast');
+		    	$('#paciente').val('');	  	
+		    	$('.pacienteinfo p').html("");
+		    	
+		    }
+		};
+		
+		
+		
+		//abrir modal para buscar paciente	
+		$(function () {			
+			$("#paciente").autocomplete({
+					minLength: 4,
+					source : function(request, response) {
+					$.ajax({
+						url : "/cargarPaciente/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {									
+									value : item.pacNumDoc,
+									label : item.pacPriNom +" "+ item.pacSegNom +" "+ item.pacPriApe +" "+ item.pacSegApe,
+									//precio : item.precio,
+								};
+							}));
+						},
+					});
+				},
+				select : function(event, ui) {
+					
+					let matched = $(".pacienteinfo p");
+					//console.log(matched.length);
+					if(matched.length == 0){
+						let pass = $("#paciente").val();
+						if(pass.length > 0){
+							$("#paciente").val(ui.item.value);
+							$( "<p>" ).text( ui.item.label ).prependTo( ".pacienteinfo" );
+							return false;
+						}
+					}else{						
+						let pass = $("#paciente").val();						
+						$("#paciente").val(ui.item.value);
+						$('.pacienteinfo p').html(ui.item.label);						
+						return false;							
+					}					
+				}
+			});
+		});
+</script>
+</body>
+</html>

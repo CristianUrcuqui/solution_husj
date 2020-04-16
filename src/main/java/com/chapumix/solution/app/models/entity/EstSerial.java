@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+
 @Entity
 @Table(name = "est_serial", uniqueConstraints = {@UniqueConstraint(columnNames = {"serial"})})
 
@@ -32,6 +33,8 @@ public class EstSerial implements Serializable {
 	private Date fechaAlta;
 	private String loginUsrAct;
 	private Date fechaAltaAct;
+	private String loginUsrDel;
+	private Date fechaDelAct;
 	private Integer serialInicial;
 	private Integer serialFinal;
 	private EstTipoCertificado estTipoCertificado;
@@ -107,8 +110,26 @@ public class EstSerial implements Serializable {
 
 	public void setFechaAltaAct(Date fechaAltaAct) {
 		this.fechaAltaAct = fechaAltaAct;
-	}
+	}	
 	
+	@Column(name = "login_usr_del")
+	public String getLoginUsrDel() {
+		return loginUsrDel;
+	}
+
+	public void setLoginUsrDel(String loginUsrDel) {
+		this.loginUsrDel = loginUsrDel;
+	}
+
+	@Column(name = "fecha_del")
+	public Date getFechaDelAct() {
+		return fechaDelAct;
+	}
+
+	public void setFechaDelAct(Date fechaDelAct) {
+		this.fechaDelAct = fechaDelAct;
+	}
+
 	@NotNull
 	@Transient
 	public Integer getSerialInicial() {
@@ -139,7 +160,7 @@ public class EstSerial implements Serializable {
 	public void setEstTipoCertificado(EstTipoCertificado estTipoCertificado) {
 		this.estTipoCertificado = estTipoCertificado;
 	}
-
+	
 	@OneToMany(mappedBy = "estSerial")
 	public List<EstCertificado> getEstCertificado() {
 		return estCertificado;

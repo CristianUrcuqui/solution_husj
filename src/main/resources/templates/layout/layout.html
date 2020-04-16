@@ -152,19 +152,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	     
 	     
 	  <!-- Sidebar Menu -->      
-      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="mt-2">
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA', 'ROLE_ESTADISTICA_MEDICO')" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview menu-open">
             <a href="#" th:class="${estadistica} ? 'nav-link active' : 'nav-link'">
-              <i class="fas fa-file-contract"></i>
+              <i class="fas fa-wave-square"></i>
               <p>
                 Estadística
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="nav nav-treeview">
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA', 'ROLE_ESTADISTICA_MEDICO')" class="nav nav-treeview">
               <li class="nav-item">
                 <a th:href="@{/indexestadistica}" th:class="${enlace7} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
@@ -341,7 +341,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.7.9
+      <b>Version</b> 0.7.12
     </div>
   </footer>
 </div>

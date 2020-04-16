@@ -83,7 +83,7 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 		List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 		
 		for (ComRole role: usuario.getRoles()) {
-			logger.info("Role: ".concat(role.getNombre()));
+			//logger.info("Role: ".concat(role.getNombre()));
 			roles.add(new SimpleGrantedAuthority(role.getNombre()));
 		}
 		

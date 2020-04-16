@@ -101,9 +101,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			
         
          	 <div class="col-md-6 m-1">
-         	 	<div class="card card-primary">
+         	 	<div class="card card-primary animacion">
          	 	<div class="card-header p-1">	              
-	              <h3 class="card-title">Consecutivos</h3>	              
+	              <h3 class="card-title">Seriales</h3>	              
 	            </div>             
               <!-- form start -->
               <form id="parametrocertificado"  class="form-horizontal" th:action="@{/parametrocertificado}" th:object="${estSerial}" role="form" method="post">					
@@ -157,25 +157,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-
-<script>	
-	$('[data-toggle="tooltip"]').tooltip();
-	$('a').tooltip('update');
-</script>
-<script>
-	window.onload = function(){
-		let contenedor = document.getElementById('contenedor_carga');
-		contenedor.style.visibility = 'hidden';
-		contenedor.style.opacity = '0';
-	}
-</script>
-<script>
-$(function(){
-    $('input[type="text"]').change(function(){
-        this.value = $.trim(this.value);
-    });
-});
-	
-</script>
 </body>
 </html>

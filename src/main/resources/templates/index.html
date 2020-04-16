@@ -106,13 +106,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
 </div>
 <!-- ./wrapper -->
-<div th:replace="layout/layout ::scripts"></div>    
-<script>
-	window.onload = function(){
-		let contenedor = document.getElementById('contenedor_carga');
-		contenedor.style.visibility = 'hidden';
-		contenedor.style.opacity = '0';
-	}
-</script>
+<div th:replace="layout/layout ::scripts"></div>
 </body>
 </html>

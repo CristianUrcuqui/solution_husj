@@ -33,7 +33,7 @@ public class EstEstadisticaController {
 	@GetMapping("/indexestadistica")
 	public String index(Model model) {
 		model.addAttribute("titulo", utf8(this.tituloestadistica));
-		model.addAttribute("calidad", enlaceprincipalestadistica);
+		model.addAttribute("estadistica", enlaceprincipalestadistica);
 		model.addAttribute("enlace7", enlace7);
 		return "indexestadistica";
 	}

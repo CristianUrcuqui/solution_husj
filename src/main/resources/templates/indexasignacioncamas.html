@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Cumpleaños Empleados</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Solicitud Y Asignación De Camas</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -52,7 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexcalidad}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-primary" th:href="@{/indexmedicinainterna}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -73,10 +73,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         	<div class="container">
 			  <div class="row">
 			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/empleadocumple}">
+			      <a id="link" th:href="@{/camasolicitud}">
 			      <div class="card-counter primary">			      	
-			        <i class="fas fa-user-tie"></i>			        
-			        <span class="count-name">Empleados</span>
+			        <i class="fas fa-hand-paper"></i>			        
+			        <span class="count-name">Solicitudes</span>
 			      </div>
 			      </a>
 			    </div>
@@ -84,8 +84,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/empleadohoy}">
 			      <div class="card-counter info">			      	
-			        <i class="fas fa-birthday-cake"></i>			        
-			        <span class="count-name">Hoy</span>
+			        <i class="fas fa-thumbs-up"></i>			        
+			        <span class="count-name">Tramitadas</span>
 			      </div>
 			      </a>
 			    </div>			
@@ -93,8 +93,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/cumplecarform}">
 			      <div class="card-counter danger">			      	
-			        <i class="fas fa-upload"></i>			        
-			        <span class="count-name">Cargar Empleados CSV</span>
+			        <i class="fas fa-thumbs-down"></i>			        
+			        <span class="count-name">Rechazadas</span>
 			      </div>
 			      </a>
 			    </div>		    			    
@@ -120,5 +120,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
+<script>
+	window.onload = function(){
+		let contenedor = document.getElementById('contenedor_carga');
+		contenedor.style.visibility = 'hidden';
+		contenedor.style.opacity = '0';
+	}
+</script>
 </body>
 </html>

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chapumix.solution.app.models.dao.IEstSerialDao;
-import com.chapumix.solution.app.models.dao.IEstTipoCertificadoDao;
 import com.chapumix.solution.app.models.entity.EstSerial;
-import com.chapumix.solution.app.models.entity.EstTipoCertificado;
 
 @Service
 public class EstSerialServiceImpl implements IEstSerialService{
@@ -22,6 +20,18 @@ public class EstSerialServiceImpl implements IEstSerialService{
 	public List<EstSerial> findAll() {
 		return (List<EstSerial>) estSerialDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public EstSerial findSerialByTipo(Long id) {
+		return estSerialDao.findSerialByTipo(id);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public EstSerial findSerialBySerialAndTipo(String serial, String tipoCertificado) {
+		return estSerialDao.findSerialBySerialAndTipo(serial, tipoCertificado);
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
@@ -41,6 +51,7 @@ public class EstSerialServiceImpl implements IEstSerialService{
 	@Transactional
 	public void delete(Long id) {
 		estSerialDao.deleteById(id);	
-	}	
+	}
+		
 
 }

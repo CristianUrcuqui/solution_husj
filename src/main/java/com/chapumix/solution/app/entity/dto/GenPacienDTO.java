@@ -16,11 +16,11 @@ public class GenPacienDTO implements Serializable {
 	private String pacPriApe;
 	private String pacSegApe;
 	
-	public GenPacienDTO() {		
+	public GenPacienDTO() {
+		
 	}
 
-	public GenPacienDTO(Integer oid, String pacNumDoc, String pacPriNom, String pacSegNom, String pacPriApe,
-			String pacSegApe) {		
+	public GenPacienDTO(Integer oid, String pacNumDoc, String pacPriNom, String pacSegNom, String pacPriApe, String pacSegApe) {		
 		this.oid = oid;
 		this.pacNumDoc = pacNumDoc;
 		this.pacPriNom = pacPriNom;

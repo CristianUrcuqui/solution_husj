@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,7 +94,7 @@ public class CalCalendarioController {
 	@GetMapping("/empleadoform")
 	public String crearEmpleado(Map<String, Object> model) {
 		CalCalendario calCalendario = new CalCalendario();		
-		model.put("titulo", utf8(this.utf8(this.tituloempleados)));
+		model.put("titulo", utf8(this.tituloempleados));
 		model.put("calCalendario", calCalendario);		
 		model.put("enlace5", enlace5);
 		return "empleadoform";
@@ -144,7 +143,7 @@ public class CalCalendarioController {
 		return "empleadoform";
 	}
 	
-	// Este metodo me permite eliminar el rol
+	// Este metodo me permite eliminar el empleado
 	@RequestMapping(value = "/eliminarempleado/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if(id > 0) {

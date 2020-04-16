@@ -257,3 +257,30 @@ table.dataTable tbody th, table.dataTable tbody td {
     background-position: center right calc(.375em + .1875rem);
     background-size: calc(.75em + .375rem) calc(.75em + .375rem);
 }
+
+/******Estilo para el input numerico, elimina arrows/spinners******/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/******Estilo para los botone que ejecutan los modales******/
+.border-custom-button {  
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;  
+ }
+ 
+ /******Estilo para los input de busqueda******/
+.border-custom-input {  
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;  
+ }
+ 
+ 

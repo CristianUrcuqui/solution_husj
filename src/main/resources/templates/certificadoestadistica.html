@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Roles Usuario</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Certificado</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -41,31 +41,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.content-header -->
     
-    <!-- TOOLBAR BOTONES -->
+    		<!-- TOOLBAR BOTONES -->    		
+    		
 			<div class="content-header py-0">
 			  <div class="container-fluid">
 				<div class="row">
-				<!-- Toolbar Botones -->
 				
 					<!-- Toolbar Botones Izquierdo-->
 					<div class="col-sm-6">						
 						<div class="btn-toolbar" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">
-									<a class="btn btn-primary" th:href="@{/rolform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
+									<a class="btn btn-primary" th:href="@{/certificadoform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
 										<i class="fas fa-plus fa-lg mt-1"></i>
 									</a>																		
 								</div>																									
 							</div>
 						</div>
-					 </div>
-						
+					</div>
+				
 					<!-- Toolbar Botones Derecho-->
 					  <div class="col-sm-6">			
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/index}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-primary" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -90,35 +90,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
          <div class="col-md-12">
 	         <div class="card animacion">
 		         <div class="card-body">
-			         <div class="table-responsive">	
-			         <table id="datatablelistarol" class="table table-striped table-sm table-bordered table-hover table-condensed" style="width: 100%">
+			         <table id="datatablelistacertificado" class="table table-striped table-sm table-bordered table-hover table-condensed" style="width: 100%">
 			         	<thead>
 				         	<tr>
-					         	<th>Rol</th>					         					         	
-					         	<th></th>					         	
+					         	<th>SERIAL</th>
+					         	<th>HISTORIA</th>
+					         	<th>PACIENTE</th>					         					         	
+					         	<th>CERTIFICADO</th>
+					         	<th>MEDICO REGISTRA</th>
+					         	<th>FECHA REGISTRO</th>
+					         	<th></th>
+					         					         	
 				         	</tr>
 			         	</thead>
 			         	<tbody>			         		
-				         	<tr th:each="lprocpat: ${listrol}">
-					         	<td th:text="${lprocpat.nombre}"></td>					         	       						         						         	
-					         	<td class="text-center align-middle">
-					         		<div class="d-inline">
-						         		<a class="btn btn-primary btn-sm"  th:href="@{/rolform(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
-											<i class="fas fa-user-edit fa-xs"></i>
-										</a>												         		
-									</div>
+				         	<tr th:each="lcertificado: ${listcertificado}">
+					         	<td th:text="${lcertificado.serial}"></td>
+					         	<td th:text="${lcertificado.docPaciente}"></td>
+					         	<td th:text="${lcertificado.nombreCompletoPaciente}"></td>
+					         	<td th:text="${lcertificado.tipoCertificado}"></td>
+					         	<td th:text="${lcertificado.nombreMedico}"></td>						         	
+					         	<td th:text="${#dates.format(lcertificado.fechaRegistro, 'dd-MM-yyy h:mm a')}"></td>					         	
+							    <td class="text-center align-middle">					         		
 									<div class="d-inline">
-						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-rol" th:attr="data-target='#modal-eliminar-rol'+${lprocpat.id}" data-placement="top" title="Eliminar" role="button">
+						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-certificado" th:attr="data-target='#modal-eliminar-certificado'+${lcertificado.id}" data-placement="top" title="Eliminar" role="button">
 	                                    	<i class="far fa-trash-alt fa-xs"></i>
 	                                    </a>							         		
 									</div>
 									
 									<!-- modal-content -->
-									<div class="modal fade" th:id="modal-eliminar-rol+${lprocpat.id}">
+									<div class="modal fade" th:id="modal-eliminar-certificado+${lcertificado.id}">
 									        <div class="modal-dialog modal-sm">
 									          <div class="modal-content">
 									            <div class="modal-header">
-									              <h4 class="modal-title">Rol Usuario</h4>
+									              <h4 class="modal-title">Certificado</h4>
 									              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									                <span aria-hidden="true">&times;</span>
 									              </button>
@@ -128,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									            </div>
 									            <div class="modal-footer justify-content-between">
 									              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-									              <a th:href="@{/eliminarrol/{id}(id=${lprocpat.id})}">
+									              <a th:href="@{/eliminarcertificado/{id}(id=${lcertificado.id})}">
 									                <span class="btn btn-danger" value="delete">Eliminar</span>
 									              </a>
 									            </div>
@@ -137,11 +142,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									        </div>
 									        <!-- /.modal-dialog -->
 								      </div><!-- /.modal -->											      							      
-								</td>													         	
+								</td>				         													         	
 				         	</tr>
 			         	</tbody>	         	
 			         </table>
-			         </div>
 		         </div>
 	         </div>
          </div>           
@@ -163,14 +167,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
 $(document).ready(function() {
-    $('#datatablelistarol').DataTable( {
-    	"columnDefs": [            
-            { "width": "8%", "targets": [1] }           
-            
-        ],        
-        "pageLength": 25,
-        "responsive": true, 
-    	"order": [],    	
+    $('#datatablelistacertificado').DataTable( {    	        
+        "pageLength": 50,
+        "responsive": true,
+        "order": [],    	   	
     	"language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",
             "zeroRecords": "Nada Encontrado - Lo sentimos!",

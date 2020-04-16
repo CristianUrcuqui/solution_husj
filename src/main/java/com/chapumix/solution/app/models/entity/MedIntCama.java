@@ -8,39 +8,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "est_certificado", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_serial"})})
-public class EstCertificado implements Serializable {
+@Table(name = "med_int_cama")
+public class MedIntCama implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private String docPaciente;
-	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
 	private String loginUsrAct;
-	private Date fechaAltaAct;	
-	private EstSerial estSerial; 
+	private Date fechaAltaAct;
 	
 	
 	@PrePersist
 	public void prePersist() {		
 		this.fechaAlta = new Date();
-		this.fechaRegistro = new Date();
 	}
 
 	@Id
-	@Column(name = "id_certificado")
+	@Column(name = "id_med_int_cama")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
@@ -50,27 +40,6 @@ public class EstCertificado implements Serializable {
 		this.id = id;
 	}
 	
-	@NotEmpty
-	@Column(name = "doc_paciente", length = 50)
-	public String getDocPaciente() {
-		return docPaciente;
-	}
-
-	public void setDocPaciente(String docPaciente) {
-		this.docPaciente = docPaciente;
-	}
-	
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "fecha_registro")
-	public Date getFechaRegistro() {
-		return fechaRegistro;
-	}
-
-	public void setFechaRegistro(Date fechaRegistro) {
-		this.fechaRegistro = fechaRegistro;
-	}
-
 	@Column(name = "login_usr_alta")
 	public String getLoginUsrAlta() {
 		return loginUsrAlta;
@@ -105,18 +74,6 @@ public class EstCertificado implements Serializable {
 
 	public void setFechaAltaAct(Date fechaAltaAct) {
 		this.fechaAltaAct = fechaAltaAct;
-	}	
-
-	@ManyToOne	
-	@JoinColumn(name = "id_serial")
-	public EstSerial getEstSerial() {
-		return estSerial;
 	}
-
-	public void setEstSerial(EstSerial estSerial) {
-		this.estSerial = estSerial;
-	}	
-	
-	
 	
 }

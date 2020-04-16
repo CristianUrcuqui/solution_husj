@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +17,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "est_tipo_certificado")
-//@Table(name = "est_tipo_certificado", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_serial"})})
 
 public class EstTipoCertificado implements Serializable {
 
@@ -92,7 +93,7 @@ public class EstTipoCertificado implements Serializable {
 		this.fechaAltaAct = fechaAltaAct;
 	}
 
-	@OneToMany(mappedBy = "estTipoCertificado")
+	@OneToMany(mappedBy = "estTipoCertificado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	public List<EstSerial> getEstSerial() {
 		return estSerial;
 	}

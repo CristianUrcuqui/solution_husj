@@ -73,24 +73,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         	<div class="container">
 			  <div class="row">
 			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/empleadocumple}">
+			      <a id="link" th:href="@{/certificadoestadistica}">
 			      <div class="card-counter primary">			      	
 			        <i class="fas fa-certificate"></i>			        
-			        <span class="count-name">Registrar</span>
+			        <span class="count-name">Certificado</span>
 			      </div>
 			      </a>
-			    </div>
+			    </div>		    
+			    		
 			    
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/empleadohoy}">
-			      <div class="card-counter success">			      	
-			        <i class="fas fa-search-plus"></i>			        
-			        <span class="count-name">Consulta General</span>
-			      </div>
-			      </a>
-			    </div>			
-			    
-			    <div class="col-md-2 grow">
+			    <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="col-md-2 grow">
 			      <a id="link" th:href="@{/parametrocertificado}">
 			      <div class="card-counter danger">			      	
 			        <i class="fas fa-cogs"></i>			        

@@ -40,8 +40,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
 		.antMatchers("/indexmedicinainterna/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y MEDICINA_INTERNA, se puede usar con mas rutas
 		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, MEDICINA_INTERNA, ENFERMERAS se puede usar con mas rutas
-		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
-		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA", "MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
+		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
+		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()
