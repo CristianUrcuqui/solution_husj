@@ -13,9 +13,13 @@ public interface IEstSerialDao extends CrudRepository<EstSerial, Long>{
 	EstSerial findSerialByTipo(Long id);
 	
 	
-	//query personalizado para obtener el serial disponible por serial y tipo de certificado
+	//query personalizado para obtener el serial disponible por serial y tipo de certificado string
 	@Query("SELECT s FROM EstSerial s JOIN s.estTipoCertificado t WHERE s.serial = ?1 AND t.tipoCertificado = ?2")
 	EstSerial findSerialBySerialAndTipo(String serial, String tipoCertificado);
 	
+	
+	//query personalizado para obtener el serial disponible por serial y tipo de certificado Long
+	@Query("SELECT s FROM EstSerial s JOIN s.estTipoCertificado t WHERE s.serial = ?1 AND t.id = ?2")
+	EstSerial findSerialBySerialAndTipoCertificado(String serial, Long tipoCertificado);
 		
 }

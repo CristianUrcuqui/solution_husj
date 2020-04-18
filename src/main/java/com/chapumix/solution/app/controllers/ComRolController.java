@@ -88,7 +88,7 @@ public class ComRolController {
 		}
 	
 	// Este metodo me permite cargar los datos para editar el rol del sistema
-	@RequestMapping(value = "/rolform")
+	@RequestMapping(value = "/rolformedit")
 	public String editarRol(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash) {		
 				
 		ComRole comRole = null;

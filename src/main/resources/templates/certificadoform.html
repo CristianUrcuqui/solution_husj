@@ -112,6 +112,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                        </select>			                   			                   			                   	                    	
 			                </div>
 	                   </div>
+	                   
+	                   <div class="form-group row required mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="servicio">Servicio</label>
+			                <div class="col-sm-5">
+				                <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.ccNombre}"></option>	                          
+		                        </select>			                   			                   			                   	                    	
+			                </div>
+	                   </div>
 					   
 					   <div class="form-group row required mt-3 serial">
 	                   		<label class="control-label col-sm-3 ml-1" for="serial">Serial</label>

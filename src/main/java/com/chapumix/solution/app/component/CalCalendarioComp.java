@@ -70,7 +70,7 @@ public class CalCalendarioComp {
     public Multipart mp;
     public SMTPTransport t;
 	
-	//metodo que se ejecuta de forma automatica todos los dias a la 7:00 AM
+	//metodo que se ejecuta de forma automatica todos los dias a la 7:00 AM formato de 24 horas
     @Scheduled(cron = "00 00 07 * * *", zone="America/Bogota")    
     public void cronCumpSch() {
 	    
@@ -83,6 +83,7 @@ public class CalCalendarioComp {
 					
 					if (!dato.getCorreo().equals(null) && !dato.getFechaNacimiento().equals(null)) {
 						
+						logger.info("Consulto al mechudo del cumpleaños");
 						String fechaCumpleC = convertirFechaString(dato.getFechaNacimiento());
 						String fechaHoyC = convertirFechaString(new Date());
 						cal = Calendar.getInstance();
@@ -119,11 +120,16 @@ public class CalCalendarioComp {
 		                        mp.addBodyPart((BodyPart)p2);
 		                        msg.setContent(mp);
 		                        t = (SMTPTransport)session.getTransport("smtp");
+		                        logger.info("Hizo la conexino smtp");
 		                        t.connect(SMTP_SERVER, USERNAME , PASSWORD);
+		                        logger.info("Valido las credenciales");
 		                        t.sendMessage(msg, msg.getAllRecipients());
+		                        logger.info("Envio el mensaje");
 		                        t.close();
+		                        logger.info("Cerro la conexion");
 		                        dato.setEnviado(true);
-		                        iCalCalendarioService.save(dato);		                        
+		                        iCalCalendarioService.save(dato);
+		                        logger.info("Actualizo estado de envio");
 		                    }			
 							
 							

@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "est_certificado", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_serial"})})
@@ -25,6 +26,7 @@ public class EstCertificado implements Serializable {
 
 	private Long id;
 	private String docPaciente;
+	private Integer idServicio;
 	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
@@ -58,8 +60,17 @@ public class EstCertificado implements Serializable {
 
 	public void setDocPaciente(String docPaciente) {
 		this.docPaciente = docPaciente;
-	}
+	}	
 	
+	@NotNull
+	@Column(name = "id_servicio")
+	public Integer getIdServicio() {
+		return idServicio;
+	}
+
+	public void setIdServicio(Integer idServicio) {
+		this.idServicio = idServicio;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "fecha_registro")

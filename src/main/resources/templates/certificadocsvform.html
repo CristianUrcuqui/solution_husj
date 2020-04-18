@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Certificados</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Cargar Seriales</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -42,7 +42,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.content-header -->
     
-    
    			<!-- TOOLBAR BOTONES -->
 			<div class="content-header py-0">
 			  <div class="container-fluid">
@@ -52,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexestadistica}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-primary" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -62,43 +61,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 				</div>
 			</div>
-        
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
 
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        
-        	<div class="container">
-			  <div class="row">
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/certificadoestadistica}">
-			      <div class="card-counter primary">			      	
-			        <i class="fas fa-certificate"></i>			        
-			        <span class="count-name">Certificado</span>
-			      </div>
-			      </a>
-			    </div>		    
-			    		
-			    
-			    <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="col-md-2 grow">
-			      <a id="link" th:href="@{/certificadocsvform}">
-			      <div class="card-counter danger">			      	
-			        <i class="fas fa-upload"></i>			        
-			        <span class="count-name">Cargar Serial CSV</span>
-			      </div>
-			      </a>
-			    </div>		    			    
-			
-			  		    			    
-			  </div><!-- /.row-card -->
-			</div><!-- /.container-card -->
-        
-        		
-			
-			                
-        </div><!-- /.row -->
+           	<div class="card card-info col-md-5 m-1 animacion">             
+              <!-- form start -->
+              <form id="uploadserial"  class="form-horizontal" th:action="@{/uploadcsvserial}" enctype="multipart/form-data" role="form" method="post">					   
+					   
+					   	<div class="input-group">
+				          <div class="input-group-prepend">
+				            <span class="input-group-text" id="archivos"><i class="fas fa-file-csv"></i></span>
+				          </div>
+				          <div class="custom-file">
+				            <input id="archivo" type="file" name="archivo" class="custom-file-input"  accept=".csv" aria-describedby="archivos">
+				            <label class="custom-file-label" for="archivo">Seleccione un archivo CSV</label>
+				          </div>				          
+				        </div>
+				        
+				        <div class="form-group float-right mt-2">
+			                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cargar</button>			                 
+			            </div>
+			           
+			           	<blockquote class="mt-5">
+		                	<p>El fichero CSV debe tener el siguiente formato:</p>
+		                	<p class="m-0 p-0"><small>serial;idTipoCertificado;estado</small></p>
+							<p class="m-0 p-0"><small> xxxxxx;1-DEFUNCION ó 2-NACIDO VIVO;0</small></p>
+		                </blockquote>
+		              	
+	                                
+                <!-- /.card-body -->                    
+              </form>
+            </div>
+            <!-- /.card -->       
+                
+        </div>
+        <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
@@ -112,12 +118,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-<script>
-	window.onload = function(){
-		let contenedor = document.getElementById('contenedor_carga');
-		contenedor.style.visibility = 'hidden';
-		contenedor.style.opacity = '0';
-	}
-</script>
+
+
+<script> 
+        $(".custom-file-input").on("change", function() { 
+            var file_name = $(this).val().split("\\").pop(); 
+            $(this).siblings(".custom-file-label").addClass("selected").html(file_name); 
+        }); 
+</script> 
 </body>
 </html>

@@ -11,6 +11,8 @@ public interface IEstSerialService {
 	public EstSerial findSerialByTipo(Long id);
 	
 	public EstSerial findSerialBySerialAndTipo(String serial, String tipoCertificado);
+	
+	public EstSerial findSerialBySerialAndTipoCertificado(String serial, Long tipoCertificado);
 
 	public void save(EstSerial estSerial);
 	

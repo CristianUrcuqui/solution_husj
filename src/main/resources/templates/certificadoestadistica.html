@@ -98,6 +98,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<th>PACIENTE</th>					         					         	
 					         	<th>CERTIFICADO</th>
 					         	<th>MEDICO REGISTRA</th>
+					         	<th>SERVICIO DONDE SE REGISTRA</th>
 					         	<th>FECHA REGISTRO</th>
 					         	<th></th>
 					         					         	
@@ -109,10 +110,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${lcertificado.docPaciente}"></td>
 					         	<td th:text="${lcertificado.nombreCompletoPaciente}"></td>
 					         	<td th:text="${lcertificado.tipoCertificado}"></td>
-					         	<td th:text="${lcertificado.nombreMedico}"></td>						         	
+					         	<td th:text="${lcertificado.nombreMedico}"></td>
+					         	<td th:text="${lcertificado.servicio}"></td>						         	
 					         	<td th:text="${#dates.format(lcertificado.fechaRegistro, 'dd-MM-yyy h:mm a')}"></td>					         	
 							    <td class="text-center align-middle">					         		
-									<div class="d-inline">
+									<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="d-inline">
 						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-certificado" th:attr="data-target='#modal-eliminar-certificado'+${lcertificado.id}" data-placement="top" title="Eliminar" role="button">
 	                                    	<i class="far fa-trash-alt fa-xs"></i>
 	                                    </a>							         		

@@ -42,6 +42,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, MEDICINA_INTERNA, ENFERMERAS se puede usar con mas rutas
 		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
 		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
+		.antMatchers("/certificadoestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
+		.antMatchers("/certificadocsvform/**").hasAnyRole("ADMIN", "ESTADISTICA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA se puede usar con mas rutas
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()

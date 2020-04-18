@@ -167,17 +167,14 @@ public class CalCalendarioController {
 	// Este metodo me permite visualizar o cargar el formulario del empleado para cargar el archivo CSV
 	@GetMapping("/cumplecarform")
 	public String crear(Map<String, Object> model) {
-		CalCalendario calCalendario = new CalCalendario();	
-		//model.put("titulo", utf8(this.utf8(this.titulorol)));
-		model.put("calCalendario", calCalendario);		
-		//model.put("ajustes", enlaceprincipalajustes);
-		//model.put("enlace4", enlace4);
+		CalCalendario calCalendario = new CalCalendario();			
+		model.put("calCalendario", calCalendario);				
 		return "cumplecarform";
 	}
 	
 	
-	@PostMapping("/uploadcsv")
-    public String uploadCSVFile(@RequestParam("archivo") MultipartFile file, Model model) {
+	@PostMapping("/uploadcsvempleado")
+    public String uploadCSVFileEmpleado(@RequestParam("archivo") MultipartFile file, Model model, SessionStatus status) {
 
 		// validamos el archivo si esta vacio
         if (file.isEmpty()) {
@@ -222,6 +219,7 @@ public class CalCalendarioController {
                 }
                 
                 // muestra mensaje despues de guardar correctamente
+                status.setComplete();
                 String mensajeFlash = "El archivo CSV se proceso correctamente";                
                 model.addAttribute("success", mensajeFlash);
 

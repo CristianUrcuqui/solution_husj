@@ -19,21 +19,23 @@ public class EstCertificadoDTO implements Serializable {
 	private String nombreCompletoPaciente;
 	private String tipoCertificado;
 	private String nombreMedico;
+	private String servicio;
 	private Date fechaRegistro;
 
 	public EstCertificadoDTO() {
 	}
-
 	
 
+
 	public EstCertificadoDTO(Long id, String serial, String docPaciente, String nombreCompletoPaciente,
-			String tipoCertificado, String nombreMedico, Date fechaRegistro) {
+			String tipoCertificado, String nombreMedico, String servicio, Date fechaRegistro) {
 		this.id = id;
 		this.serial = serial;
 		this.docPaciente = docPaciente;
 		this.nombreCompletoPaciente = nombreCompletoPaciente;
 		this.tipoCertificado = tipoCertificado;
 		this.nombreMedico = nombreMedico;
+		this.servicio = servicio;
 		this.fechaRegistro = fechaRegistro;
 	}
 
@@ -84,6 +86,14 @@ public class EstCertificadoDTO implements Serializable {
 
 	public void setNombreMedico(String nombreMedico) {
 		this.nombreMedico = nombreMedico;
+	}	
+
+	public String getServicio() {
+		return servicio;
+	}
+
+	public void setServicio(String servicio) {
+		this.servicio = servicio;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
