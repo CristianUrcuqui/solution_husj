@@ -118,7 +118,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			                <div class="col-sm-5">
 				                <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
 		                          <option value="" selected="selected">Seleccione</option>
-		                            <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.ccNombre}"></option>	                          
+		                            <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.gasNombre}"></option>	                          
 		                        </select>			                   			                   			                   	                    	
 			                </div>
 	                   </div>

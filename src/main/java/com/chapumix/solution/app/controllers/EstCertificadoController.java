@@ -39,6 +39,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.chapumix.solution.app.entity.dto.CtnCenCosDTO;
 import com.chapumix.solution.app.entity.dto.EstCertificadoDTO;
 import com.chapumix.solution.app.entity.dto.EstSerialDTO;
+import com.chapumix.solution.app.entity.dto.GenAreSerDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenUsuarioDTO;
 import com.chapumix.solution.app.models.entity.EstCertificado;
@@ -56,9 +57,9 @@ import com.opencsv.bean.CsvToBeanBuilder;
 @PropertySource(value = "application.properties", encoding="UTF-8")
 public class EstCertificadoController {
 	
-	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral";
-	public static final String URLMedico = "http://localhost:9000/api/usuarios/username";
-	public static final String URLServicio = "http://localhost:9000/api/camasmedico/servicio";
+	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController
+	public static final String URLMedico = "http://localhost:9000/api/usuarios/username"; //se obtuvo de API REST de GenUsuarioRestController
+	public static final String URLServicio = "http://localhost:9000/api/camasmedico/servicio"; //se obtuvo de API REST de HcnOrdHospRestController
 	
 	
 	@Autowired
@@ -206,10 +207,10 @@ public class EstCertificadoController {
 			GenUsuarioDTO medico = respuestam.getBody();
 			
 			// proceso API para consultar el servicio.			
-			ResponseEntity<CtnCenCosDTO> respuestas = restTemplate.exchange(URLServicio + '/' + c.getIdServicio(), HttpMethod.GET, null, new ParameterizedTypeReference<CtnCenCosDTO>() {});
-			CtnCenCosDTO servicio = respuestas.getBody();
+			ResponseEntity<GenAreSerDTO> respuestas = restTemplate.exchange(URLServicio + '/' + c.getIdServicio(), HttpMethod.GET, null, new ParameterizedTypeReference<GenAreSerDTO>() {});
+			GenAreSerDTO servicio = respuestas.getBody();
 			
-			EstCertificadoDTO dto = new EstCertificadoDTO(c.getId(), c.getEstSerial().getSerial(), paciente.get(0).getPacNumDoc(), paciente.get(0).getPacPriNom() +" "+ paciente.get(0).getPacSegNom() +" "+ paciente.get(0).getPacPriApe()+" "+ paciente.get(0).getPacSegApe(), c.getEstSerial().getEstTipoCertificado().getTipoCertificado(), medico.getUsuDescri(), servicio.getCcNombre(), c.getFechaAlta());
+			EstCertificadoDTO dto = new EstCertificadoDTO(c.getId(), c.getEstSerial().getSerial(), paciente.get(0).getPacNumDoc(), paciente.get(0).getPacPriNom() +" "+ paciente.get(0).getPacSegNom() +" "+ paciente.get(0).getPacPriApe()+" "+ paciente.get(0).getPacSegApe(), c.getEstSerial().getEstTipoCertificado().getTipoCertificado(), medico.getUsuDescri(), servicio.getGasNombre(), c.getFechaAlta());
 			newCertificados.add(dto);		
 			
 		});
@@ -228,8 +229,8 @@ public class EstCertificadoController {
 		EstCertificado estCertificado = new EstCertificado();
 		
 		// proceso API para consultar el servicio.			
-		ResponseEntity<List<CtnCenCosDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<CtnCenCosDTO>>() {});
-		List<CtnCenCosDTO> servicio = respuestas.getBody();
+		ResponseEntity<List<GenAreSerDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenAreSerDTO>>() {});
+		List<GenAreSerDTO> servicio = respuestas.getBody();
 		
 		model.put("titulo", utf8(this.tituloestadistica));
 		model.put("tipos", iEstTipoCertificadoService.findAll());
@@ -244,8 +245,8 @@ public class EstCertificadoController {
 	public String guardarCertificado(@Valid EstCertificado estCertificado, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 		
 		// proceso API para consultar el servicio.			
-		ResponseEntity<List<CtnCenCosDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<CtnCenCosDTO>>() {});
-		List<CtnCenCosDTO> servicio = respuestas.getBody();
+		ResponseEntity<List<GenAreSerDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenAreSerDTO>>() {});
+		List<GenAreSerDTO> servicio = respuestas.getBody();
 		
 		
 		if (result.hasErrors()) {
