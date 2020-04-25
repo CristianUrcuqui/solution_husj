@@ -1,8 +1,6 @@
 package com.chapumix.solution.app.controllers;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +9,6 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -158,11 +155,9 @@ public class ComUsuarioController {
 					ResponseEntity<GenUsuarioDTO> respuestam = restTemplate.exchange(URLUsuario + '/' + doc, HttpMethod.GET, null, new ParameterizedTypeReference<GenUsuarioDTO>() {});
 					GenUsuarioDTO usuario = respuestam.getBody();
 					
-					ComUsuario guardar = usuarioAgregar(usuario);
-					System.out.println(guardar);
+					ComUsuario guardar = usuarioAgregar(usuario);					
 					iComUsuarioService.save(guardar);
-					flash.addFlashAttribute("success", "Usuario(s) sincronizado correctamente");
-					//agregar.setUsuario(usuario.ge);
+					flash.addFlashAttribute("success", "Usuario(s) sincronizado correctamente");					
 				}				
 				
 			});

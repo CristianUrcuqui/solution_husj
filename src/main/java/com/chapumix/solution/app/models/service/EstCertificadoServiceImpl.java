@@ -30,6 +30,13 @@ public class EstCertificadoServiceImpl implements IEstCertificadoService{
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<EstCertificado> findAllByFechaRegistroAsc() {
+		return estCertificadoDao.findAllByFechaRegistroAsc();
+	}		
+
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public EstCertificado findByNameTipo(String docPaciente, String tipoCertificado) {		
 		return (EstCertificado) estCertificadoDao.findByNameTipo(docPaciente, tipoCertificado);
 	}
@@ -52,6 +59,5 @@ public class EstCertificadoServiceImpl implements IEstCertificadoService{
 	@Transactional
 	public void delete(Long id) {
 		estCertificadoDao.deleteById(id);	
-	}		
-
+	}	
 }

@@ -191,7 +191,7 @@ public class EstCertificadoController {
 	@GetMapping("/certificadoestadistica")
 	public String listar(Model model) {
 		
-		List<EstCertificado> certificados = iEstCertificadoService.findAll();
+		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroAsc();
 		List<EstCertificadoDTO> newCertificados = new ArrayList<>();
 		
 		

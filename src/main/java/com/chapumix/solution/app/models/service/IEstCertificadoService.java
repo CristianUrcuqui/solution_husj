@@ -9,6 +9,7 @@ public interface IEstCertificadoService {
 	public List<EstCertificado> findAll();
 	
 	//public List<EstCertificado> findByName(String docPaciente);
+	public List<EstCertificado> findAllByFechaRegistroAsc();
 
 	public EstCertificado findByNameTipo(String docPaciente, String tipoCertificado);
 	
@@ -17,5 +18,7 @@ public interface IEstCertificadoService {
 	public EstCertificado findById(Long id);
 	
 	public void delete(Long id);
+
+	
 
 }
