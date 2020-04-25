@@ -67,8 +67,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-        <div class="row"><!-- CONTENIDO DESDE AQUI-->
-        
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->        
         
         	<div class="container">
 			  <div class="row">
@@ -93,12 +92,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			
 			  		    			    
 			  </div><!-- /.row-card -->
-			</div><!-- /.container-card -->
-        
-        		
-			
-			                
+			</div><!-- /.container-card -->            
         </div><!-- /.row -->
+        
+        
+        <!-- INFORMACION CANTIDAD DE CERTIFICADOS -->
+        <div class="row mt-2">
+          <div class="col-md-4"></div>	
+          <div class="col-md-4 offset-md-4">
+            <div class="card card-default">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-info-circle"></i>
+                  Certificados Disponibles
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="callout callout-danger">
+                  <h5>Certificados De Defunción</h5>
+                  <p><h4><span th:text=${defuncion} class="badge badge-danger"></span></h4></p>
+                </div>
+                
+                <div class="callout callout-success">
+                  <h5>Certificados Nacido Vivo</h5>
+                  <p><h4><span th:text=${nacidovivo} class="badge badge-success"></span></h4></p>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        
+        
+        
+        
+        
+        
+        
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->

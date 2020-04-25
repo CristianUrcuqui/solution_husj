@@ -90,8 +90,14 @@ public class EstCertificadoController {
 	//INDEX ESTADISTICA
 	@GetMapping("/indexcertificado")
 	public String index(Model model) {
+		
+		List<EstSerial> serialesDefuncion = iEstSerialService.countSerialDefuncion();
+		List<EstSerial> serialesNacidoVivo = iEstSerialService.countSerialNacidoVivo();		
+		
 		model.addAttribute("titulo", utf8(this.tituloestadistica));
 		model.addAttribute("estadistica", enlaceprincipalestadistica);
+		model.addAttribute("defuncion", serialesDefuncion.size());
+		model.addAttribute("nacidovivo", serialesNacidoVivo.size());
 		model.addAttribute("enlace7", enlace7);
 		return "indexcertificado";
 	}

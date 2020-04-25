@@ -38,6 +38,18 @@ public class EstSerialServiceImpl implements IEstSerialService{
 	public EstSerial findSerialBySerialAndTipoCertificado(String serial, Long tipoCertificado) {		
 		return estSerialDao.findSerialBySerialAndTipoCertificado(serial, tipoCertificado);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<EstSerial> countSerialDefuncion() {
+		return estSerialDao.countSerialDefuncion();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<EstSerial> countSerialNacidoVivo() {
+		return estSerialDao.countSerialNacidoVivo();
+	}
 		
 
 	@Override
@@ -58,6 +70,6 @@ public class EstSerialServiceImpl implements IEstSerialService{
 	@Transactional
 	public void delete(Long id) {
 		estSerialDao.deleteById(id);	
-	}	
+	}		
 
 }
