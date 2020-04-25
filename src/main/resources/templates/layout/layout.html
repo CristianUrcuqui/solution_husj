@@ -277,11 +277,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Roles</p>
                 </a>
               </li>                         
-            </ul>                       
+            </ul>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/sincronizaform}" th:class="${enlace8} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Sincronización Usuarios</p>
+                </a>
+              </li>                         
+            </ul>                         
           </li>          
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
+      
+      
+      
     </div>
     <!-- /.sidebar -->
   </aside>  
@@ -341,7 +352,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.7.14
+      <b>Version</b> 0.7.16
     </div>
   </footer>
 </div>

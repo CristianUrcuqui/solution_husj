@@ -73,7 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-           	<div class="card card-info col-md-5 m-1 animacion">             
+           	<div class="card card-info col-md-6 m-1 animacion">             
               <!-- form start -->
               <form id="uploadempleado"  class="form-horizontal" th:action="@{/uploadcsvempleado}" enctype="multipart/form-data" role="form" method="post">					   
 					   
@@ -89,19 +89,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        
 				        <div class="form-group float-right mt-2">
 			                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cargar</button>			                 
-			            </div>
-			           
-			           	<blockquote class="mt-5">
-		                	<p>El fichero CSV debe tener el siguiente formato:</p>
-		                	<p class="m-0 p-0"><small>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado</small></p>
-							<p class="m-0 p-0"><small> xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</small></p>
-		                </blockquote>
-		              	
+			            </div>           	
 	                                
                 <!-- /.card-body -->                    
               </form>
             </div>
-            <!-- /.card -->       
+            <!-- /.card -->
+            
+            
+            <!-- Descripcion o detalle -->
+            <div class="col-md-6">
+            <div class="card animacion">
+              <div class="card-header">
+                <h3 class="card-title text-primary">
+                  <i class="fas fa-text-width"></i>
+                  Ayuda
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">                
+                <h6>El fichero CSV debe tener el siguiente formato:</h6>
+                <h6><strong>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado</strong></h6> 
+                <h6>xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</h6>               
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- ./col -->
+                   
                 
         </div>
         <!-- /.row -->

@@ -59,10 +59,6 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 					 //cambiar fetch = FetchType.EAGER por fetch = FetchType.LAZY
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		//obtener el datos extras del usuario
-		//ComUsuario user = (ComUsuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
-		//user.getNombreCompleto();		
-		
 		//boolean result = passwordEncoder.matches(password_plan_text_here, encoded_password_here);  //comparar contraseñas
 		
 		//obtengo la clave para luego ser comparada en dinamica

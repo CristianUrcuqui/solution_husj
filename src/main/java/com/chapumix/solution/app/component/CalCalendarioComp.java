@@ -98,8 +98,12 @@ public class CalCalendarioComp {
 		                    mesHoy = cal.get(2);
 		                    ++mesHoy;
 		                    diaHoy = cal.get(5);
+		                    logger.info("Arma la fecha del cumpleaños para comparar");
+		                    System.out.println("Compara dia cumple:" + diaCumple + " y la fecha dia de hoy: " + diaHoy);
+		                    System.out.println("Compara mes cumple:" + mesCumple + " y la fecha dia de hoy: " + mesHoy);
 		                    
 		                    if(diaCumple == diaHoy && mesCumple == mesHoy) {
+		                    	logger.info("Valida fecha de cumpleaños");
 		                    	prop = System.getProperties();
 		                        prop.put("mail.smtp.auth", "true");
 		                        session = Session.getInstance(prop, (Authenticator)null);

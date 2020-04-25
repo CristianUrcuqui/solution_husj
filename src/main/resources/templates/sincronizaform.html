@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Cargar Seriales</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Sincronizar Usuario</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -42,22 +42,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.content-header -->
     
-   			<!-- TOOLBAR BOTONES -->
+    <!-- TOOLBAR BOTONES -->
 			<div class="content-header py-0">
 			  <div class="container-fluid">
 				<div class="row">
-					<!-- Toolbar Botones Derecho-->
-					  <div class="col-sm-12">			
+					<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="submit" form="usuariosincroniza" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+										<i class="fas fa-save fa-lg mt-1"></i>
+									</button>																		
+								</div>
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="reset" form="usuariosincroniza" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+										<i class="fas fa-times fa-lg mt-1"></i>									
+									</button>
+								</div>																	
+							</div>
+						</div>
+					  </div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn btn-dark" th:href="@{/usuarioincroniza}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
 							</div>
 						</div>
-					  </div>						  				
+					  </div>				  				
 					</div>
 				</div>
 			</div>
@@ -73,27 +90,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-           	<div class="card card-info col-md-6 m-1 animacion">             
+        <!-- Lista para mostrar los errorer antes del formulario -->
+	         <div class="col-md-12">
+	        	<div th:object="${comUsuario}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>        				
+        
+         	 <div class="card card-info col-md-6 m-1 animacion">             
               <!-- form start -->
-              <form id="uploadserial"  class="form-horizontal" th:action="@{/uploadcsvserial}" enctype="multipart/form-data" role="form" method="post">					   
+              <form id="usuariosincroniza"  class="form-horizontal" th:action="@{/sincronizaform}" th:object="${comUsuario}" role="form" method="post">					   
 					   
-					   	<div class="input-group">
-				          <div class="input-group-prepend">
-				            <span class="input-group-text" id="archivos"><i class="fas fa-file-csv"></i></span>
-				          </div>
-				          <div class="custom-file">
-				            <input id="archivo" type="file" name="archivo" class="custom-file-input"  accept=".csv" aria-describedby="archivos">
-				            <label class="custom-file-label" for="archivo">Seleccione un archivo CSV</label>
-				          </div>				          
-				        </div>
-				        
-				        <div class="form-group float-right mt-2">
-			                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cargar</button>			                 
-			            </div>         	
+					   
+					   <div class="form-group row mt-3">
+	                   		<label class="control-label col-sm-3 ml-1" for="nombre">Documento Usuario</label>
+			                <div class="col-sm-5">              	
+			                   	<input id="documento" th:name="documento" type="text" class="form-control form-control-sm">	                   			                   	                    	
+			                </div>
+	                   </div>
+	                   
 	                                
                 <!-- /.card-body -->                    
               </form>
-            </div>
+            </div>            
             <!-- /.card -->
             
             <!-- Descripcion o detalle -->
@@ -107,16 +128,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <!-- /.card-header -->
               <div class="card-body">                
-                <h6>El fichero CSV debe tener el siguiente formato:</h6>
-                <h6><strong>serial;idTipoCertificado;estado</strong></h6> 
-                <h6>xxxxxx;1-DEFUNCION ó 2-NACIDO VIVO;0</h6>               
+                <h6>Ingresa un solo número de documento <strong>EJ: xxxxxxxx</strong></h6>
+                <h6>O </h6> 
+                <h6>Ingresa un listado de números separados por <strong>coma</strong> <strong>EJ: xxxxxxxx,xxxxxxxx,xxxxxxxx</strong></h6>               
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>
-          <!-- ./col --> 
-                   
+          <!-- ./col -->            
                 
         </div>
         <!-- /.row -->
@@ -133,13 +153,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-
-
-<script> 
-        $(".custom-file-input").on("change", function() { 
-            var file_name = $(this).val().split("\\").pop(); 
-            $(this).siblings(".custom-file-label").addClass("selected").html(file_name); 
-        }); 
-</script> 
 </body>
 </html>

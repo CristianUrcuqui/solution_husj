@@ -21,6 +21,12 @@ public class ComUsuarioServiceImpl implements IComUsuarioService{
 	public List<ComUsuario> findAll() {
 		return (List<ComUsuario>) comUsuarioDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public ComUsuario findByUsuario(String username) {
+		return comUsuarioDao.findByUsuario(username);
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura

@@ -11,6 +11,7 @@ public class GenUsuarioDTO implements Serializable {
 
 	private Integer oid;
 	private String usuNombre;
+	private String usuClave;
 	private String usuDescri;
 	private String usuEstado;
 	
@@ -41,6 +42,14 @@ public class GenUsuarioDTO implements Serializable {
 
 	public void setUsuNombre(String usuNombre) {
 		this.usuNombre = usuNombre;
+	}	
+
+	public String getUsuClave() {
+		return usuClave;
+	}
+
+	public void setUsuClave(String usuClave) {
+		this.usuClave = usuClave;
 	}
 
 	public String getUsuDescri() {

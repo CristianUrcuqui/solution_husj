@@ -36,7 +36,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.chapumix.solution.app.entity.dto.CtnCenCosDTO;
 import com.chapumix.solution.app.entity.dto.EstCertificadoDTO;
 import com.chapumix.solution.app.entity.dto.EstSerialDTO;
 import com.chapumix.solution.app.entity.dto.GenAreSerDTO;
@@ -195,6 +194,7 @@ public class EstCertificadoController {
 		List<EstCertificado> certificados = iEstCertificadoService.findAll();
 		List<EstCertificadoDTO> newCertificados = new ArrayList<>();
 		
+		
 		certificados.forEach(c ->{
 			
 			// proceso API para consultar el paciente.
@@ -213,8 +213,7 @@ public class EstCertificadoController {
 			EstCertificadoDTO dto = new EstCertificadoDTO(c.getId(), c.getEstSerial().getSerial(), paciente.get(0).getPacNumDoc(), paciente.get(0).getPacPriNom() +" "+ paciente.get(0).getPacSegNom() +" "+ paciente.get(0).getPacPriApe()+" "+ paciente.get(0).getPacSegApe(), c.getEstSerial().getEstTipoCertificado().getTipoCertificado(), medico.getUsuDescri(), servicio.getGasNombre(), c.getFechaAlta());
 			newCertificados.add(dto);		
 			
-		});
-		
+		});		
 		model.addAttribute("titulo", utf8(this.tituloestadistica));		
 		model.addAttribute("estadistica", enlaceprincipalestadistica);
 		model.addAttribute("listcertificado", newCertificados);		
@@ -310,7 +309,7 @@ public class EstCertificadoController {
 	}
 		
 	
-	//Este metodo me permite cargar el serial por tipo de certificado		
+	//Este metodo me permite cargar por FETCH API el serial por tipo de certificado		
 	@RequestMapping(value = "/cargarSerial")
 	@ResponseBody
 	public String cargarSerial(@RequestParam Long id) {
@@ -324,6 +323,7 @@ public class EstCertificadoController {
 		return serial;
 	}	
 	
+	//Este metodo me permite cargar por AJAX el dato del paciente	
 	@GetMapping(value = "/cargarPaciente/{term}", produces = { "application/json" })
 	@ResponseBody
 	public  List<GenPacienDTO> cargarPacientes(@PathVariable String term) {

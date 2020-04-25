@@ -7,10 +7,12 @@ import com.chapumix.solution.app.models.entity.ComUsuario;
 public interface IComUsuarioService {
 	
 	public List<ComUsuario> findAll();
-
-	public void save(ComUsuario comUsuario);
 	
+	public ComUsuario findByUsuario(String username);
+
 	public ComUsuario findById(Long id);
+	
+	public void save(ComUsuario comUsuario);	
 	
 	public void delete(Long id);
 

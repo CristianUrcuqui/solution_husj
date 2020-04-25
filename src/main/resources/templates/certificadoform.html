@@ -131,12 +131,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	                   </div>
 	                   
 	                   <div class="form-group row required mt-3 paciente">
-	                   		<label class="control-label col-sm-3 ml-1" for="paciente">Paciente</label>
+	                   		<label class="control-label col-sm-3 ml-1" for="paciente">Documento Paciente</label>
 			                <div class="col-sm-5">              	
-			                   	<input id="paciente" type="text" name="buscar_paciente" th:field="*{docPaciente}" class="form-control form-control-sm">			                   			                   					                   			                  	                   			                   	                    	
+			                   	<input id="paciente" type="number" name="buscar_paciente" th:field="*{docPaciente}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">			                   			                   			                   					                   			                  	                   			                   	                    	
 			                </div>             
 	                   </div>
-	                   <div class="external-event bg-success pacienteinfo p-0 text-center"></div>
+	                   <div class="external-event bg-success pacienteinfo p-0 text-center"></div>	                   
 	                                
                 <!-- /.card-body -->                               
               </form>
@@ -157,7 +157,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-<script>
+<script>	
+		
 		//inicializar, animar y procesar selector y cajas de texto registro tipo certificado-serial	
 		$('.serial').hide('fast');
 		$('.paciente').hide('fast');		
