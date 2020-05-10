@@ -17,7 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Favicon Icon -->
   <link rel="icon" type="image/png" th:href="@{../../dist/img/logologin.png}">
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome/css/all.css}">
   <!-- DataTables -->
   <link rel="stylesheet" th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables/extensions/Buttons/css/buttons.bootstrap4.min.css}">
@@ -126,7 +126,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview menu-open">
             <a href="#" th:class="${calidad} ? 'nav-link active' : 'nav-link'">
-              <i class="fas fa-certificate nav-icon"></i>
+              <i class="fas fa-star nav-icon"></i>
               <p>
                 Calidad
                 <i class="right fas fa-angle-left"></i>
@@ -223,7 +223,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview menu-open">
             <a href="#" th:class="${patologia} ? 'nav-link active' : 'nav-link'">
-              <i class="fas fa-bug nav-icon"></i>
+              <i class="fas fa-virus nav-icon"></i>
               <p>
                 Patología
                 <i class="right fas fa-angle-left"></i>
@@ -240,7 +240,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>          
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->      
+      <!-- /.sidebar-menu -->
+      
+      
+      
+      <!--   ----------------------------------------------------------
+	     * MENU SIAU
+	     * ---------------------------------------------------------- */-->	
+      
+
+      <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SIAU')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${siau} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-hands-helping nav-icon"></i>
+              <p>
+                Siau
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SIAU')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/indexsiau}" th:class="${enlace9} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Menú Principal</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->           
 	     
 	     
 	     
@@ -352,7 +385,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.7.19
+      <b>Version</b> 0.7.25
     </div>
   </footer>
 </div>

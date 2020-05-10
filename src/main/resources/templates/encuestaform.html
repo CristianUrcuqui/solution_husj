@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+     <div th:replace="layout/layout ::mensajes"></div>
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Encuesta De Satisfacción Del Usuario</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6">
+						<!-- Toolbar Botones -->						
+					  </div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn btn-dark" th:href="@{/indexencuestasat}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->
+        
+        <!-- Lista para mostrar los errorer antes del formulario -->
+	         <div class="col-md-12">
+	        	<div th:object="${atenEncuDatoBasico}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>        				
+        
+         	 <div class="card card-info col-md-12 animacion mx-auto">             
+              <!-- form start -->
+              <form id="editarencuesta"  class="form-horizontal" th:action="@{/encuestaform}" th:object="${atenEncuDatoBasico}" role="form" method="post">					   
+					   
+					   
+					 <div class="row">
+				      <div class="col-md-12">
+				        <h1 class="text-center">Formato De Encuesta De Satisfacción.</h1>
+				        <p class="text-center">Hospital Universitario San Jose De Popayán.</p>
+				      </div>
+				    </div>
+				    
+				    <hr><br />
+				    
+				    <!-- DATOS BASICOS-->
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h3>Datos Básicos</h3>
+				        <p></p>
+				      </div>
+				    </div>				    
+				    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        
+				        <div class="row">
+				          <div class="col-md-4 required">
+				          	<div class="form-group">
+					            <label class="control-label" for="servicio">Servicio</label>
+					            <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
+				                	<option value="" selected="selected">Seleccione</option>
+				                    <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.gasNombre}"></option>	                          
+				                </select>
+			                </div>
+				          </div>
+				          
+				          <div class="col-md-4 required">
+				            <div class="form-group">
+				            	<label class="control-label" for="genero">Genero</label>
+				                <select id="genero" th:field="*{comGenero}"  class="form-control form-control-sm">
+			                    	<option value="" selected="selected">Seleccione</option>
+			                    	<option th:each="gen : ${genero}" th:value="${gen.id}" th:text="${gen.nombre}"></option>	                          
+			                    </select>           
+				            </div>
+				          </div>
+				          
+				          <div class="col-md-4 required">
+				            <div class="form-group">
+				              <label class="control-label" for="edad">Edad</label>				                             	
+				              <input id="edad" type="number" th:field="*{edad}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">	                   			                   			                   					                   			                  	                   			                   	                    	
+				            </div>
+				          </div>
+				        </div> 				        
+				      </div>
+				    </div>        
+			                 
+			        <hr />
+			        
+			        <!-- ENCUESTA-->
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h3>Encuesta</h3>
+				        <p></p>
+				      </div>
+				    </div>
+				    
+				    
+				    <!-- PREGUNTA 1 -->				    
+				    <div  class="row ml-1">
+				    	<div class="col-md-12">					    		
+				    		<h6>1. Siente que ha recibido un trato digno y respetuoso por parte del personal que lo atendió.</h6>
+				    		<input id="pregunta1" type="radio"  th:field="*{pregunta1}" name="pregunta1" th:value="pregunta1">				    				    		
+				    	</div>
+				    </div>		        
+			       	        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa1" type="radio"  th:field="*{respuesta1}" name="respuesta" value="1"> SI     				        
+				        <img th:src="@{../../dist/img/si.png}" width="40" height="35" alt="..."/>
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">				        
+				        <input id="preguntab1" type="radio"  th:field="*{respuesta1}" name="respuesta" value="0" > NO			        
+				        <img th:src="@{../../dist/img/no.jpg}" width="40" height="30" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				   	
+				   	<hr />
+				   	
+				   	
+				   	<!--  PREGUNTA 2  -->				    			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>2. La información sobre su estado de salud entregada por el personal durante su atención fue:</h6>
+				        <input id="pregunta2" type="radio"  th:field="*{pregunta2}" name="pregunta2" th:value="pregunta2">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaa2" type="radio"  th:field="*{respuesta2}" name="respuesta2" value="3"> Muy Mala				        
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab2" type="radio" th:field="*{respuesta2}" name="respuesta2" value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac2" type="radio" th:field="*{respuesta2}" name="respuesta2"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad2" type="radio" th:field="*{respuesta2}" name="respuesta2"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae2" type="radio" th:field="*{respuesta2}" name="respuesta2" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>	    
+				    
+				    <hr />
+				    
+				    <!--  PREGUNTA 3  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>3. La información recibida al momento del alta sobre los cuidados de su enfermedad ha sido:</h6>
+				        <input id="pregunta3" type="radio"  th:field="*{pregunta3}" name="pregunta3" th:value="pregunta3">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa3" type="radio" th:field="*{respuesta3}" name="respuesta3" value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab3" type="radio" th:field="*{respuesta3}" name="respuesta3"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac3" type="radio" th:field="*{respuesta3}" name="respuesta3"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad3" type="radio" th:field="*{respuesta3}" name="respuesta3"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae3" type="radio" th:field="*{respuesta3}" name="respuesta3" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr />
+				    
+				    <!--  PREGUNTA 4  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>4. La alimentación ha sido:</h6>
+				        <input id="pregunta4" type="radio"  th:field="*{pregunta4}" name="pregunta4" th:value="pregunta4">
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa4" type="radio" th:field="*{respuesta4}" name="respuesta4"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab4" type="radio" th:field="*{respuesta4}" name="respuesta4"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac4" type="radio" th:field="*{respuesta4}" name="respuesta4"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input type="radio" id="preguntad4" th:field="*{respuesta4}" name="respuesta4"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input type="radio" id="preguntae4" th:field="*{respuesta4}" name="respuesta4" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>				    
+				    
+				    <hr />
+				    
+				    <!--  PREGUNTA 5  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>5. El confort de las habitaciones ha sido:</h6>
+				        <input id="pregunta5" type="radio"  th:field="*{pregunta5}" name="pregunta5" th:value="pregunta5">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa5" type="radio" th:field="*{respuesta5}" name="respuesta5"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab5" type="radio" th:field="*{respuesta5}" name="respuesta5"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac5" type="radio" th:field="*{respuesta5}" name="respuesta5"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad5" type="radio" th:field="*{respuesta5}" name="respuesta5"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae5" type="radio" th:field="*{respuesta5}" name="respuesta5" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr />
+				    
+				    <!--  PREGUNTA 6  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>6. La limpieza del hospital ha sido:</h6>
+				        <input id="pregunta6" type="radio"  th:field="*{pregunta6}" name="pregunta6" th:value="pregunta6">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa6" type="radio" th:field="*{respuesta6}" name="respuesta6"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab6" type="radio" th:field="*{respuesta6}" name="respuesta6"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac6" type="radio" th:field="*{respuesta6}" name="respuesta6"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad6" type="radio" th:field="*{respuesta6}" name="respuesta6"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae6" type="radio" th:field="*{respuesta6}" name="respuesta6" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>				    
+				    
+				    <hr /> 
+				    
+				    <!--  PREGUNTA 7  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>7. La oportunidad para resolver sus problemas ha sido:</h6>
+				        <input id="pregunta7" type="radio"  th:field="*{pregunta7}" name="pregunta7" th:value="pregunta7">
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa7" type="radio" th:field="*{respuesta7}" name="respuesta7"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab7" type="radio" th:field="*{respuesta7}" name="respuesta7"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac7" type="radio" th:field="*{respuesta7}" name="respuesta7"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad7" type="radio" th:field="*{respuesta7}" name="respuesta7"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae7" type="radio" th:field="*{respuesta7}" name="respuesta7" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr />
+				    
+				    <!--  PREGUNTA 8  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>8. Su opinión acerca de la atención recibida por los médicos es:</h6>
+				        <input id="pregunta8" type="radio"  th:field="*{pregunta8}" name="pregunta8" th:value="pregunta8">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa8" type="radio"  th:field="*{respuesta8}" name="respuesta8"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab8" type="radio" th:field="*{respuesta8}" name="respuesta8"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac8" type="radio" th:field="*{respuesta8}" name="respuesta8"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad8"  type="radio" th:field="*{respuesta8}" name="respuesta8"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae8" type="radio" th:field="*{respuesta8}" name="respuesta8" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr /> 
+				    
+				    <!--  PREGUNTA 9  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>9. Su opinión acerca de la atención recibida por el personal de enfermería es:</h6>
+				        <input id="pregunta9" type="radio"  th:field="*{pregunta9}" name="pregunta9" th:value="pregunta9">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa9" type="radio" th:field="*{respuesta9}" name="respuesta9"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab9" type="radio" th:field="*{respuesta9}" name="respuesta9"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac9" type="radio" th:field="*{respuesta9}" name="respuesta9"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad9" type="radio" th:field="*{respuesta9}" name="respuesta9"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae9" type="radio" th:field="*{respuesta9}" name="respuesta9" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr /> 
+				    
+				    <!--  PREGUNTA 10  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>10. Se le solicitó su consentimiento o autorización para ser atendido con estudiantes en formación?</h6>
+				        <input id="pregunta10" type="radio"  th:field="*{pregunta10}" name="pregunta10" th:value="pregunta10">				        
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa10" type="radio" th:field="*{respuesta10}" name="respuesta10"  value="1"> SI
+				        <img th:src="@{../../dist/img/si.png}" width="40" height="35" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab10" type="radio" th:field="*{respuesta10}" name="respuesta10"  value="0"> NO
+				        <img th:src="@{../../dist/img/no.jpg}" width="40" height="30" alt="..."/>
+				      	</label>
+				      </div>  
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae10"  type="radio" th:field="*{respuesta10}" name="respuesta10" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>  
+				    </div>
+				    
+				    <hr /> 
+				    
+				    <!--  PREGUNTA 11  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>11. ¿Cómo calificaría su experiencia respecto a los servicios de salud que ha recibido en el Hospital Universitario San José de Popayán E.S.E?</h6>
+				        <input id="pregunta11" type="radio"  th:field="*{pregunta11}" name="pregunta11" th:value="pregunta11">	 
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa11" type="radio" th:field="*{respuesta11}" name="respuesta11"  value="3"> Muy Mala
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab11" type="radio" th:field="*{respuesta11}" name="respuesta11"  value="4"> Mala
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac11" type="radio" th:field="*{respuesta11}" name="respuesta11"  value="5"> Regular
+				        <img th:src="@{../../dist/img/regular.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad11" type="radio" th:field="*{respuesta11}" name="respuesta11"  value="6"> Buena
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntae11" type="radio" th:field="*{respuesta11}" name="respuesta11" value="7"> Muy Buena
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
+				      	</label>
+				      </div> 
+				      <div class="col-md-12">				      	
+                        <div class="form-group">
+				          <label for="comment">¿Porque?</label>
+				          <textarea id="preguntaf11" name="respuesta11" th:field="*{justificacion11}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>
+				        </div>              
+				      </div>
+				    </div>
+				    
+				    <hr />  
+				    
+				    <!--  PREGUNTA 12  -->			    
+				    <div class="row ml-1">
+				      <div class="col-md-12">
+				        <h6>12. ¿Recomendaría a sus familiares y amigos el Hospital Universitario San José de Popayán E.S.E?</h6>
+				        <input id="pregunta12" type="radio"  th:field="*{pregunta12}" name="pregunta12" th:value="pregunta12"> 
+				      </div>
+				    </div>		        
+			        
+			        <div class="row ml-1">
+				      <div class="col-md-2">
+				        <label class="radio">				        
+				        <input id="preguntaa12" type="radio" th:field="*{respuesta12}" name="respuesta12"  value="8"> Definitivamente NO
+				        <img th:src="@{../../dist/img/muymala.jpg}" width="40" height="40" alt="..."/>	
+				        </label>
+				      </div>
+				      <div class="col-md-2">
+				      	<label class="radio">
+				        <input id="preguntab12" type="radio" th:field="*{respuesta12}" name="respuesta12"  value="9"> Probablemente NO
+				        <img th:src="@{../../dist/img/mala.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntac12" type="radio" th:field="*{respuesta12}" name="respuesta12"  value="10"> Probablemente SI
+				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntad12" type="radio" th:field="*{respuesta12}" name="respuesta12"  value="11"> Definitivamente SI
+				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="40" alt="..."/>
+				      	</label>
+				      </div>				      
+				      <div class="col-md-12">				      	
+                        <div class="form-group">
+				          <label for="comment">¿Porque?</label>
+				          <textarea id="preguntaf12" name="respuesta12" th:field="*{justificacion12}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>
+				        </div>              
+				      </div> 
+				    </div>
+				    
+				      <div class="row ml-1 mb-1">
+					    <div class="col-md-12">					      
+					      <button type="submit" form="editarencuesta" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar Encuesta</button>					      
+					      <button type="reset" form="editarencuesta" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					    </div>
+					  </div>
+				    
+				    
+				    
+			        
+			        
+				    
+				    
+				                          
+	                                   
+	                                
+                <!-- /.card-body -->                               
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+</body>
+<script>
+	//me sirven para ocultar y selecccionar los input radio del titulo pregunta.
+	$("#pregunta1").prop("checked", true);
+	$("#pregunta1").hide();
+	$("#pregunta2").prop("checked", true);
+	$("#pregunta2").hide();
+	$("#pregunta3").prop("checked", true);
+	$("#pregunta3").hide();
+	$("#pregunta4").prop("checked", true);
+	$("#pregunta4").hide();
+	$("#pregunta5").prop("checked", true);
+	$("#pregunta5").hide();
+	$("#pregunta6").prop("checked", true);
+	$("#pregunta6").hide();
+	$("#pregunta7").prop("checked", true);
+	$("#pregunta7").hide();
+	$("#pregunta8").prop("checked", true);
+	$("#pregunta8").hide();
+	$("#pregunta9").prop("checked", true);
+	$("#pregunta9").hide();
+	$("#pregunta10").prop("checked", true);
+	$("#pregunta10").hide();
+	$("#pregunta11").prop("checked", true);
+	$("#pregunta11").hide();
+	$("#pregunta12").prop("checked", true);
+	$("#pregunta12").hide();
+	
+</script>
+</html>

@@ -1,15 +1,9 @@
 package com.chapumix.solution.app.component;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
@@ -27,13 +21,11 @@ import javax.mail.internet.MimeMultipart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.chapumix.solution.app.models.entity.EstSerial;
-import com.chapumix.solution.app.models.service.IEstCertificadoService;
 import com.chapumix.solution.app.models.service.IEstSerialService;
 import com.sun.mail.smtp.SMTPTransport;
 
@@ -66,8 +58,8 @@ public class EstCertificadoComp {
     public Multipart mp;
     public SMTPTransport t;
 	
-	//metodo que se ejecuta de forma automatica todos los dias cada hora formato de 24 horas
-    @Scheduled(cron = "00 00 00/01 * * *", zone="America/Bogota")   
+	//metodo que se ejecuta de forma automatica todos los dias cada a las 8:00 am y a las 2:00 pm
+    @Scheduled(cron = "00 00 08,11,14,17 * * *", zone="America/Bogota")   
     public void cronCantidadCertificadosSch() throws AddressException, MessagingException {	    
     	
     	logger.info("SE ESTA EJECUTANDO");

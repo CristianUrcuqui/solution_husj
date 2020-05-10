@@ -47,9 +47,8 @@ $browser-context: 16;
 }
 
 
-
 /******Estilo para los label de los formularios que sean obligatorios******/
-.form-group.required .control-label:after {
+.required .control-label:after {
   content:"*";
   color:red;
 }
