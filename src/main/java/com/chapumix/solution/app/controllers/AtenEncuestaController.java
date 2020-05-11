@@ -1,6 +1,7 @@
 package com.chapumix.solution.app.controllers;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -94,9 +95,9 @@ public class AtenEncuestaController {
 	}
 	
 	
-	// Este metodo me permite guardar el rol del sistema
+	// Este metodo me permite guardar la encuesta
 	@RequestMapping(value = "/encuestaform", method = RequestMethod.POST)
-	public String guardarRol(@Valid AtenEncuDatoBasico atenEncuDatoBasico, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+	public String guardarRol(@Valid AtenEncuDatoBasico atenEncuDatoBasico, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 		
 		// proceso API para consultar el servicio.			
 		ResponseEntity<List<GenAreSerDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenAreSerDTO>>() {});
@@ -121,8 +122,9 @@ public class AtenEncuestaController {
 				
 		
 
-		String mensajeFlash = (atenEncuDatoBasico.getId() != null) ? "La encuesta fue editada correctamente" : "La encuesta fue creado correctamente";
+		String mensajeFlash = (atenEncuDatoBasico.getId() != null) ? "La encuesta fue editada correctamente" : "La encuesta fue creada correctamente";
 
+		atenEncuDatoBasico.setLoginUsrAlta(principal.getName());
 		iAtenEncuDatoBasicoService.save(atenEncuDatoBasico);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
