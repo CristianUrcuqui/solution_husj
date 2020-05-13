@@ -47,6 +47,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/indexsiau/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
 		.antMatchers("/indexencuestasat/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
 		.antMatchers("/encuestaformt/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
+		.antMatchers("/consolidadoencuesta/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas		
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()
@@ -54,7 +55,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			.defaultSuccessUrl("/index")
 			.permitAll()
 		.and()
-			.rememberMe().key("uniqueAndSecret").rememberMeParameter("remember-me").tokenValiditySeconds(1440)//el cookie durara solo un dia y se llamara remember-me
+			.rememberMe().key("uniqueAndSecret").rememberMeParameter("remember-me").tokenValiditySeconds(3600)//el cookie durara dos horas y se llamara remember-me
 		.and()
 			.logout()
 			.permitAll()

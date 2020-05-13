@@ -62,7 +62,7 @@ public class EstCertificadoComp {
     @Scheduled(cron = "00 00 08,11,14,17 * * *", zone="America/Bogota")   
     public void cronCantidadCertificadosSch() throws AddressException, MessagingException {	    
     	
-    	logger.info("SE ESTA EJECUTANDO");
+    	//logger.info("SE ESTA EJECUTANDO");
     	List<EstSerial> serialesDefuncion = iEstSerialService.countSerialDefuncion();
 		List<EstSerial> serialesNacidoVivo = iEstSerialService.countSerialNacidoVivo();		
 		
@@ -80,7 +80,7 @@ public class EstCertificadoComp {
 					"					<b style=\"color:#0059a4; font-family:Roboto,sans-serif; font-size:16px; text-align:center\"><span color=\"#0059a4\" face=\"Roboto, sans-serif\"><b><span style=\"font-family:helvetica,arial,sans-serif\"><span style=\"color:#999999; font-size:14pt\">El motivo de este correo es para notificar que alguno de los seriales está en su limite.&nbsp;</span></span></b></span></b><br>\r\n" + 
 					"					<br>\r\n" + 
 					"					<span style=\"font-size:12pt; font-family:helvetica,arial,sans-serif\"><span color=\"#0059a4\" face=\"Roboto, sans-serif\"><span style=\"color:#999999\">Certificados de defunción: "+serialesDefuncion.size()+"</span></span><br>\r\n" + 
-					"					<span color=\"#0059a4\" face=\"Roboto, sans-serif\"><span style=\"color:#999999\">Certificados de defunción: "+serialesNacidoVivo.size()+"</span><br>\r\n" + 
+					"					<span color=\"#0059a4\" face=\"Roboto, sans-serif\"><span style=\"color:#999999\">Certificados de nacido vivo: "+serialesNacidoVivo.size()+"</span><br>\r\n" + 
 					"					</td>\r\n" + 
 					"					</tr>\r\n" + 
 					"					</tbody>\r\n" + 
