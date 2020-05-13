@@ -91,16 +91,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                    <div class="input-group-text badge-primary rounded-left border-right-0"><i class="far fa-calendar-alt"></i></div>
 		                </span>
 		                <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off">		                       
+		            </div>
+		            
+		            <div class="input-group">						
+		                <div class="custom-control custom-radio ml-2">
+                          <input class="custom-control-input" type="radio" id="formato1" name="formato" checked>
+                          <label for="formato1" class="custom-control-label m-0">Formato 1</label>                          
+                        </div>
+                        <div class="custom-control custom-radio ml-2">
+                        	<input class="custom-control-input" type="radio" id="formato2" name="formato">
+                          	<label for="formato2" class="custom-control-label m-0">Formato 2</label>
+                        </div>		                       
 		            </div>         
 		            
 		            <div class="input-group">						
-		                <button type="submit" class="btn btn-warning btn-sm ml-1">Consultar</button>      
-		            </div>    
-		            
+		                <button type="submit" class="btn btn-warning btn-sm ml-2">Consultar</button>      
+		            </div>       
 				</form>
 			</div>
-		</div>
-		               
+		</div>	               
 	
 			
 	<!-- Linea Separadora Botones - Contenido Principal -->
@@ -246,7 +255,7 @@ $(document).ready(function() {
               // Modificar el año
               changeYear: true,
               // Formato de la fecha
-              dateFormat: "dd-mm-yy 00:00:00",
+              dateFormat: "dd-mm-yy",
               // Primer dia de la semana - lunes
               firstDay: 1,
               // D�as largo traducido
@@ -273,7 +282,7 @@ $(document).ready(function() {
               // Modificar el año
               changeYear: true,
               // Formato de la fecha
-              dateFormat: "dd-mm-yy 23:59:59",              
+              dateFormat: "dd-mm-yy",              
               // Primer dia de la semana - lunes
               firstDay: 1,
               // D�as largo traducido

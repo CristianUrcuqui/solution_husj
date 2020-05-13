@@ -10,7 +10,7 @@ public interface IEstCertificadoService {
 	
 	//public List<EstCertificado> findByName(String docPaciente);
 	public List<EstCertificado> findAllByFechaRegistroAsc();
-
+		
 	public EstCertificado findByNameTipo(String docPaciente, String tipoCertificado);
 	
 	public void save(EstCertificado estCertificado);

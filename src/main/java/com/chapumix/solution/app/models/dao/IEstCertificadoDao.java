@@ -18,7 +18,7 @@ public interface IEstCertificadoDao extends CrudRepository<EstCertificado, Long>
 	EstCertificado findByNameTipo(String docPaciente, String tipoCertificado);
 		
 	//query personalizado para consultar la cantidad de certificados por documento identificacion del paciente
-	@Query("SELECT c FROM EstCertificado c ORDER BY c.fechaRegistro DESC")
+	@Query(value = "SELECT * FROM est_certificado ORDER BY fecha_registro DESC LIMIT 25", nativeQuery = true)
 	List<EstCertificado> findAllByFechaRegistroAsc();
 		
 }

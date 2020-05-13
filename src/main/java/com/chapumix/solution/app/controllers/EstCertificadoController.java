@@ -118,6 +118,7 @@ public class EstCertificadoController {
 		return "certificadocsvform";
 	}
 	
+	// Este metodo me permite los seriales por medio de un archivo CSV
 	@PostMapping("/uploadcsvserial")
     public String uploadCSVFileSerial(@RequestParam("archivo") MultipartFile file, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 
@@ -197,6 +198,7 @@ public class EstCertificadoController {
 	@GetMapping("/certificadoestadistica")
 	public String listar(Model model) {
 		
+		//List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroAsc();
 		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroAsc();
 		List<EstCertificadoDTO> newCertificados = new ArrayList<>();
 		
