@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -39,6 +41,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	private String justificacion11;	
 	private String respuesta12;
 	private String justificacion12;
+	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
 	private String loginUsrAct;
@@ -47,6 +50,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	
 	public AtenEncuDatoBasico() {
 		this.fechaAlta = new Date();
+		this.fechaRegistro = new Date();
 	}
 
 
@@ -269,6 +273,17 @@ public class AtenEncuDatoBasico implements Serializable {
 
 	public void setJustificacion12(String justificacion12) {
 		this.justificacion12 = justificacion12;
+	}
+
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fecha_registro", nullable = false)
+	public Date getFechaRegistro() {
+		return fechaRegistro;
+	}
+
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 
 

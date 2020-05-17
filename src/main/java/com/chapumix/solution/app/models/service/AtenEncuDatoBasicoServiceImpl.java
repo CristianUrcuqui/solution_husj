@@ -1,5 +1,6 @@
 package com.chapumix.solution.app.models.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class AtenEncuDatoBasicoServiceImpl implements IAtenEncuDatoBasicoService
 	public List<AtenEncuDatoBasico> findAll() {
 		return (List<AtenEncuDatoBasico>) atenEncuDatoBasicoDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<AtenEncuDatoBasico> findByStartDateBetween(Date fechaInicial, Date fechaFinal) {
+		return atenEncuDatoBasicoDao.findByStartDateBetween(fechaInicial, fechaFinal);
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
