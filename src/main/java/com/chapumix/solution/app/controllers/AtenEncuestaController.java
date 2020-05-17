@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +171,7 @@ public class AtenEncuestaController {
 			return "consolidadoencuesta";
 		}
 		
-		// consulta por la fecha inicial y la fecha final sin contar con el especialista
+		// consulta por la fecha inicial y la fecha final
 		if (!fechaInicial.equals("") && !fechaFinal.equals("")) {
 			Date fechaI = convertirfecha(fechaInicial);
 			Date fechaF = convertirfecha(fechaFinal);			
@@ -284,8 +286,7 @@ public class AtenEncuestaController {
 		//model.addAttribute("medicos", medicos);
 		model.addAttribute("titulo", utf8(this.tituloencuesta));
 		model.addAttribute("listprocpat", atenEncuConsolidadoDTO);
-		model.addAttribute("enlace9", enlace9);
-		// flash.addFlashAttribute("error", errorFechas);
+		model.addAttribute("enlace9", enlace9);		
 		return "consolidadoencuesta";
 	}
 	
@@ -304,7 +305,7 @@ public class AtenEncuestaController {
 	
 	// Este metodo me permite generar el consolidad de encuestas negativas	
 	@RequestMapping("/buscarnegativosiau")
-	public String listarConsolidadoNegativo(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, RedirectAttributes flash) {
+	public String listarConsolidadoNegativo(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, RedirectAttributes flash) throws ParseException {
 		
 		// List<AtenEncuDatoBasico> atenEncuDatoBasico = new ArrayList<>();
 		List<AtenEncuConsolidadoDTO> atenEncuConsolidadoDTO = new ArrayList<>();
@@ -324,10 +325,26 @@ public class AtenEncuestaController {
 			return "negativaencuesta";
 		}
 		
-		model.addAttribute("titulo", utf8(this.tituloencuesta));
-		model.addAttribute("listprocpat", atenEncuConsolidadoDTO);
+		// consulta por la fecha inicial y la fecha final
+		if (!fechaInicial.equals("") && !fechaFinal.equals("")) {
+			
+			Date fechaI = convertirfecha(fechaInicial);
+			Date fechaF = convertirfecha(fechaFinal);	
+			
+			List<AtenEncuDatoBasico> atenEncuDatoBasico = new ArrayList<>();
+			List<AtenEncuDatoBasico> finalDatos = new ArrayList<>();
+			
+			atenEncuDatoBasico = iAtenEncuDatoBasicoService.findByStartDateBetween(fechaI, fechaF);
+			
+			List<AtenEncuDatoBasico> tmp11 = atenEncuDatoBasico.stream().filter(c -> c.getRespuesta11().equals("3")).collect(Collectors.toList());
+			
+			finalDatos.addAll(tmp11);
+			
+			model.addAttribute("listprocpat", finalDatos);	
+		}
+		
+		model.addAttribute("titulo", utf8(this.tituloencuesta));		
 		model.addAttribute("enlace9", enlace9);
-		// flash.addFlashAttribute("error", errorFechas);
 		return "negativaencuesta";				
 	}
 	
