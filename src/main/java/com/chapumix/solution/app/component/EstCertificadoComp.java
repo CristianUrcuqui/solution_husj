@@ -1,6 +1,5 @@
 package com.chapumix.solution.app.component;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,7 +38,7 @@ public class EstCertificadoComp {
 	private ResourceLoader loader;
 	
 	private Logger logger = LoggerFactory.getLogger(EstCertificadoComp.class);
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	//private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private static final String SMTP_SERVER = "correo.dongee.com";
     private static final String USERNAME = "desarrollo.sistemas@hospitalsanjose.gov.co";
     private static final String PASSWORD = "HusjequiposP0";
@@ -103,8 +102,7 @@ public class EstCertificadoComp {
             msg.setContent(mp);
             t = (SMTPTransport)session.getTransport("smtp");            
             t.connect(SMTP_SERVER, USERNAME , PASSWORD);            
-            t.sendMessage(msg, msg.getAllRecipients());
-            logger.info("MENSAJE ENVIADO");
+            t.sendMessage(msg, msg.getAllRecipients());            
             t.close();            
 		}
 		

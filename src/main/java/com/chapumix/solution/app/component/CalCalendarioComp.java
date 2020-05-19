@@ -75,15 +75,14 @@ public class CalCalendarioComp {
     public void cronCumpSch() {
 	    
     	    //verificamos la hora y fecha de ejecucion
-    		logger.info("Hora y fecha de ejecución      = {}", dateFormat.format(new Date()));
+    		//logger.info("Hora y fecha de ejecución      = {}", dateFormat.format(new Date()));
 			//buscamos todos los empleados en base de datos
     		List<CalCalendario> listEmpleado = iCalCalendarioService.findAll();
 			if(listEmpleado != null) {
 				listEmpleado.forEach(dato -> {
 					
-					if (!dato.getCorreo().equals(null) && !dato.getFechaNacimiento().equals(null)) {
+					if (!dato.getCorreo().equals(null) && !dato.getFechaNacimiento().equals(null)) {						
 						
-						logger.info("Consulto al mechudo del cumpleaños");
 						String fechaCumpleC = convertirFechaString(dato.getFechaNacimiento());
 						String fechaHoyC = convertirFechaString(new Date());
 						cal = Calendar.getInstance();
@@ -97,33 +96,22 @@ public class CalCalendarioComp {
 		                    cal.setTime(fechaHoy);
 		                    mesHoy = cal.get(2);
 		                    ++mesHoy;
-		                    diaHoy = cal.get(5);
-		                    logger.info("Arma la fecha del cumpleaños para comparar");
-		                    System.out.println("Compara dia cumple:" + diaCumple + " y la fecha dia de hoy: " + diaHoy);
-		                    System.out.println("Compara mes cumple:" + mesCumple + " y la fecha dia de hoy: " + mesHoy);
+		                    diaHoy = cal.get(5);		                    
 		                    
-		                    if(diaCumple == diaHoy && mesCumple == mesHoy) {
-		                    	logger.info("Valida fecha de cumpleaños");
+		                    if(diaCumple == diaHoy && mesCumple == mesHoy) {		                    	
 		                    	prop = System.getProperties();
-		                        prop.put("mail.smtp.auth", "true");
-		                        logger.info("Paso 1");
+		                        prop.put("mail.smtp.auth", "true");		                        
 		                        session = Session.getInstance(prop, (Authenticator)null);
 		                        msg = (Message)new MimeMessage(session);
 		                        msg.setFrom((Address)new InternetAddress(EMAIL_FROM));
-		                        msg.setRecipients(Message.RecipientType.TO, (Address[])InternetAddress.parse(dato.getCorreo(), false));
-		                        logger.info("Paso 2");
-		                        msg.setSubject(EMAIL_SUBJECT);
-		                        logger.info("Paso 3");
-		                        p1 = new MimeBodyPart();
-		                        logger.info("Paso 4");
-		                        p1.setText(EMAIL_TEXT);
-		                        logger.info("Paso 5");
-		                        p2 = new MimeBodyPart();
-		                        logger.info("Paso 6");
-		                        Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg");
-		                        logger.info("Paso 7");
-		                        File dbAsFile = resource.getFile();                  
-		                        logger.info("Paso 8");
+		                        msg.setRecipients(Message.RecipientType.TO, (Address[])InternetAddress.parse(dato.getCorreo(), false));		                        
+		                        msg.setSubject(EMAIL_SUBJECT);		                        
+		                        p1 = new MimeBodyPart();		                        
+		                        p1.setText(EMAIL_TEXT);		                        
+		                        p2 = new MimeBodyPart();		                        
+		                        //Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg");
+		                        Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg");		                        
+		                        File dbAsFile = resource.getFile();                    
 		                        fds = new FileDataSource(dbAsFile);
 		                        p2.setDataHandler(new DataHandler((DataSource)fds));
 		                        p2.setFileName(fds.getName());	                        
@@ -131,19 +119,14 @@ public class CalCalendarioComp {
 		                        mp.addBodyPart((BodyPart)p1);
 		                        mp.addBodyPart((BodyPart)p2);		                        
 		                        msg.setContent(mp);
-		                        t = (SMTPTransport)session.getTransport("smtp");
-		                        logger.info("Hizo la conexino smtp");
-		                        t.connect(SMTP_SERVER, USERNAME , PASSWORD);
-		                        logger.info("Valido las credenciales");
+		                        t = (SMTPTransport)session.getTransport("smtp");		                        
+		                        t.connect(SMTP_SERVER, USERNAME , PASSWORD);		                        
 		                        t.sendMessage(msg, msg.getAllRecipients());
-		                        logger.info("Envio el mensaje");
-		                        t.close();
-		                        logger.info("Cerro la conexion");
+		                        logger.info("Mensaje enviado");
+		                        t.close();		                        
 		                        dato.setEnviado(true);
-		                        iCalCalendarioService.save(dato);
-		                        logger.info("Actualizo estado de envio");
-		                    }			
-							
+		                        iCalCalendarioService.save(dato);		                        
+		                    }	
 							
 						} catch (ParseException | MessagingException | IOException e) {						
 							e.printStackTrace();

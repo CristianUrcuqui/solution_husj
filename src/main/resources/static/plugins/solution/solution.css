@@ -251,7 +251,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 /******Estilo para el input fecha******/
 .icon-custom {
     padding-right: calc(1.5em + .75rem);
-    background-image: url('https://use.fontawesome.com/releases/v5.10.2/svgs/regular/calendar-alt.svg');
+    background-image: url('https://use.fontawesome.com/releases/v5.13.0/svgs/regular/calendar-alt.svg');
     background-repeat: no-repeat;
     background-position: center right calc(.375em + .1875rem);
     background-size: calc(.75em + .375rem) calc(.75em + .375rem);

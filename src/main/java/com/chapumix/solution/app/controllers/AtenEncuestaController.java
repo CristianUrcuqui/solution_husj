@@ -135,9 +135,7 @@ public class AtenEncuestaController {
 				.filter(s -> atenEncuDatoBasico.getIdServicio().equals(s.getOid().toString())).findAny().orElse(null);
 
 		// establezco el nombre del servicio para guardar.
-		atenEncuDatoBasico.setServicio(nombreServicio.getGasNombre());
-				
-		
+		atenEncuDatoBasico.setServicio(nombreServicio.getGasNombre());		
 
 		String mensajeFlash = (atenEncuDatoBasico.getId() != null) ? "La encuesta fue editada correctamente" : "La encuesta fue creada correctamente";
 
@@ -255,9 +253,15 @@ public class AtenEncuestaController {
 			long totalMuyBuena11 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "7".equals(a.getRespuesta11())).count();
 			long totalMuyBuena = totalMuyBuena2 + totalMuyBuena3 + totalMuyBuena4 + totalMuyBuena5 + totalMuyBuena6 + totalMuyBuena7 + totalMuyBuena8 + totalMuyBuena9 + totalMuyBuena11;
 			
-			//obtenemos cantidad de NO APLICA preguntas 10			
+			//obtenemos cantidad de NO APLICA preguntas 2,3,4,5,8,9,10
+			long totalNoAplica2 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta2())).count();
+			long totalNoAplica3 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta3())).count();
+			long totalNoAplica4 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta4())).count();
+			long totalNoAplica5 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta5())).count();
+			long totalNoAplica8 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta8())).count();
+			long totalNoAplica9 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta9())).count();
 			long totalNoAplica10 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "2".equals(a.getRespuesta10())).count();
-			long totalNoAplica = totalNoAplica10;
+			long totalNoAplica = totalNoAplica2 + totalNoAplica3 + totalNoAplica4 + totalNoAplica5 + totalNoAplica8 + totalNoAplica9 + totalNoAplica10;
 			
 			//obtenemos cantidad de Definitivamente NO preguntas 12			
 			long totalDefinitivamenteNo12 = atenEncuDatoBasico.stream().filter(a -> s.getOid().toString().equals(a.getIdServicio()) && "8".equals(a.getRespuesta12())).count();

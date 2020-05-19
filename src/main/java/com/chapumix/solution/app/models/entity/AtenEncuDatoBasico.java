@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "aten_encu_dato_basico")
 public class AtenEncuDatoBasico implements Serializable {
@@ -49,8 +51,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	
 	
 	public AtenEncuDatoBasico() {
-		this.fechaAlta = new Date();
-		this.fechaRegistro = new Date();
+		this.fechaAlta = new Date();		
 	}
 
 
@@ -276,7 +277,9 @@ public class AtenEncuDatoBasico implements Serializable {
 	}
 
 	
+	@NotNull
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name = "fecha_registro", nullable = false)
 	public Date getFechaRegistro() {
 		return fechaRegistro;

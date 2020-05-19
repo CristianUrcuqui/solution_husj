@@ -111,7 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				      <div class="col-md-12">
 				        
 				        <div class="row">
-				          <div class="col-md-4 required">
+				          <div class="col-md-3 required">
 				          	<div class="form-group">
 					            <label class="control-label" for="servicio">Servicio</label>
 					            <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
@@ -119,9 +119,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				                    <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.gasNombre}"></option>	                          
 				                </select>
 			                </div>
+				          </div>				          
+				          
+				          <div class="col-md-3 required">
+				            <div class="form-group">
+				            	<label class="control-label" for="fechaRegistro">Fecha Encuesta</label>
+				                <input id="fechaRegistro" type="text" th:field="*{fechaRegistro}" class="form-control form-control-sm icon-custom" autocomplete="off">         
+				            </div>
 				          </div>
 				          
-				          <div class="col-md-4 required">
+				          <div class="col-md-3 required">
 				            <div class="form-group">
 				            	<label class="control-label" for="genero">Genero</label>
 				                <select id="genero" th:field="*{comGenero}"  class="form-control form-control-sm">
@@ -131,7 +138,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				            </div>
 				          </div>
 				          
-				          <div class="col-md-4 required">
+				          <div class="col-md-3 required">
 				            <div class="form-group">
 				              <label class="control-label" for="edad">Edad</label>				                             	
 				              <input id="edad" type="number" th:field="*{edad}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">	                   			                   			                   					                   			                  	                   			                   	                    	
@@ -215,7 +222,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        <input id="preguntae2" type="radio" th:field="*{respuesta2}" name="respuesta2" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf2"  type="radio" th:field="*{respuesta2}" name="respuesta2" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>    
 				    </div>	    
 				    
 				    <hr>
@@ -257,7 +270,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        <input id="preguntae3" type="radio" th:field="*{respuesta3}" name="respuesta3" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf3"  type="radio" th:field="*{respuesta3}" name="respuesta3" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>    
 				    </div>
 				    
 				    <hr>
@@ -290,16 +309,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				      </div>
 				      <div class="col-md-2">
 				        <label class="radio">
-				        <input type="radio" id="preguntad4" th:field="*{respuesta4}" name="respuesta4"  value="6"> Buena
+				        <input id="preguntad4" type="radio" th:field="*{respuesta4}" name="respuesta4"  value="6"> Buena
 				        <img th:src="@{../../dist/img/buena.jpg}" width="40" height="40" alt="..."/>
 				      	</label>
 				      </div>
 				      <div class="col-md-2">
 				        <label class="radio">
-				        <input type="radio" id="preguntae4" th:field="*{respuesta4}" name="respuesta4" value="7"> Muy Buena
+				        <input id="preguntae4" type="radio" th:field="*{respuesta4}" name="respuesta4" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf4"  type="radio" th:field="*{respuesta4}" name="respuesta4" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>    
 				    </div>				    
 				    
 				    <hr>
@@ -341,7 +366,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        <input id="preguntae5" type="radio" th:field="*{respuesta5}" name="respuesta5" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf5"  type="radio" th:field="*{respuesta5}" name="respuesta5" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>   
 				    </div>
 				    
 				    <hr>
@@ -467,7 +498,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        <input id="preguntae8" type="radio" th:field="*{respuesta8}" name="respuesta8" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf8"  type="radio" th:field="*{respuesta8}" name="respuesta8" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>   
 				    </div>
 				    
 				    <hr> 
@@ -509,7 +546,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				        <input id="preguntae9" type="radio" th:field="*{respuesta9}" name="respuesta9" value="7"> Muy Buena
 				        <img th:src="@{../../dist/img/muybuena.jpg}" width="40" height="35" alt="..."/>
 				      	</label>
-				      </div>  
+				      </div>
+				      <div class="col-md-2">
+				        <label class="radio">
+				        <input id="preguntaf9"  type="radio" th:field="*{respuesta9}" name="respuesta9" value="2"> NO APLICA
+				        <img th:src="@{../../dist/img/noaplica.jpg}" width="28" height="32" alt="..."/>
+				      	</label>
+				      </div>   
 				    </div>
 				    
 				    <hr> 
@@ -634,8 +677,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				    
 				      <div class="row ml-1 mb-1">
 					    <div class="col-md-12">					      
-					      <button type="submit" form="editarencuesta" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar Encuesta</button>					      
-					      <button type="reset" form="editarencuesta" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					      <button type="submit" form="editarencuesta" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar Encuesta</button>					      
+					      <button type="reset" form="editarencuesta" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
 					    </div>
 					  </div>                    
 	                                   
@@ -659,5 +702,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
+
+<script>
+    $( "#fechaRegistro" ).datepicker({
+    	// Mostrar animacion
+	    showAnim: "drop",
+	    // Modificar el mes
+	    changeMonth: true,
+	    // Modificar el año
+	    changeYear: true,
+	    // Formato de la fecha
+	    dateFormat: "dd-mm-yy",              
+	    // Primer dia de la semana - lunes
+	    firstDay: 1,
+	    // Días largo traducido
+	    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+	    // Dias cortos traducido
+	    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+	    // Nombres largos de los meses traducido
+	    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+	    // Nombres cortos de los meses traducido 
+	    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+	    // Al selecconar fecha, se escribe en el campo de texto
+	    onSelect: function(dateText) { 
+	    $('#fechaFinal').val(dateText);
+	     }
+    });
+</script>
+
 </body>
 </html>
