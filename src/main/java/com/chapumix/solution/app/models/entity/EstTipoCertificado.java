@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -93,7 +92,7 @@ public class EstTipoCertificado implements Serializable {
 		this.fechaAltaAct = fechaAltaAct;
 	}
 
-	@OneToMany(mappedBy = "estTipoCertificado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "estTipoCertificado", fetch = FetchType.LAZY)
 	public List<EstSerial> getEstSerial() {
 		return estSerial;
 	}

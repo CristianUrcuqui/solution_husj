@@ -28,14 +28,13 @@ public class EstCertificadoDTO implements Serializable {
 
 
 	public EstCertificadoDTO(Long id, String serial, String docPaciente, String nombreCompletoPaciente,
-			String tipoCertificado, String nombreMedico, String servicio, Date fechaRegistro) {
+			String tipoCertificado, String nombreMedico, Date fechaRegistro) {
 		this.id = id;
 		this.serial = serial;
 		this.docPaciente = docPaciente;
 		this.nombreCompletoPaciente = nombreCompletoPaciente;
 		this.tipoCertificado = tipoCertificado;
-		this.nombreMedico = nombreMedico;
-		this.servicio = servicio;
+		this.nombreMedico = nombreMedico;		
 		this.fechaRegistro = fechaRegistro;
 	}
 

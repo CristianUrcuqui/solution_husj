@@ -36,17 +36,24 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.chapumix.solution.app.entity.dto.EstCertificadoDTO;
 import com.chapumix.solution.app.entity.dto.EstSerialDTO;
-import com.chapumix.solution.app.entity.dto.GenAreSerDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
-import com.chapumix.solution.app.entity.dto.GenUsuarioDTO;
+import com.chapumix.solution.app.models.entity.ComGenero;
+import com.chapumix.solution.app.models.entity.ComTipoDocumento;
+import com.chapumix.solution.app.models.entity.ComUsuario;
 import com.chapumix.solution.app.models.entity.EstCertificado;
 import com.chapumix.solution.app.models.entity.EstSerial;
 import com.chapumix.solution.app.models.entity.EstTipoCertificado;
+import com.chapumix.solution.app.models.entity.GenAreSer;
+import com.chapumix.solution.app.models.entity.GenPacien;
+import com.chapumix.solution.app.models.service.IComGeneroService;
+import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
+import com.chapumix.solution.app.models.service.IComUsuarioService;
 import com.chapumix.solution.app.models.service.IEstCertificadoService;
 import com.chapumix.solution.app.models.service.IEstSerialService;
 import com.chapumix.solution.app.models.service.IEstTipoCertificadoService;
+import com.chapumix.solution.app.models.service.IGenAreSerService;
+import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -56,10 +63,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 @PropertySource(value = "application.properties", encoding="UTF-8")
 public class EstCertificadoController {
 	
-	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController
-	public static final String URLMedico = "http://localhost:9000/api/usuarios/username"; //se obtuvo de API REST de GenUsuarioRestController
-	public static final String URLServicio = "http://localhost:9000/api/camasmedico/servicio"; //se obtuvo de API REST de HcnOrdHospRestController
-	
+	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController	
 	
 	@Autowired
 	private IEstTipoCertificadoService iEstTipoCertificadoService;
@@ -69,6 +73,21 @@ public class EstCertificadoController {
 	
 	@Autowired
 	private IEstSerialService iEstSerialService;
+	
+	@Autowired
+	private IGenAreSerService iGenAreSerService;
+	
+	@Autowired
+	private IGenPacienService iGenPacienService;
+	
+	@Autowired
+	private IComGeneroService iComGeneroService;
+	
+	@Autowired
+	private IComUsuarioService iComUsuarioService;
+	
+	@Autowired
+	private IComTipoDocumentoService iComTipoDocumentoService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -107,7 +126,7 @@ public class EstCertificadoController {
      * AJUSTES ESTADISTICA
      * ---------------------------------------------------------- */
 	
-	// Este metodo me permite visualizar o cargar el formulario del consecutivo
+	// Este metodo me permite visualizar o cargar el formulario para el cargue del consecutivo por medio del CSV
 	@GetMapping("/certificadocsvform")
 	public String crearParametroCertificado(Map<String, Object> model) {
 		EstSerial estSerial = new EstSerial();
@@ -181,8 +200,7 @@ public class EstCertificadoController {
                 String mensajeFlash = "El archivo CSV se proceso correctamente";                
                 model.addAttribute("success", mensajeFlash);
 
-            } catch (Exception ex) {
-            	//System.out.println(ex);
+            } catch (Exception ex) {            	
                 model.addAttribute("error", "Se produjo un error al procesar el archivo CSV.");                
             }
         }                
@@ -196,34 +214,12 @@ public class EstCertificadoController {
 	
 	// Este metodo me permite listar todos los certificados realizados
 	@GetMapping("/certificadoestadistica")
-	public String listar(Model model) {
-		
-		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroAsc();
-		List<EstCertificadoDTO> newCertificados = new ArrayList<>();
-		
-		
-		certificados.forEach(c ->{
-			
-			// proceso API para consultar el paciente.
-			//System.out.println(restTemplate.exchange(URLPaciente + '/' + c.getDocPaciente(), HttpMethod.GET, null, new ParameterizedTypeReference<GenPacienDTO>() {}));
-			ResponseEntity<List<GenPacienDTO>> respuestap = restTemplate.exchange(URLPaciente + '/' + c.getDocPaciente(), HttpMethod.GET, null, new ParameterizedTypeReference<List<GenPacienDTO>>() {});
-			List<GenPacienDTO> paciente = respuestap.getBody();	
-						
-			// proceso API para consultar el medico.			
-			ResponseEntity<GenUsuarioDTO> respuestam = restTemplate.exchange(URLMedico + '/' + c.getLoginUsrAlta(), HttpMethod.GET, null, new ParameterizedTypeReference<GenUsuarioDTO>() {});
-			GenUsuarioDTO medico = respuestam.getBody();
-			
-			// proceso API para consultar el servicio.			
-			ResponseEntity<GenAreSerDTO> respuestas = restTemplate.exchange(URLServicio + '/' + c.getIdServicio(), HttpMethod.GET, null, new ParameterizedTypeReference<GenAreSerDTO>() {});
-			GenAreSerDTO servicio = respuestas.getBody();
-			
-			EstCertificadoDTO dto = new EstCertificadoDTO(c.getId(), c.getEstSerial().getSerial(), paciente.get(0).getPacNumDoc(), paciente.get(0).getPacPriNom() +" "+ paciente.get(0).getPacSegNom() +" "+ paciente.get(0).getPacPriApe()+" "+ paciente.get(0).getPacSegApe(), c.getEstSerial().getEstTipoCertificado().getTipoCertificado(), medico.getUsuDescri(), servicio.getGasNombre(), c.getFechaAlta());
-			newCertificados.add(dto);		
-			
-		});		
+	public String listar(Model model) {		
+				
+		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroDesc();
 		model.addAttribute("titulo", utf8(this.tituloestadistica));		
 		model.addAttribute("estadistica", enlaceprincipalestadistica);
-		model.addAttribute("listcertificado", newCertificados);		
+		model.addAttribute("listcertificado", certificados);		
 		model.addAttribute("enlace7", enlace7);
 		return "certificadoestadistica";
 	}
@@ -232,11 +228,10 @@ public class EstCertificadoController {
 	// Este metodo me permite visualizar o cargar el formulario del certificado
 	@GetMapping("/certificadoform")
 	public String crearCertificado(Map<String, Object> model) {		
-		EstCertificado estCertificado = new EstCertificado();
+		EstCertificado estCertificado = new EstCertificado();		
 		
-		// proceso API para consultar el servicio.			
-		ResponseEntity<List<GenAreSerDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenAreSerDTO>>() {});
-		List<GenAreSerDTO> servicio = respuestas.getBody();
+		//obtengo el listado de servicios
+		List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();		
 		
 		model.put("titulo", utf8(this.tituloestadistica));
 		model.put("tipos", iEstTipoCertificadoService.findAll());
@@ -250,36 +245,109 @@ public class EstCertificadoController {
 	@RequestMapping(value = "/certificadoform", method = RequestMethod.POST)
 	public String guardarCertificado(@Valid EstCertificado estCertificado, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 		
-		// proceso API para consultar el servicio.			
-		ResponseEntity<List<GenAreSerDTO>> respuestas = restTemplate.exchange(URLServicio, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenAreSerDTO>>() {});
-		List<GenAreSerDTO> servicio = respuestas.getBody();
-		
-		
 		if (result.hasErrors()) {
+			
+			//obtengo el listado de servicios
+			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
+			
 			model.addAttribute("titulo", utf8(this.tituloestadistica));
 			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
-			model.addAttribute("servicio", servicio);
+			model.addAttribute("servicio", servicio);			
 			model.addAttribute("estCerticado", estCertificado);
 			model.addAttribute("enlace7", enlace7);
 			return "certificadoform";
 		}
 		
+		if(estCertificado.getEstSerial().getEstTipoCertificado() == null) {
+			//obtengo el listado de servicios
+			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
+			
+			model.addAttribute("titulo", utf8(this.tituloestadistica));
+			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
+			model.addAttribute("servicio", servicio);			
+			model.addAttribute("estCerticado", estCertificado);
+			model.addAttribute("enlace7", enlace7);
+			model.addAttribute("error", "El tipo de certificado es requerido.");
+			return "certificadoform";
+		}
+		
+		if(estCertificado.getGenAreSer() == null) {
+			//obtengo el listado de servicios
+			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
+			
+			model.addAttribute("titulo", utf8(this.tituloestadistica));
+			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
+			model.addAttribute("servicio", servicio);			
+			model.addAttribute("estCerticado", estCertificado);
+			model.addAttribute("enlace7", enlace7);
+			model.addAttribute("error", "El servicio es requerido.");
+			return "certificadoform";
+		}
+		
+		if(estCertificado.getGenPacien().getPacNumDoc() == "") {
+			//obtengo el listado de servicios
+			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
+			
+			model.addAttribute("titulo", utf8(this.tituloestadistica));
+			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
+			model.addAttribute("servicio", servicio);			
+			model.addAttribute("estCerticado", estCertificado);
+			model.addAttribute("enlace7", enlace7);
+			model.addAttribute("error", "El paciente es requerido");
+			return "certificadoform";
+		}
 	
 		String mensajeFlash = (estCertificado.getId() != null) ? "El certificado fue editado correctamente" : "El certificado fue creado correctamente";
 
-		//List<EstCertificado> validar = iEstCertificadoService.findByName(estCertificado.getDocPaciente());
-		EstCertificado validar = iEstCertificadoService.findByNameTipo(estCertificado.getDocPaciente(), estCertificado.getEstSerial().getEstTipoCertificado().getTipoCertificado());
+		
+		//valido si el paciente existe en solution para ir alimentando tabla de pacientes en solution
+		GenPacien validarPaciente = iGenPacienService.findByNumberDoc(estCertificado.getGenPacien().getPacNumDoc());
+		if(validarPaciente == null) {
+			
+			// proceso API para buscar el paciente
+			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + estCertificado.getGenPacien().getPacNumDoc(), HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
+			List<GenPacienDTO> dinamica = respuestaa.getBody();
+			
+			//buscamos el sexo del paciente			
+			ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
+			
+			//buscamos el tipo de documento del paciente			
+			ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());
+			
+			GenPacien agregarPaciente = new GenPacien();
+			agregarPaciente.setOid(dinamica.get(0).getOid());
+			agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
+			agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
+			agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
+			agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
+			agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
+			agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
+			agregarPaciente.setComGenero(sexoPaciente);
+			agregarPaciente.setComTipoDocumento(tipoDocumento);
+			iGenPacienService.save(agregarPaciente);
+			
+		}
+		
+		//busco el paciente para agregarlo al certificado
+		GenPacien paciente = iGenPacienService.findByNumberDoc(estCertificado.getGenPacien().getPacNumDoc());
+		
+		//busco el usuario para agregarlo al certificado		
+		ComUsuario usuario = iComUsuarioService.findByUsuario(principal.getName());
+		
 				
-		if(validar == null ) {
+		//valido si el paciente tiene varios certificados
+		EstCertificado validarCertificado = iEstCertificadoService.findByNameTipo(estCertificado.getGenPacien().getPacNumDoc(), estCertificado.getEstSerial().getEstTipoCertificado().getTipoCertificado());
+				
+		if(validarCertificado == null ) {
 			EstSerial serial = iEstSerialService.findSerialBySerialAndTipo(estCertificado.getEstSerial().getSerial(), estCertificado.getEstSerial().getEstTipoCertificado().getTipoCertificado());
 			estCertificado.setLoginUsrAlta(principal.getName());
 			estCertificado.setEstSerial(serial);
+			estCertificado.setGenPacien(paciente);
+			estCertificado.setComUsuario(usuario);
 			//guardo el certificado
-			iEstCertificadoService.save(estCertificado);
+			iEstCertificadoService.save(estCertificado);			
 			
-			
-			//actualizo el estado del serial
-			//EstSerial serial = iEstSerialService.findById(estCertificado.getEstSerial().getId());
+			//actualizo el estado del serial			
 			serial.setEstado(true);
 			serial.setLoginUsrAct(principal.getName());
 			serial.setFechaAltaAct(new Date());

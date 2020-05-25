@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "est_certificado", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_serial"})})
@@ -24,15 +22,16 @@ public class EstCertificado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String docPaciente;
-	private Integer idServicio;
+	private Long id;		
 	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
 	private String loginUsrAct;
-	private Date fechaAltaAct;	
-	private EstSerial estSerial; 
+	private Date fechaAltaAct;
+	private GenAreSer genAreSer;
+	private EstSerial estSerial;
+	private GenPacien genPacien;
+	private ComUsuario comUsuario;
 	
 	
 	@PrePersist
@@ -50,27 +49,7 @@ public class EstCertificado implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-	
-	@NotEmpty
-	@Column(name = "doc_paciente", length = 50)
-	public String getDocPaciente() {
-		return docPaciente;
-	}
-
-	public void setDocPaciente(String docPaciente) {
-		this.docPaciente = docPaciente;
-	}	
-	
-	@NotNull
-	@Column(name = "id_servicio")
-	public Integer getIdServicio() {
-		return idServicio;
-	}
-
-	public void setIdServicio(Integer idServicio) {
-		this.idServicio = idServicio;
-	}
+	}		
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "fecha_registro")
@@ -117,16 +96,46 @@ public class EstCertificado implements Serializable {
 	public void setFechaAltaAct(Date fechaAltaAct) {
 		this.fechaAltaAct = fechaAltaAct;
 	}	
+		
+	@ManyToOne
+	@JoinColumn(name = "id_servicio", nullable = false)
+	public GenAreSer getGenAreSer() {
+		return genAreSer;
+	}
+
+	public void setGenAreSer(GenAreSer genAreSer) {
+		this.genAreSer = genAreSer;
+	}
 
 	@ManyToOne	
-	@JoinColumn(name = "id_serial")
+	@JoinColumn(name = "id_serial", nullable = false)
 	public EstSerial getEstSerial() {
 		return estSerial;
 	}
 
 	public void setEstSerial(EstSerial estSerial) {
 		this.estSerial = estSerial;
-	}	
+	}
+
+	@ManyToOne	
+	@JoinColumn(name = "id_paciente", nullable = false)
+	public GenPacien getGenPacien() {
+		return genPacien;
+	}
+
+	public void setGenPacien(GenPacien genPacien) {
+		this.genPacien = genPacien;
+	}
+
+	@ManyToOne	
+	@JoinColumn(name = "id_usuario", nullable = false)
+	public ComUsuario getComUsuario() {
+		return comUsuario;
+	}
+
+	public void setComUsuario(ComUsuario comUsuario) {
+		this.comUsuario = comUsuario;
+	}
 	
 	
 	

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -152,16 +153,17 @@ public class EstSerial implements Serializable {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "id_tipo_certificado", nullable=false)
+	@JoinColumn(name = "id_tipo_certificado", nullable = false)
 	public EstTipoCertificado getEstTipoCertificado() {
 		return estTipoCertificado;
 	}
 
 	public void setEstTipoCertificado(EstTipoCertificado estTipoCertificado) {
 		this.estTipoCertificado = estTipoCertificado;
-	}
+	}		
 	
-	@OneToMany(mappedBy = "estSerial")
+	@NotNull
+	@OneToMany(mappedBy = "estSerial", fetch = FetchType.LAZY)
 	public List<EstCertificado> getEstCertificado() {
 		return estCertificado;
 	}

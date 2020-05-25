@@ -99,12 +99,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</div>
 			</div>        				
         
-         	 <div class="card card-info col-sm-5 m-1 animacion">             
+         	 <div class="card card-info col-md-5 m-1 animacion">             
               <!-- form start -->
               <form id="editarcertificado"  class="form-horizontal" th:action="@{/certificadoform}" th:object="${estCertificado}" role="form" method="post">					   
 					   
 					   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="tipoCertificado">Tipo Certificado</label>
+	                   		<label class="control-label col-md-3 ml-1" for="tipoCertificado">Tipo Certificado</label>
 			                <div class="col-sm-5">
 				                <select id="tipoCertificado" th:field="*{estSerial.estTipoCertificado}"  class="form-control form-control-sm">
 		                          <option value="" selected="selected">Seleccione</option>
@@ -114,26 +114,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	                   </div>
 	                   
 	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="servicio">Servicio</label>
+	                   		<label class="control-label col-md-3 ml-1" for="servicio">Servicio</label>
 			                <div class="col-sm-5">
-				                <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
+				                <select id="servicio" th:field="*{genAreSer}"  class="form-control form-control-sm">
 		                          <option value="" selected="selected">Seleccione</option>
-		                            <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.gasNombre}"></option>	                          
+		                            <option th:each="serv : ${servicio}" th:value="${serv.id}" th:text="${serv.gasNombre}"></option>	                          
 		                        </select>			                   			                   			                   	                    	
 			                </div>
 	                   </div>
 					   
 					   <div class="form-group row required mt-3 serial">
-	                   		<label class="control-label col-sm-3 ml-1" for="serial">Serial</label>
+	                   		<label class="control-label col-md-3 ml-1" for="serial">Serial</label>
 			                <div class="col-sm-5">              	
 			                   	<input id="serial" type="text" th:field="*{estSerial.serial}" class="form-control form-control-sm" readonly>	                   			                   	                    	
 			                </div>
 	                   </div>
 	                   
 	                   <div class="form-group row required mt-3 paciente">
-	                   		<label class="control-label col-sm-3 ml-1" for="paciente">Documento Paciente</label>
+	                   		<label class="control-label col-md-3 ml-1" for="paciente">Documento Paciente</label>
 			                <div class="col-sm-5">              	
-			                   	<input id="paciente" type="number" name="buscar_paciente" th:field="*{docPaciente}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">			                   			                   			                   					                   			                  	                   			                   	                    	
+			                   	<input id="paciente" type="text" name="buscar_paciente" th:field="*{genPacien.pacNumDoc}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">			                   			                   			                   					                   			                  	                   			                   	                    	
 			                </div>             
 	                   </div>
 	                   <div class="external-event bg-success pacienteinfo p-0 text-center"></div>	                   
@@ -141,9 +141,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- /.card-body -->                               
               </form>
             </div>
-            <!-- /.card -->
-          </div>
+            <!-- /.card -->          
+          </div>    
         <!-- /.row -->
+        
+        <div class="row">
+			<div class="col-md-5 animacion">
+				<div class="alert alert-warning alert-dismissible">                  
+                  <h5><i class="icon fas fa-exclamation-triangle"></i> Advertencia!</h5>
+                  <strong>Por favor, guardar este certificado &nbsp<i class="icon fas fa-save"></i>para evitar problemas en el RUAF.</strong>	  	
+                	  
+                </div>				
+			</div>
+		</div>
+        
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->

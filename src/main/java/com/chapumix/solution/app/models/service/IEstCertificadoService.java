@@ -8,8 +8,10 @@ public interface IEstCertificadoService {
 	
 	public List<EstCertificado> findAll();
 	
+	public List<EstCertificado> findAllByFechaRegistroDesc();
+	
 	//public List<EstCertificado> findByName(String docPaciente);
-	public List<EstCertificado> findAllByFechaRegistroAsc();
+	public List<EstCertificado> findAllByFechaRegistroAscLimit();
 		
 	public EstCertificado findByNameTipo(String docPaciente, String tipoCertificado);
 	

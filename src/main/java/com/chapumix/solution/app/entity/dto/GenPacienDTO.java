@@ -1,6 +1,7 @@
 package com.chapumix.solution.app.entity.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,10 +12,13 @@ public class GenPacienDTO implements Serializable {
 
 	private Integer oid;
 	private String pacNumDoc;
+	private Integer pacTipDoc;
 	private String pacPriNom;
 	private String pacSegNom;
 	private String pacPriApe;
 	private String pacSegApe;
+	private Date gpafecnac;
+	private Integer gpasexpac;
 	
 	public GenPacienDTO() {
 		
@@ -27,6 +31,32 @@ public class GenPacienDTO implements Serializable {
 		this.pacSegNom = pacSegNom;
 		this.pacPriApe = pacPriApe;
 		this.pacSegApe = pacSegApe;
+	}	
+
+	public GenPacienDTO(Integer oid, String pacNumDoc, String pacPriNom, String pacSegNom, String pacPriApe,
+			String pacSegApe, Date gpafecnac, Integer gpasexpac) {		
+		this.oid = oid;
+		this.pacNumDoc = pacNumDoc;
+		this.pacPriNom = pacPriNom;
+		this.pacSegNom = pacSegNom;
+		this.pacPriApe = pacPriApe;
+		this.pacSegApe = pacSegApe;
+		this.gpafecnac = gpafecnac;
+		this.gpasexpac = gpasexpac;
+	}
+	
+
+	public GenPacienDTO(Integer oid, String pacNumDoc, Integer pacTipDoc, String pacPriNom, String pacSegNom,
+			String pacPriApe, String pacSegApe, Date gpafecnac, Integer gpasexpac) {		
+		this.oid = oid;
+		this.pacNumDoc = pacNumDoc;
+		this.pacTipDoc = pacTipDoc;
+		this.pacPriNom = pacPriNom;
+		this.pacSegNom = pacSegNom;
+		this.pacPriApe = pacPriApe;
+		this.pacSegApe = pacSegApe;
+		this.gpafecnac = gpafecnac;
+		this.gpasexpac = gpasexpac;
 	}
 
 	public Integer getOid() {
@@ -39,6 +69,14 @@ public class GenPacienDTO implements Serializable {
 
 	public String getPacNumDoc() {
 		return pacNumDoc;
+	}	
+
+	public Integer getPacTipDoc() {
+		return pacTipDoc;
+	}
+
+	public void setPacTipDoc(Integer pacTipDoc) {
+		this.pacTipDoc = pacTipDoc;
 	}
 
 	public void setPacNumDoc(String pacNumDoc) {
@@ -76,6 +114,22 @@ public class GenPacienDTO implements Serializable {
 	public void setPacSegApe(String pacSegApe) {
 		this.pacSegApe = pacSegApe;
 	}
+
+	public Date getGpafecnac() {
+		return gpafecnac;
+	}
+
+	public void setGpafecnac(Date gpafecnac) {
+		this.gpafecnac = gpafecnac;
+	}
+
+	public Integer getGpasexpac() {
+		return gpasexpac;
+	}
+
+	public void setGpasexpac(Integer gpasexpac) {
+		this.gpasexpac = gpasexpac;
+	}	
 		
 }
 

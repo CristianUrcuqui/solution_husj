@@ -30,10 +30,16 @@ public class EstCertificadoServiceImpl implements IEstCertificadoService{
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public List<EstCertificado> findAllByFechaRegistroAsc() {
-		return estCertificadoDao.findAllByFechaRegistroAsc();
-	}
+	public List<EstCertificado> findAllByFechaRegistroDesc() {
+		return estCertificadoDao.findAllByFechaRegistroDesc();
+	}	
 	
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<EstCertificado> findAllByFechaRegistroAscLimit() {
+		return estCertificadoDao.findAllByFechaRegistroAscLimit();
+	}
 
 	
 	@Override

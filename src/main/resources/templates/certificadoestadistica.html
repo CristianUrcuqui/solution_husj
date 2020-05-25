@@ -106,12 +106,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lcertificado: ${listcertificado}">
-					         	<td th:text="${lcertificado.serial}"></td>
-					         	<td th:text="${lcertificado.docPaciente}"></td>
-					         	<td th:text="${lcertificado.nombreCompletoPaciente}"></td>
-					         	<td th:text="${lcertificado.tipoCertificado}"></td>
-					         	<td th:text="${lcertificado.nombreMedico}"></td>
-					         	<td th:text="${lcertificado.servicio}"></td>						         	
+					         	<td th:text="${lcertificado.estSerial.serial}"></td>
+					         	<td th:text="${lcertificado.genPacien.pacNumDoc}"></td>
+					         	<td th:text="${lcertificado.genPacien.pacPriNom +' '+ lcertificado.genPacien.pacSegNom +' '+ lcertificado.genPacien.pacPriApe +' '+ lcertificado.genPacien.pacSegApe}"></td>
+					         	<td th:text="${lcertificado.estSerial.estTipoCertificado.tipoCertificado}"></td>
+					         	<td th:text="${lcertificado.comUsuario.nombreCompleto}">
+					         	<td th:text="${lcertificado.genAreSer.gasNombre}"></td>						         	
 					         	<td th:text="${#dates.format(lcertificado.fechaRegistro, 'dd-MM-yyy h:mm a')}"></td>					         	
 							    <td class="text-center align-middle">					         		
 									<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="d-inline">
