@@ -59,6 +59,10 @@ public class ComUsuarioController {
 	@Value("${app.enlaceprincipalajustes}")
 	private String enlaceprincipalajustes;
 	
+	@Value("${app.titulosincronizarusuario}")
+	private String titulosincronizarusuario;
+	
+	
 	@Value("${app.enlace3}")
 	private String enlace3;
 	
@@ -130,7 +134,7 @@ public class ComUsuarioController {
 	@GetMapping("/sincronizaform")
 	public String sincroniza(Map<String, Object> model) {
 		ComUsuario comUsuario = new ComUsuario();
-		model.put("titulo", utf8(this.titulousuarios));
+		model.put("titulo", utf8(this.titulosincronizarusuario));
 		model.put("comUsuario", comUsuario);
 		model.put("enlace8", enlace8);
 		return "sincronizaform";

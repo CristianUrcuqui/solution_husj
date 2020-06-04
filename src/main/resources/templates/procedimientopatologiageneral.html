@@ -64,53 +64,73 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			
 	<!-- Div para colocar los botones de exportacion y busqueda-->
 	
-		<div class="btn-group">
-	        <div id="botonxls" class="ml-3 mb-1">
-	        </div>         
-	   </div>
+		<div class="col-md-8">
+			<div class="btn-group">
+		        <div id="botonxls" class="ml-2 mb-1">
+		        </div>         
+		   </div>
+		</div>
+
+
+			<div class="mx-auto">
+				<div class="card ml-3 mr-3">
+					<div class="card-header custom-header p-0">
+						<h6>
+							<span class="fas fa-filter m-1"></span>Filtro Avanzado
+						</h6>
+					</div>
+					<div class="card-body">
 	
-		<form id="buscarpatologiaprocesada"  class="form-horizontal" th:action="@{/buscarpatologiageneral}" role="form" method="get">
-		<div class="margin">			
-	        <div class="btn-group ml-3">
-	           <label class="control-label text-center align-middle">Consulta:</label>
-	           <div class="input-group-prepend">
-				  <span class="input-group-text badge-primary">
-				   	<i class="far fa-calendar-alt"></i>
-				  </span>
-                </div>
-               <input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm" placeholder="Fecha Inicial" autocomplete="off">         
-	        </div>
-	        <div class="btn-group">	           
-	           <div class="input-group-prepend">
-				  <span class="input-group-text badge-primary">
-				   	<i class="far fa-calendar-alt"></i>
-				  </span>
-                </div>
-               <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm" placeholder="Fecha Final" autocomplete="off">         
-	        </div>
-	        <div class="btn-group">	           
-	           <select id="patologoAsignado" th:name="especialista" class="form-control form-control-sm">
-		       		<option value="" selected="selected">Seleccione Patólogo</option>
-		            <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>	                          
-	           </select>        
-	        </div>
-	        <div class="btn-group ml-1">	           
-	            <button type="submit" class="btn btn-warning btn-sm">Consultar</button>         
-	        </div>
-	        <div class="btn-group btn-group-sm" role="group">									
-				<a class="btn btn-primary" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Lista Completa" role="button">
-					<i class="fas fa-sync fa-lg mt-1"></i>
-				</a>
-			</div>
-        </div>
-        </form>          
-                  
+						<form id="buscarpatologiaprocesada" class="form-inline ml-3"
+							th:action="@{/buscarpatologiageneral}" role="form" method="get">
 	
-			
-	<!-- Linea Separadora Botones - Contenido Principal -->
-	<div class="form-group col-md-12 mt-0 mb-0">
-            <hr>
-    </div>	
+							<div class="input-group">
+								<label class="control-label text-center align-middle">Consulta:</label>
+								<span class="input-group-prepend ml-1">
+									<div
+										class="input-group-text badge-primary rounded-left border-right-0">
+										<i class="far fa-calendar-alt"></i>
+									</div>
+								</span> <input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Inicial" autocomplete="off">
+							</div>
+	
+	
+							<div class="input-group">
+								<span class="input-group-prepend ml-1">
+									<div
+										class="input-group-text badge-primary rounded-left border-right-0">
+										<i class="far fa-calendar-alt"></i>
+									</div>
+								</span> <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off">
+							</div>
+	
+	
+							<div class="input-group">
+								<select id="patologoAsignado" th:name="especialista"
+									class="form-control form-control-sm ml-1">
+									<option value="" selected="selected">Seleccione Patólogo</option>
+									<option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>
+								</select>
+							</div>
+	
+							<div class="input-group">
+								<button type="submit" class="btn btn-warning btn-sm ml-1">Consultar</button>
+							</div>
+	
+							<div class="input-group btn-group-sm">
+								<a class="btn btn-primary ml-1" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Lista Completa" role="button"> 
+									<i class="fas fa-sync fa-lg mt-1"></i>
+								</a>
+							</div>
+	
+						</form>
+	
+					</div>
+				</div>
+			</div>			
+          
+		<!-- Linea Separadora -->
+    	<hr>	
     
 
     <!-- Main content -->

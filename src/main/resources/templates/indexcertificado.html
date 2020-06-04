@@ -74,7 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			    <div class="col-md-2 grow">
 			      <a id="link" th:href="@{/certificadoestadistica}">
 			      <div class="card-counter primary">			      	
-			        <i class="fas fa-certificate"></i>			        
+			        <i class="fab fa-wpforms"></i>			        
 			        <span class="count-name">Certificado</span>
 			      </div>
 			      </a>
@@ -98,8 +98,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
         <!-- INFORMACION CANTIDAD DE CERTIFICADOS -->
         <div class="row mt-2">
-          <div class="col-md-4"></div>	
-          <div class="col-md-4 offset-md-4">
+          <div class="col-md-3"></div>	
+          <div class="col-md-3 offset-md-6">
             <div class="card card-default">
               <div class="card-header">
                 <h3 class="card-title">
@@ -110,13 +110,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="callout callout-danger">
-                  <h5>Certificados De Defunción</h5>
-                  <p><h4><span th:text=${defuncion} class="badge badge-danger"></span></h4></p>
+                  <h5>Certificados De Defunción <span th:text=${defuncion} class="badge badge-danger"></span></h5>                  
                 </div>
                 
                 <div class="callout callout-success">
-                  <h5>Certificados Nacido Vivo</h5>
-                  <p><h4><span th:text=${nacidovivo} class="badge badge-success"></span></h4></p>
+                  <h5>Certificados Nacido Vivo <span th:text=${nacidovivo} class="badge badge-success"></span></h5>                  
                 </div>
               </div>
               <!-- /.card-body -->

@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         <!-- Lista para mostrar los errorer antes del formulario -->
@@ -99,50 +99,51 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</div>
 			</div>        				
         
-         	 <div class="card card-info col-md-6 m-1 animacion">             
-              <!-- form start -->
-              <form id="usuariosincroniza"  class="form-horizontal" th:action="@{/sincronizaform}" th:object="${comUsuario}" role="form" method="post">					   
+         	<div class="col-md-8 mx-auto">
+         	
+         		<div class="card card-primary animacion">         		
+         			<div class="card-header custom-header p-0">
+	        			<h4 class="ml-3 mt-1">Sincronizar Usuario</h4>   		
+	        		</div>
+	        		
+	        		<div class="card-body">
+	        			
+	        			<form id="usuariosincroniza"  class="form-horizontal" th:action="@{/sincronizaform}" th:object="${comUsuario}" role="form" method="post">					   
 					   
-					   
-					   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="nombre">Documento Usuario</label>
-			                <div class="col-sm-5">              	
-			                   	<input id="documento" th:name="documento" type="text" class="form-control form-control-sm">	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                                
-                <!-- /.card-body -->                    
-              </form>
-            </div>            
-            <!-- /.card -->
+						   <div class="form-group row mt-3">
+		                   		<label class="control-label col-md-4" for="nombre">Documento Usuario</label>
+				                <div class="col-md-8">              	
+				                   	<input id="documento" th:name="documento" type="text" class="form-control form-control-sm">	                   			                   	                    	
+				                </div>
+		                   </div>                  
+		                                
+			                                    
+		              	</form>
+	        		
+	        		</div><!-- /.card-body -->        		
+         		</div><!-- /.card -->        	
+         	</div>           
             
             <!-- Descripcion o detalle -->
-            <div class="col-md-6">
-            <div class="card animacion">
-              <div class="card-header">
-                <h3 class="card-title text-primary">
-                  <i class="fas fa-hands-helping"></i>
-                  Ayuda
-                </h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">                
-                <h6>Ingresa un solo número de documento <strong>EJ: xxxxxxxx</strong></h6>
-                <h6>O </h6> 
-                <h6>Ingresa un listado de números separados por <strong>coma</strong> <strong>EJ: xxxxxxxx,xxxxxxxx,xxxxxxxx</strong></h6>               
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- ./col -->            
-                
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
+            
+            <div class="col-md-8 mx-auto">            
+            	<div class="card animacion">            	
+            		<div class="card-header">
+            			<h3 class="card-title text-primary">
+		                 <i class="fas fa-hands-helping"></i>
+		                   Ayuda
+		               	</h3>
+            		</div><!-- /.card-header -->
+            		<div class="card-body">
+            			<h6>Ingresa un solo número de documento <strong>EJ: xxxxxxxx</strong></h6>
+                		<h6>O </h6> 
+                		<h6>Ingresa un listado de números separados por <strong>coma</strong> <strong>EJ: xxxxxxxx,xxxxxxxx,xxxxxxxx</strong></h6>  
+            		</div><!-- /.card-body -->            	
+            	</div><!-- /.card -->            
+            </div>           
+        </div><!-- /.row -->
+      </div><!-- /.container -->
+    </div><!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <!-- FIN CONTENIDO -->

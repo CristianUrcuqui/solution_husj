@@ -282,4 +282,14 @@ input[type=number] {
   border-bottom-right-radius: 0;  
  }
  
+ /******Estilo para los header de los card******/
+ .custom-header {
+  background: linear-gradient(90deg, rgba(0,120,250,1) 0%, rgba(0,123,255,1) 43%, rgba(37,44,59,1) 100%) !important;
+  color: white !important;  
+        
+ }
  
+ .custom-header h4{
+  font-family: 'Architects Daughter', cursive;
+  font-size: 20px !important;
+ }

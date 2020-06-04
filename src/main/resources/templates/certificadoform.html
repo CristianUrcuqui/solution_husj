@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         <!-- Lista para mostrar los errorer antes del formulario -->
@@ -97,62 +97,72 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
 				</div>
-			</div>        				
-        
-         	 <div class="card card-info col-md-5 m-1 animacion">             
-              <!-- form start -->
-              <form id="editarcertificado"  class="form-horizontal" th:action="@{/certificadoform}" th:object="${estCertificado}" role="form" method="post">					   
-					   
-					   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-md-3 ml-1" for="tipoCertificado">Tipo Certificado</label>
-			                <div class="col-sm-5">
-				                <select id="tipoCertificado" th:field="*{estSerial.estTipoCertificado}"  class="form-control form-control-sm">
+			</div>
+			
+			<div class="col-md-8 mx-auto">
+				
+				<div class="card card-primary animacion">
+					<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Agregar Serial</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    <form id="editarcertificado"  class="form-horizontal" th:action="@{/certificadoform}" th:object="${estCertificado}" role="form" method="post">
+                    	
+                    	<div class="form-group row required">
+                           <label class="control-label col-md-4" for="tipoCertificado">Tipo Certificado</label>
+                           <div class="col-md-8">                           		
+                           		<select id="tipoCertificado" th:field="*{estSerial.estTipoCertificado}"  class="form-control form-control-sm">
 		                          <option value="" selected="selected">Seleccione</option>
 		                            <option th:each="tip : ${tipos}" th:value="${tip.id}" th:text="${tip.tipoCertificado}"></option>	                          
-		                        </select>			                   			                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-md-3 ml-1" for="servicio">Servicio</label>
-			                <div class="col-sm-5">
-				                <select id="servicio" th:field="*{genAreSer}"  class="form-control form-control-sm">
+		                        </select>
+                           </div>
+                       	</div>
+                       	
+                       	
+                       	<div class="form-group row required">
+                           <label class="control-label col-md-4" for="servicio">Servicio</label>
+                           <div class="col-md-8">                           		
+                           		<select id="servicio" th:field="*{genAreSer}"  class="form-control form-control-sm">
 		                          <option value="" selected="selected">Seleccione</option>
 		                            <option th:each="serv : ${servicio}" th:value="${serv.id}" th:text="${serv.gasNombre}"></option>	                          
-		                        </select>			                   			                   			                   	                    	
-			                </div>
-	                   </div>
-					   
-					   <div class="form-group row required mt-3 serial">
-	                   		<label class="control-label col-md-3 ml-1" for="serial">Serial</label>
-			                <div class="col-sm-5">              	
-			                   	<input id="serial" type="text" th:field="*{estSerial.serial}" class="form-control form-control-sm" readonly>	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3 paciente">
-	                   		<label class="control-label col-md-3 ml-1" for="paciente">Documento Paciente</label>
-			                <div class="col-sm-5">              	
-			                   	<input id="paciente" type="text" name="buscar_paciente" th:field="*{genPacien.pacNumDoc}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">			                   			                   			                   					                   			                  	                   			                   	                    	
-			                </div>             
-	                   </div>
-	                   <div class="external-event bg-success pacienteinfo p-0 text-center"></div>	                   
-	                                
-                <!-- /.card-body -->                               
-              </form>
-            </div>
-            <!-- /.card -->          
+		                        </select>
+                           </div>
+                       	</div>
+                       	
+                       	
+                       	<div class="form-group row required serial">
+                           <label class="control-label col-md-4" for="serial">Serial</label>
+                           <div class="col-md-8">                           		
+                           		<input id="serial" type="text" th:field="*{estSerial.serial}" class="form-control form-control-sm" readonly>
+                           </div>
+                       	</div>
+                       	
+                       	<div class="form-group row required paciente">
+                           <label class="control-label col-md-4" for="paciente">Documento Paciente</label>
+                           <div class="col-md-8">                           		
+                           		<input id="paciente" type="text" name="buscar_paciente" th:field="*{genPacien.pacNumDoc}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">
+                           </div>
+                       	</div>
+                    
+                    	<div class="col-md-12 external-event bg-success pacienteinfo p-0 text-center"></div>
+                    
+                    </form>             
+                    </div><!-- /.card-body -->				
+				</div><!-- /.card -->
+			
+			</div> 
+         	         
           </div>    
         <!-- /.row -->
         
         <div class="row">
-			<div class="col-md-5 animacion">
+        	<div class="col-md-8 mx-auto animacion">        		
 				<div class="alert alert-warning alert-dismissible">                  
-                  <h5><i class="icon fas fa-exclamation-triangle"></i> Advertencia!</h5>
-                  <strong>Por favor, guardar este certificado &nbsp<i class="icon fas fa-save"></i>para evitar problemas en el RUAF.</strong>	  	
-                	  
-                </div>				
-			</div>
+	               <h5><i class="icon fas fa-exclamation-triangle"></i> Advertencia!</h5>
+	               <strong>Por favor, guardar este certificado &nbsp<i class="icon fas fa-save"></i>para evitar problemas en el RUAF.</strong>           	  
+	            </div>      	
+        	</div>			
 		</div>
         
       </div><!-- /.container-fluid -->

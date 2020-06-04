@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         <!-- Lista para mostrar los errorer antes del formulario -->
@@ -97,46 +97,54 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
 				</div>
-			</div>        				
-        
-         	 <div class="card card-info col-md-6 m-1 animacion">             
-              <!-- form start -->
-              <form id="editarempleado"  class="form-horizontal" th:action="@{/empleadoform}" th:object="${calCalendario}" role="form" method="post">					   
-					   
-					   
-					   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="nombre">Nombres y Apellidos</label>
-			                <div class="col-sm-8">              	
-			                   	<input id="nombre" type="text" th:field="*{nombreCompleto}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="numero">Número de Identificación</label>
-			                <div class="col-sm-8">              	
-			                   	<input id="numero" type="text" th:field="*{numeroIdentificacion}" class="form-control form-control-sm">	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3">
-					   		<label class="control-label col-sm-3 ml-1" for="fecha">Fecha de Nacimiento</label>
-					      	<div class="col-sm-8">
-					        	<input id="fecha" type="text" th:field="*{fechaNacimiento}" class="form-control form-control-sm icon-custom" autocomplete="off">					        	
-					      	</div>
-					   </div>
-					   
-					   <div class="form-group row required mt-3">
-					   		<label class="control-label col-sm-3 ml-1" for="email">E-mail</label>
-					      	<div class="col-sm-8">
-					        	<input id="email" type="text" th:field="*{correo}" class="form-control form-control-sm">					        	
-					      	</div>
-					   </div>					   
-					   
-	                                
-                <!-- /.card-body -->                    
-              </form>
-            </div>
-            <!-- /.card -->       
+			</div>
+         	
+         	
+         	<div class="col-md-8 mx-auto">
+         		<div class="card card-primary animacion">
+         			<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Agregar Empleado</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    <form id="editarempleado"  class="form-horizontal" th:action="@{/empleadoform}" th:object="${calCalendario}" role="form" method="post">
+                    
+                    	<div class="form-group row required">
+                           <label class="control-label col-md-4" for="nombre">Nombres y Apellidos</label>
+                           <div class="col-md-8">                           		
+                           		<input id="nombre" type="text" th:field="*{nombreCompleto}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="numero">Número de Identificación</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numero" type="text" th:field="*{numeroIdentificacion}" class="form-control form-control-sm">	
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="fecha">Fecha de Nacimiento</label>
+                           <div class="col-md-8">                           		
+                           		<input id="fecha" type="text" th:field="*{fechaNacimiento}" class="form-control form-control-sm icon-custom" autocomplete="off">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="email">E-mail</label>
+                           <div class="col-md-8">                           		
+                           		<input id="email" type="text" th:field="*{correo}" class="form-control form-control-sm">	
+                           </div>
+                       </div>
+                    
+                    
+                    </form>                    
+                    </div><!-- /.card-body -->     
+         		</div>  <!-- /.card -->       	
+         	</div>   	 
+         	 
+         	 
+         	     
                 
         </div>
         <!-- /.row -->

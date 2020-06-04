@@ -70,16 +70,17 @@ public class HcnSolPatController {
 	private IPatProcedimientoService iPatProcedimientoService;	
 	
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Value("${app.tituloprocesarpacientesinternos}")
-	private String tituloprocesarpacientesinternos;	
+	private RestTemplate restTemplate;	
 	
 	@Value("${app.titulopacientes}")
-	private String titulopacientes;	
+	private String titulopacientes;
 	
-	@Value("${app.tituloprocedimintopatologia}")
-	private String tituloprocedimintopatologia;
+	@Value("${app.titulopatologia}")
+	private String titulopatologia;
+	
+	@Value("${app.tituloprocedimiento}")
+	private String tituloprocedimiento;
+	
 	
 	@Value("${app.tituloeditarprocedimientosprocesados}")
 	private String tituloeditarprocedimientosprocesados;
@@ -102,7 +103,7 @@ public class HcnSolPatController {
 	//INDEX PATOLOGIA
 	@GetMapping("/indexpatologia")
 	public String indexPatologia(Model model) throws ParseException {	  
-	  model.addAttribute("titulo", utf8(this.tituloprocedimintopatologia));	 
+	  model.addAttribute("titulo", utf8(this.titulopatologia));	 
 	  model.addAttribute("patologia", enlaceprincipalpatologia);
 	  model.addAttribute("enlace1", enlace1);
 	  return "indexpatologia";
@@ -133,7 +134,7 @@ public class HcnSolPatController {
 			});	  
 		  
 		  
-		  model.addAttribute("titulo", utf8(this.tituloprocedimintopatologia));
+		  model.addAttribute("titulo", utf8(this.tituloprocedimiento));
 		  model.addAttribute("procesar", dinamica.size());	  
 		  model.addAttribute("procesados", patProcedimiento.size());
 		  model.addAttribute("patologia", enlaceprincipalpatologia);
@@ -237,7 +238,7 @@ public class HcnSolPatController {
 		List<GenMedicoDTO> medicos = respuestac.getBody();		
 		
 		model.put("medicos", medicos);
-		model.put("titulo", utf8(this.tituloprocesarpacientesinternos));		
+		model.put("titulo", utf8(this.titulopacientes));		
 		model.put("patProcedimiento", patProcedimiento);
 		model.put("patologia", enlaceprincipalpatologia);
 		model.put("enlace1", enlace1);
@@ -305,7 +306,7 @@ public class HcnSolPatController {
 				
 				
 				model.addAttribute("medicos", medicos);				
-				model.addAttribute("titulo", utf8(this.tituloprocesarpacientesinternos));
+				model.addAttribute("titulo", utf8(this.titulopacientes));
 				model.addAttribute("patProcedimiento", patProcedimiento);
 				model.addAttribute("patologia", enlaceprincipalpatologia);
 				model.addAttribute("enlace1", enlace1);

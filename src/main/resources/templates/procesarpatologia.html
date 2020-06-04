@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Procesar Pacientes Internos</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Procesar</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-2">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         <!-- Lista para mostrar los errorer antes del formulario -->
@@ -169,57 +169,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				  </tbody>
 				</table>			    
 			  </div>
-			</div>        
-        
-         	 <div class="card card-info col-md-6 m-1">             
-              <!-- form start -->
-              <form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologia}" th:object="${patProcedimiento}" role="form" method="post">					
+			</div>
+			
+			
+			
+			<div class="col-md-8 mx-auto">
+			
+				<div class="card card-primary animacion">
+				
+					<div class="card-body">
+					
+					
+						<form id="procesarpatologia"  class="form-horizontal" th:action="@{/procesarpatologia}" th:object="${patProcedimiento}" role="form" method="post">
+							
+							
+							<div class="form-group row required">
+	                           <label class="control-label col-md-4" for="patologoAsignado">Patólogo Asignado</label>
+	                           <div class="col-md-8">                           		
+	                           		<select id="patologoAsignado" th:field="*{idPatologo}"  class="form-control form-control-sm">
+			                          <option value="" selected="selected">Seleccione</option>
+			                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
+			                        </select>	
+	                           </div>
+	                       </div>
+	                       
+	                       <div class="form-group row required">
+	                           <label class="control-label col-md-4" for="patologoReAsignado">Patólogo ReAsignado</label>
+	                           <div class="col-md-8">                           		
+	                           		<select id="patologoReAsignado" th:field="*{idPatologoReasigando}" class="form-control form-control-sm">
+			                          <option value="" selected="selected">Seleccione</option>
+			                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
+			                        </select>
+	                           </div>
+	                       </div>
+	                       
+	                       <div class="form-group row required">
+	                           <label class="control-label col-md-4" for="muestra">Tipo de Muestra</label>
+	                           <div class="col-md-8">                           		
+	                           		<textarea id="muestra" th:field="*{tipoMuestra}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
+	                           </div>
+	                       </div>
+	                       
+	                       <div class="form-group row required">
+	                           <label class="control-label col-md-4" for="correcion">Corrección</label>
+	                           <div class="col-md-8">                           		
+	                           		<textarea id="correcion" th:field="*{correccion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
+	                           </div>
+	                       </div>
+	                       
+	                       <div class="form-group row required">
+	                           <label class="control-label col-md-4" for="observacion">Observación</label>
+	                           <div class="col-md-8">                           		
+	                           		<textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
+	                           </div>
+	                       </div>                
 						
-						<div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="patologoAsignado">Patólogo Asignado</label>
-			                <div class="col-sm-5">
-				                <select id="patologoAsignado" th:field="*{idPatologo}"  class="form-control form-control-sm">
-		                          <option value="" selected="selected">Seleccione</option>
-		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
-		                        </select>			                   			                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="patologoReAsignado">Patólogo ReAsignado</label>
-			                <div class="col-sm-5">
-				                <select id="patologoReAsignado" th:field="*{idPatologoReasigando}" class="form-control form-control-sm">
-		                          <option value="" selected="selected">Seleccione</option>
-		                          <option th:each="med : ${medicos}" th:value="${med.oid}" th:text="${med.gmeCodigo+'-'+med.gmeNomCod}"></option>		                          
-		                        </select>			                   			                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row required mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="muestra">Tipo de Muestra</label>
-			                <div class="col-sm-5"> 			                   	
-			                   	<textarea id="muestra" th:field="*{tipoMuestra}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
-			                </div>
-	                   </div>						
-	                   
-	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="correcion">Corrección</label>
-			                <div class="col-sm-5"> 			                   	
-			                   	<textarea id="correcion" th:field="*{correccion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>		                   			                   	                    	
-			                </div>
-	                   </div>
-	                   <div class="form-group row">
-			                 <label class="control-label col-sm-3 ml-1" for="observacion">Observación</label>
-			                 <div class="col-sm-5">			                    
-			                    <textarea id="observacion" th:field="*{observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm"></textarea>
-			                 </div>
-			           </div>           
-                	
-                
-                <!-- /.card-body -->                    
-              </form>
-            </div>
-            <!-- /.card -->       
+						</form>	
+					
+					</div><!-- /.card-body -->			
+				</div><!-- /.card --> 			
+			</div>         	       
                 
         </div>
         <!-- /.row -->

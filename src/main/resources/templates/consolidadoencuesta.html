@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-md-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Consolidado Encuesta De Satisfacción</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Consolidado</span></h1>
           </div><!-- /.col -->
           <div class="col-md-6">
             <ol class="breadcrumb float-sm-right">
@@ -65,62 +65,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- Div para colocar los botones de exportacion y busqueda-->
 	
 		
-		<div class="row">
-			<div class="col-md-12">
-				<div class="btn-group">
-			        <div id="botonxls" class="ml-3 mb-1">
-			        </div>         
-			   </div>
-			</div>
+		<div class="col-md-8">
+			<div class="btn-group">
+		        <div id="botonxls" class="ml-2 mb-1">
+		        </div>         
+		   </div>
 		</div>
 		
-		
-		<div class="row">
-			<div class="col-md-12 ml-3">			
-				<form id="buscarconsolidadosiau" class="form-inline mb-3" th:action="@{/buscarconsolidadosiau}" role="form" method="get">
-					<div class="input-group">
-						<label class="control-label text-center align-middle">Consulta:</label>
-		                <span class="input-group-prepend ml-1">
-		                    <div class="input-group-text badge-primary rounded-left border-right-0"><i class="far fa-calendar-alt"></i></div>
-		                </span>		                
-		                <input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Inicial" autocomplete="off">        
-		            </div>
-		            
-		            <div class="input-group">						
-		                <span class="input-group-prepend ml-1">
-		                    <div class="input-group-text badge-primary rounded-left border-right-0"><i class="far fa-calendar-alt"></i></div>
-		                </span>
-		                <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off">		                       
-		            </div>
-		            
-		             <div class="input-group">						
-		                <button type="submit" class="btn btn-warning btn-sm ml-2">Consultar</button>      
-		            </div>		            
-		                        
-		            
-		            <!--  <div class="col-md-7 mt-2">
-		            <div class="input-group">						
-		                <div class="custom-control custom-radio ml-2">
-                          <input class="custom-control-input" type="radio" id="formato1" th:name="formato" value="1" checked>
-                          <label for="formato1" class="custom-control-label m-0">Formato 1</label>                          
-                        </div>
-                        <div class="custom-control custom-radio ml-2">
-                        	<input class="custom-control-input" type="radio" id="formato2" th:name name="formato" value="2">
-                          	<label for="formato2" class="custom-control-label m-0">Formato 2</label>
-                        </div>
-                        </div>		                       
-		            </div>-->	                
-		            
-		              
-				</form>
-			</div>
-		</div>	               
+		<div class="mx-auto">		
+			<div class="card ml-3 mr-3">			
+				<div class="card-header custom-header p-0">
+					<h6>
+						<span class="fas fa-filter m-1"></span>Filtro Avanzado
+					</h6>
+				</div>
+				
+				<div class="card-body">
+					<form id="buscarconsolidadosiau" class="form-inline mb-3" th:action="@{/buscarconsolidadosiau}" role="form" method="get">
+						<div class="input-group">
+							<label class="control-label text-center align-middle">Consulta:</label>
+			                <span class="input-group-prepend ml-1">
+			                    <div class="input-group-text badge-primary rounded-left border-right-0">
+			                    	<i class="far fa-calendar-alt"></i>
+			                    </div>
+			                </span>		                
+			                <input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Inicial" autocomplete="off">        
+			            </div>
+			            
+			            <div class="input-group">						
+			                <span class="input-group-prepend ml-1">
+			                    <div class="input-group-text badge-primary rounded-left border-right-0">
+			                    	<i class="far fa-calendar-alt"></i>
+			                    </div>
+			                </span>
+			                <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off">		                       
+			            </div>
+			            
+			             <div class="input-group">						
+			                <button type="submit" class="btn btn-warning btn-sm ml-2">Consultar</button>      
+			            </div>	             
+					</form>
+				</div>			
+			</div>		
+		</div>          
 	
 			
-	<!-- Linea Separadora Botones - Contenido Principal -->
-	<div class="form-group col-md-12 mt-0 mb-0">
-            <hr>
-    </div>	
+		<!-- Linea Separadora -->
+    	<hr>
     
 
     <!-- Main content -->

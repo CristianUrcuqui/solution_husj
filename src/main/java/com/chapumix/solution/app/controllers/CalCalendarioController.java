@@ -56,6 +56,9 @@ public class CalCalendarioController {
 	@Value("${app.titulohoy}")
 	private String titulohoy;
 	
+	@Value("${app.titulocargare}")
+	private String titulocargare;
+	
 	@Value("${app.enlaceprincipalcalidad}")
 	private String enlaceprincipalcalidad;
 	
@@ -167,8 +170,11 @@ public class CalCalendarioController {
 	// Este metodo me permite visualizar o cargar el formulario del empleado para cargar el archivo CSV
 	@GetMapping("/cumplecarform")
 	public String crear(Map<String, Object> model) {
+		model.put("titulo", utf8(this.titulocargare));
 		CalCalendario calCalendario = new CalCalendario();			
-		model.put("calCalendario", calCalendario);				
+		model.put("calCalendario", calCalendario);
+		model.put("calidad", enlaceprincipalcalidad);
+		model.put("enlace5", enlace5);	
 		return "cumplecarform";
 	}
 	

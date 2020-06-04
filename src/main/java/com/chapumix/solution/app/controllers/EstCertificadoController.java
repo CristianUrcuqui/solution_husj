@@ -95,6 +95,15 @@ public class EstCertificadoController {
 	@Value("${app.tituloestadistica}")
 	private String tituloestadistica;
 	
+	@Value("${app.titulocertificados}")
+	private String titulocertificados;
+	
+	@Value("${app.titulocertificado}")
+	private String titulocertificado;
+	
+	@Value("${app.titulocargars}")
+	private String titulocargars;
+	
 	@Value("${app.enlaceprincipalestadistica}")
 	private String enlaceprincipalestadistica;
 	
@@ -103,17 +112,17 @@ public class EstCertificadoController {
 	
 	
 	/* ----------------------------------------------------------
-     * INDEX ESTADISTICA
+     * INDEX ESTADISTICA CERTIFICADO DF Y NV
      * ---------------------------------------------------------- */
 	
-	//INDEX ESTADISTICA
+	//INDEX ESTADISTICA CERTIFICADO DF Y NV
 	@GetMapping("/indexcertificado")
 	public String index(Model model) {
 		
 		List<EstSerial> serialesDefuncion = iEstSerialService.countSerialDefuncion();
 		List<EstSerial> serialesNacidoVivo = iEstSerialService.countSerialNacidoVivo();		
 		
-		model.addAttribute("titulo", utf8(this.tituloestadistica));
+		model.addAttribute("titulo", utf8(this.titulocertificados));
 		model.addAttribute("estadistica", enlaceprincipalestadistica);
 		model.addAttribute("defuncion", serialesDefuncion.size());
 		model.addAttribute("nacidovivo", serialesNacidoVivo.size());
@@ -130,7 +139,7 @@ public class EstCertificadoController {
 	@GetMapping("/certificadocsvform")
 	public String crearParametroCertificado(Map<String, Object> model) {
 		EstSerial estSerial = new EstSerial();
-		model.put("titulo", utf8(this.tituloestadistica));
+		model.put("titulo", utf8(this.titulocargars));
 		model.put("estadistica", enlaceprincipalestadistica);		
 		model.put("estSerial", estSerial);
 		model.put("enlace7", enlace7);
@@ -217,7 +226,7 @@ public class EstCertificadoController {
 	public String listar(Model model) {		
 				
 		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroDesc();
-		model.addAttribute("titulo", utf8(this.tituloestadistica));		
+		model.addAttribute("titulo", utf8(this.titulocertificado));		
 		model.addAttribute("estadistica", enlaceprincipalestadistica);
 		model.addAttribute("listcertificado", certificados);		
 		model.addAttribute("enlace7", enlace7);
@@ -233,7 +242,7 @@ public class EstCertificadoController {
 		//obtengo el listado de servicios
 		List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();		
 		
-		model.put("titulo", utf8(this.tituloestadistica));
+		model.put("titulo", utf8(this.titulocertificado));
 		model.put("tipos", iEstTipoCertificadoService.findAll());
 		model.put("servicio", servicio);
 		model.put("estCertificado", estCertificado);

@@ -186,8 +186,7 @@ public class JpaComUsuarioDetalleService implements UserDetailsService{
 
 
 	//metodo para validar contraseña de dinamica y contraseña digitada en Solution
-	private String hashValue(String contrasena) {
-		 //String digest = null;
+	private String hashValue(String contrasena) {		 
 	    try {
 	        MessageDigest md = MessageDigest.getInstance("MD5");
 	        byte[] hash = md.digest(contrasena.getBytes("UTF-16LE")); // <-- note encoding

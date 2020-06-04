@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         <!-- Lista para mostrar los errorer antes del formulario -->
@@ -97,50 +97,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
 				</div>
-			</div>        				
-        
-         	 <div class="card card-info col-md-6 m-1">             
-              <!-- form start -->
-              <form id="editarusuario"  class="form-horizontal" th:action="@{/usuarioform}" th:object="${comUsuario}" role="form" method="post">					   
+			</div>
+			
+			<div class="col-md-8 mx-auto">
+			
+				<div class="card card-primary animacion">				
+					<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Editar Usuario</h4>
+                    </div>
+                    <div class="card-body">                    
+                    
+                    	<form id="editarusuario"  class="form-horizontal" th:action="@{/usuarioform}" th:object="${comUsuario}" role="form" method="post">					   
 					   
 					   
-					   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="usuario">Usuario</label>
-			                <div class="col-sm-5">              	
-			                   	<input id="usuario" type="text" th:field="*{usuario}" class="form-control form-control-sm" readonly>	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="nombre">Nombre Completo</label>
-			                <div class="col-sm-5">              	
-			                   	<input id="nombre" type="text" th:field="*{nombreCompleto}" class="form-control form-control-sm" readonly>	                   			                   	                    	
-			                </div>
-	                   </div>
-	                   
-	                   <div class="form-group row mt-3">
-	                   		<label class="control-label col-sm-3 ml-1" for="roles">Roles</label>
-			                <div class="col-sm-5">
-				                <select id="roles" th:field="*{roles}" class="form-control form-control-sm" multiple>
-		                          <option value="" selected="selected">Seleccione</option>
-		                          <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>		                          
-		                        </select>			                   			                   			                   	                    	
-			                </div>
-	                   </div>  
-		               
-		                           
-	                   
-					          
-                	
-                
-                <!-- /.card-body -->                    
-              </form>
-            </div>
-            <!-- /.card -->       
-                
+						   <div class="form-group row">
+		                   		<label class="control-label col-md-4" for="usuario">Usuario</label>
+				                <div class="col-md-8">              	
+				                   	<input id="usuario" type="text" th:field="*{usuario}" class="form-control form-control-sm" readonly>	                   			                   	                    	
+				                </div>
+		                   </div>
+		                   
+		                   <div class="form-group row">
+		                   		<label class="control-label col-md-4" for="nombre">Nombre Completo</label>
+				                <div class="col-md-8">              	
+				                   	<input id="nombre" type="text" th:field="*{nombreCompleto}" class="form-control form-control-sm" readonly>	                   			                   	                    	
+				                </div>
+		                   </div>
+		                   
+		                   <div class="form-group row">
+		                   		<label class="control-label col-md-4" for="roles">Roles</label>
+				                <div class="col-md-8">
+					                <select id="roles" th:field="*{roles}" class="form-control form-control-sm" multiple>
+			                          <option value="" selected="selected">Seleccione</option>
+			                          <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>		                          
+			                        </select>			                   			                   			                   	                    	
+				                </div>
+		                   </div>        
+                		                   
+              			</form>              
+                    </div><!-- /.card-body -->			
+				</div><!-- /.card -->			
+			</div>                
         </div>
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div><!-- /.container -->
     </div>
     <!-- /.content -->
   </div>

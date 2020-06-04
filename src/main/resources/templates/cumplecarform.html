@@ -70,62 +70,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
-        
-           	<div class="card card-info col-md-6 m-1 animacion">             
-              <!-- form start -->
-              <form id="uploadempleado"  class="form-horizontal" th:action="@{/uploadcsvempleado}" enctype="multipart/form-data" role="form" method="post">					   
-					   
-					   	<div class="input-group">
-				          <div class="input-group-prepend">
-				            <span class="input-group-text" id="archivos"><i class="fas fa-file-csv"></i></span>
-				          </div>
-				          <div class="custom-file">
-				            <input id="archivo" type="file" name="archivo" class="custom-file-input"  accept=".csv" aria-describedby="archivos">
-				            <label class="custom-file-label" for="archivo">Seleccione un archivo CSV</label>
-				          </div>				          
-				        </div>
-				        
-				        <div class="form-group float-right mt-2">
-			                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cargar</button>			                 
-			            </div>           	
-	                                
-                <!-- /.card-body -->                    
-              </form>
-            </div>
-            <!-- /.card -->
-            
-            
-            <!-- Descripcion o detalle -->
-            <div class="col-md-6">
-            <div class="card animacion">
-              <div class="card-header">
-                <h3 class="card-title text-primary">
-                  <i class="fas fa-hands-helping"></i>
-                  Ayuda
-                </h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">                
-                <h6>El fichero CSV debe tener el siguiente formato:</h6>
-                <h6><strong>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado</strong></h6> 
-                <h6>xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</h6>               
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- ./col -->
-                   
-                
+        	
+        <div class="col-md-8 mx-auto">        
+        	<div class="card card-primary animacion">        	
+        		<div class="card-header custom-header p-0">
+        			<h4 class="ml-3 mt-1">Cargar Empleados</h4>   		
+        		</div>
+        		
+        		<div class="card-body">			
+        			
+        			<form id="editarempleado"  class="form-horizontal" th:action="@{/empleadoform}" th:object="${calCalendario}" role="form" method="post">
+        			
+        				<div class="input-group">                                            		
+                           		<div class="input-group-prepend">
+						           <span class="input-group-text" id="archivos"><i class="fas fa-file-csv"></i></span>
+						        </div>
+						        <div class="custom-file">
+						          <input id="archivo" type="file" name="archivo" class="custom-file-input"  accept=".csv" aria-describedby="archivos">
+						          <label class="custom-file-label" for="archivo">Seleccione un archivo CSV</label>
+						        </div>                           
+                       </div>
+                       
+                       <div class="float-right mt-2">
+			                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cargar</button>			                 
+			           </div>        			
+        			
+        			</form>
+        		</div><!-- /.card-body -->        		        	
+        	</div><!-- /.card -->        	        
         </div>
-        <!-- /.row -->
+        
+        <!-- Descripcion o detalle -->
+        <div class="col-md-8 mx-auto">
+        	<div class="card animacion">
+        		
+        		<div class="card-header">
+	               <h3 class="card-title text-primary">
+	                 <i class="fas fa-hands-helping"></i>
+	                   Ayuda
+	               </h3>
+	            </div><!-- /.card-header -->
+	            
+	            <div class="card-body">
+	            	<h6>El fichero CSV debe tener el siguiente formato:</h6>
+                	<h6><strong>nombreCompleto;numeroIdentificacion;fechaNacimiento;correo;enviado</strong></h6> 
+                	<h6>xxxxxx;xxxxxx;00-00-0000;xxxxxx;0</h6>
+	            </div><!-- /.card-body -->      		
+        		
+        	</div><!-- /.card -->
+        </div><!-- ./col -->                
+                
+        </div><!-- /.row -->        
       </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+    </div><!-- /.content -->    
+  </div><!-- /.content-wrapper -->  
   <!-- FIN CONTENIDO -->
 
  <!-- Main Footer -->

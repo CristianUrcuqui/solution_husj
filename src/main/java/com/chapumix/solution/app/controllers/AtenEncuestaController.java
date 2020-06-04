@@ -53,8 +53,18 @@ public class AtenEncuestaController {
 	@Autowired
 	private RestTemplate restTemplate;
 	 
+	@Value("${app.tituloencuestasatisfaccion}")
+	private String tituloencuestasatisfaccion;
+	
 	@Value("${app.tituloencuesta}")
-	private String tituloencuesta;	
+	private String tituloencuesta;
+	
+	@Value("${app.tituloconsolidado}")
+	private String tituloconsolidado;
+	
+	@Value("${app.titulonegativa}")
+	private String titulonegativa;
+	
 	
 	@Value("${app.enlaceprincipalsiau}")
 	private String enlaceprincipalsiau;
@@ -70,7 +80,7 @@ public class AtenEncuestaController {
 	
 	@GetMapping("/indexencuestasat")
 	public String index(Model model) {
-		model.addAttribute("titulo", utf8(this.tituloencuesta));
+		model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
 		model.addAttribute("siau", enlaceprincipalsiau);
 		model.addAttribute("enlace9", enlace9);
 		return "indexencuestasat";
@@ -86,7 +96,7 @@ public class AtenEncuestaController {
 	@GetMapping("/consolidadoencuesta")
 	public String crearListaConsolidado(Map<String, Object> model) {		
 		AtenEncuDatoBasico atenEncuDatoBasico = new AtenEncuDatoBasico();
-		model.put("titulo", utf8(this.tituloencuesta));				
+		model.put("titulo", utf8(this.tituloconsolidado));				
 		model.put("atenEncuDatoBasico", atenEncuDatoBasico);
 		model.put("siau", enlaceprincipalsiau);
 		model.put("enlace9", enlace9);		
@@ -122,7 +132,7 @@ public class AtenEncuestaController {
 		
 		
 		if (result.hasErrors()) {
-			model.addAttribute("titulo", utf8(this.tituloencuesta));
+			model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
 			model.addAttribute("servicio", servicio);
 			model.addAttribute("genero", iComGeneroService.findAll());			
 			model.addAttribute("atenEncuDatoBasico", atenEncuDatoBasico);			
@@ -288,7 +298,7 @@ public class AtenEncuestaController {
 		}
 		
 		//model.addAttribute("medicos", medicos);
-		model.addAttribute("titulo", utf8(this.tituloencuesta));
+		model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
 		model.addAttribute("listprocpat", atenEncuConsolidadoDTO);
 		model.addAttribute("enlace9", enlace9);		
 		return "consolidadoencuesta";
@@ -299,7 +309,7 @@ public class AtenEncuestaController {
 	@GetMapping("/negativaencuesta")
 	public String crearListaConsolidadoNegativo(Map<String, Object> model) {
 		AtenEncuDatoBasico atenEncuDatoBasico = new AtenEncuDatoBasico();
-		model.put("titulo", utf8(this.tituloencuesta));
+		model.put("titulo", utf8(this.titulonegativa));
 		model.put("atenEncuDatoBasico", atenEncuDatoBasico);
 		model.put("siau", enlaceprincipalsiau);
 		model.put("enlace9", enlace9);
@@ -347,7 +357,7 @@ public class AtenEncuestaController {
 			model.addAttribute("listprocpat", finalDatos);	
 		}
 		
-		model.addAttribute("titulo", utf8(this.tituloencuesta));		
+		model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));		
 		model.addAttribute("enlace9", enlace9);
 		return "negativaencuesta";				
 	}
