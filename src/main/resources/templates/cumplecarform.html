@@ -81,7 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         		
         		<div class="card-body">			
         			
-        			<form id="editarempleado"  class="form-horizontal" th:action="@{/empleadoform}" th:object="${calCalendario}" role="form" method="post">
+        			<form id="uploadempleado"  class="form-horizontal" th:action="@{/uploadcsvempleado}" enctype="multipart/form-data" role="form" method="post">
         			
         				<div class="input-group">                                            		
                            		<div class="input-group-prepend">
