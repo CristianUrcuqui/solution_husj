@@ -272,24 +272,51 @@ input[type=number] {
 
 /******Estilo para los botone que ejecutan los modales******/
 .border-custom-button {  
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;  
- }
+ 	border-top-left-radius: 0;
+  	border-bottom-left-radius: 0;  
+}
  
  /******Estilo para los input de busqueda******/
 .border-custom-input {  
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;  
- }
+  	border-top-right-radius: 0;
+  	border-bottom-right-radius: 0;  
+}
  
  /******Estilo para los header de los card******/
  .custom-header {
-  background: linear-gradient(90deg, rgba(0,120,250,1) 0%, rgba(0,123,255,1) 43%, rgba(37,44,59,1) 100%) !important;
-  color: white !important;  
+  	background: linear-gradient(90deg, rgba(0,120,250,1) 0%, rgba(0,123,255,1) 43%, rgba(37,44,59,1) 100%) !important;
+  	color: white !important;  
         
- }
+}
  
  .custom-header h4{
-  font-family: 'Architects Daughter', cursive;
-  font-size: 20px !important;
- }
+  	font-family: 'Architects Daughter', cursive;
+  	font-size: 20px !important;
+}
+ 
+ /******Estilo para los encabezados de los formularios******/
+ .fieldset {
+	font-family: 'Coda', cursive;
+	font-family: 14px;		
+}
+
+/******Estilo para los textos de los input******/
+.customtxt{
+	font-family: 'Lora', serif;
+	font-size: 12px;
+	letter-spacing: 1.6px;
+	word-spacing: 0.6px;
+	color: #020504;
+	font-weight: 700;
+	text-decoration: none;
+	font-style: italic;
+	font-variant: normal;
+	text-transform: none;  
+}
+
+/******Estilo adicional para las tablas******/
+.custom-table table, th, td{
+	font-size: 12px !important;
+	padding: 0px !important;
+} 
+ 

@@ -156,7 +156,7 @@ public class EstCertificadoController {
             model.addAttribute("error", mensajeFlash);
         } else {           
         	
-            // analizar el archivo CSV para crear una lista de objetos Empleado
+            // analizar el archivo CSV para crear una lista de objetos Serial
             try (Reader reader = new BufferedReader(new InputStreamReader(new BOMInputStream(file.getInputStream()), StandardCharsets.ISO_8859_1))) {
         	
                 // create csv bean reader                
@@ -172,7 +172,7 @@ public class EstCertificadoController {
                 //creamos una lista para guardar los seriales no ingresados
                 List<String> errores = new ArrayList<>();
              
-                // recorremos la lista de empleados para ser guardada en la base de datos   
+                // recorremos la lista de seriales para ser guardada en la base de datos   
                 if(!seriales.isEmpty()) {
                 	seriales.forEach(s -> {
                 		
@@ -210,7 +210,8 @@ public class EstCertificadoController {
                 model.addAttribute("success", mensajeFlash);
 
             } catch (Exception ex) {            	
-                model.addAttribute("error", "Se produjo un error al procesar el archivo CSV.");                
+            	ex.printStackTrace();
+            	model.addAttribute("error", "Se produjo un error al procesar el archivo CSV.");                
             }
         }                
         return "certificadocsvform";

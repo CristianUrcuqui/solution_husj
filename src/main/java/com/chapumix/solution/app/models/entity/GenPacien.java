@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "gen_pacien")
@@ -55,6 +56,7 @@ public class GenPacien implements Serializable {
 		this.oid = oid;
 	}	
 
+	@NotEmpty
 	@Column(name = "pac_num_doc", length = 20)
 	public String getPacNumDoc() {
 		return pacNumDoc;

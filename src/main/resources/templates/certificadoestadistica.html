@@ -52,7 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">
-									<a class="btn btn-primary" th:href="@{/certificadoform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/certificadoform}" data-toggle="tooltip" data-placement="top" title="Nuevo" role="button">
 										<i class="fas fa-plus fa-lg mt-1"></i>
 									</a>																		
 								</div>																									
@@ -65,7 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/indexcertificado}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -90,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          <div class="col-md-12">
 	         <div class="card animacion">
 		         <div class="card-body">
-			         <table id="datatablelistacertificado" class="table table-striped table-sm table-bordered table-hover table-condensed" style="width: 100%">
+			         <table id="datatablelistacertificado" class="table table-striped table-sm table-bordered table-hover table-condensed custom-table" style="width: 100%">
 			         	<thead>
 				         	<tr>
 					         	<th>SERIAL</th>
@@ -134,9 +134,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									              <p>Estas seguro que quieres eliminar?</p>
 									            </div>
 									            <div class="modal-footer justify-content-between">
-									              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									              <button type="button" class="btn bg-gradient-secondary" data-dismiss="modal">Cancelar</button>
 									              <a th:href="@{/eliminarcertificado/{id}(id=${lcertificado.id})}">
-									                <span class="btn btn-danger" value="delete">Eliminar</span>
+									                <span class="btn bg-gradient-danger" value="delete">Eliminar</span>
 									              </a>
 									            </div>
 									          </div>

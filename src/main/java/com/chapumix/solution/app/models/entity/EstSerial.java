@@ -162,7 +162,6 @@ public class EstSerial implements Serializable {
 		this.estTipoCertificado = estTipoCertificado;
 	}		
 	
-	@NotNull
 	@OneToMany(mappedBy = "estSerial", fetch = FetchType.LAZY)
 	public List<EstCertificado> getEstCertificado() {
 		return estCertificado;

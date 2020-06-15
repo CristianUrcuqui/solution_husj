@@ -49,12 +49,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-sm-6">
 						<!-- Toolbar Botones -->						
 					  </div>
-					  	<div class="col-sm-6">
+					  	<div class="col-md-6">
 						<!-- Toolbar Botones -->
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-dark" th:href="@{/indexencuestasat}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-secondary" th:href="@{/indexencuestasat}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -114,9 +114,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				          <div class="col-md-3 required">
 				          	<div class="form-group">
 					            <label class="control-label" for="servicio">Servicio</label>
-					            <select id="servicio" th:field="*{idServicio}"  class="form-control form-control-sm">
+					            <select id="servicio" th:field="*{genAreSer}"  class="form-control form-control-sm">
 				                	<option value="" selected="selected">Seleccione</option>
-				                    <option th:each="serv : ${servicio}" th:value="${serv.oid}" th:text="${serv.gasNombre}"></option>	                          
+				                    <option th:each="serv : ${servicio}" th:value="${serv.id}" th:text="${serv.gasNombre}"></option>	                          
 				                </select>
 			                </div>
 				          </div>				          
@@ -677,8 +677,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				    
 				      <div class="row ml-1 mb-1">
 					    <div class="col-md-12">					      
-					      <button type="submit" form="editarencuesta" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar Encuesta</button>					      
-					      <button type="reset" form="editarencuesta" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					      <button type="submit" form="editarencuesta" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+					      <button type="reset" form="editarencuesta" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
 					    </div>
 					  </div>                    
 	                                   

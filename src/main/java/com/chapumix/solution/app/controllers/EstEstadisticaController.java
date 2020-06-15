@@ -38,6 +38,11 @@ public class EstEstadisticaController {
 		return "indexestadistica";
 	}
 	
+	
+	/* ----------------------------------------------------------
+     * METODOS ADICIONALES 
+     * ---------------------------------------------------------- */
+	
 	//Se usa para codificacion ISO-8859-1 a UTF-8  
 		public String utf8(String input) {
 			String output = "";

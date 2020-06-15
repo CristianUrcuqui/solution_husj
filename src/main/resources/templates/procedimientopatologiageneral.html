@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexprocesar}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/indexprocesar}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -81,14 +81,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 					<div class="card-body">
 	
-						<form id="buscarpatologiaprocesada" class="form-inline ml-3"
-							th:action="@{/buscarpatologiageneral}" role="form" method="get">
+						<form id="buscarpatologiaprocesada" class="form-inline ml-3" th:action="@{/buscarpatologiageneral}" role="form" method="get">
 	
 							<div class="input-group">
 								<label class="control-label text-center align-middle">Consulta:</label>
 								<span class="input-group-prepend ml-1">
-									<div
-										class="input-group-text badge-primary rounded-left border-right-0">
+									<div class="input-group-text badge-primary rounded-left border-right-0">
 										<i class="far fa-calendar-alt"></i>
 									</div>
 								</span> <input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Inicial" autocomplete="off">
@@ -97,8 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	
 							<div class="input-group">
 								<span class="input-group-prepend ml-1">
-									<div
-										class="input-group-text badge-primary rounded-left border-right-0">
+									<div class="input-group-text badge-primary rounded-left border-right-0">
 										<i class="far fa-calendar-alt"></i>
 									</div>
 								</span> <input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off">
@@ -114,11 +111,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</div>
 	
 							<div class="input-group">
-								<button type="submit" class="btn btn-warning btn-sm ml-1">Consultar</button>
+								<button type="submit" class="btn bg-gradient-warning btn-sm ml-1">Consultar</button>
 							</div>
 	
 							<div class="input-group btn-group-sm">
-								<a class="btn btn-primary ml-1" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Lista Completa" role="button"> 
+								<a class="btn bg-gradient-primary ml-1" th:href="@{/procedimientopatologiageneral}" data-toggle="tooltip" data-placement="top" title="Lista Completa" role="button"> 
 									<i class="fas fa-sync fa-lg mt-1"></i>
 								</a>
 							</div>
@@ -173,12 +170,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${lprocpat.pacienteInternoExterno}"></td>					         						         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
-						         		<a class="btn btn-primary btn-sm" th:href="@{/editarpatologiaprocesada(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
+						         		<a class="btn bg-gradient-primary btn-sm" th:href="@{/editarpatologiaprocesada(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">
 											<i class="fas fa-edit fa-xs"></i>
 										</a>												         		
 									</div>
 									<div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="d-inline">
-						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-patologia" th:attr="data-target='#modal-eliminar-patologia'+${lprocpat.id}" data-placement="top" title="Eliminar" role="button">
+						         		<a class="btn bg-gradient-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-patologia" th:attr="data-target='#modal-eliminar-patologia'+${lprocpat.id}" data-placement="top" title="Eliminar" role="button">
 	                                    	<i class="far fa-trash-alt fa-xs"></i>
 	                                    </a>							         		
 									</div>
@@ -197,9 +194,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									              <p>Estas seguro que quieres eliminar?</p>
 									            </div>
 									            <div class="modal-footer justify-content-between">
-									              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									              <button type="button" class="btn bg-gradient-secondary" data-dismiss="modal">Cancelar</button>
 									              <a th:href="@{/eliminarpatologiaprocesada/{id}(id=${lprocpat.id})}">
-									                <span class="btn btn-danger" value="delete">Eliminar</span>
+									                <span class="btn bg-gradient-danger" value="delete">Eliminar</span>
 									              </a>
 									            </div>
 									          </div>
@@ -235,7 +232,7 @@ $(document).ready(function() {
     var table = $('#datatablelistaprocedimientopatologia').DataTable( {
     	"pageLength": 25,
     	"responsive": true,
-    	"ordering": false,    	
+    	"order": [],    	
     	"pagingType": "full_numbers",
     	dom: 'Blfrtip',    	
     	 "buttons": {
@@ -252,7 +249,7 @@ $(document).ready(function() {
 
             	 {
                      extend:    'excelHtml5',
-                     text:      '<i class="fas fa-file-excel"></i>Excel',
+                     text:      '<i class="fas fa-file-excel"></i>Exportar',
                      /*title:'Titulo de tabla en excel',*/
                      titleAttr: 'Exportar Excel',
                      className: 'btn btn-app export excel',

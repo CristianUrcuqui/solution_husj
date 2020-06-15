@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn btn-primary" th:href="@{/indexencuestasat}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/indexencuestasat}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -102,7 +102,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			            </div>
 			            
 			             <div class="input-group">						
-			                <button type="submit" class="btn btn-warning btn-sm ml-2">Consultar</button>      
+			                <button type="submit" class="btn bg-gradient-success btn-sm ml-2"><i class="fas fa-file-excel"></i> Exportar</button>      
 			            </div>	             
 					</form>
 				</div>			
@@ -119,102 +119,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-         <div class="col-md-12">
-	         <div class="card animacion">
-		         <div class="card-body">		         		         	
-			         <table id="datatableconsolidadoencuesta" class="table table-striped table-sm table-bordered table-hover table-condensed" style="width: 100%">
-			         	<thead>
-				         	<tr>
-					         	<th>SERVICIO</th>
-					         	<th>NUMERO DE ENCUESTAS</th>
-					         	<th>SI</th>
-					         	<th>NO</th>
-					         	<th>MUY MALA</th>
-					         	<th>MALA</th>
-					         	<th>REGULAR</th>
-					         	<th>BUENA</th>
-					         	<th>MUY BUENA</th>
-					         	<th>NO APLICA</th>
-					         	<th>DEFINITIVAMENTE NO</th>
-					         	<th>PROBABLEMENTE NO</th>
-					         	<th>PROBABLEMENTE SI</th>					         			         	
-					         	<th>DEFINITIVAMENTE SI</th>					         	
-				         	</tr>
-			         	</thead>
-			         	<tbody>			         		
-				         	<tr th:each="lconsolidado: ${listprocpat}">
-					         	<td th:text="${lconsolidado.servicio}"></td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.numeroEncuestas} > 0">
-									    <h6><small class="badge badge-success"><span th:text="${lconsolidado.numeroEncuestas}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalSi} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalSi}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalNo} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalNo}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalMuyMala} > 0">
-									    <h6><small class="badge badge-danger"><span th:text="${lconsolidado.totalMuyMala}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalMala} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalMala}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalRegular} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalRegular}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalBuena} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalBuena}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalMuyBuena} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalMuyBuena}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalNoAplica} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalNoAplica}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalDefinitivamenteNo} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalDefinitivamenteNo}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalProbablementeNo} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalProbablementeNo}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalProbablementeSi} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalProbablementeSi}"></span></small></h6>
-									</div>																										
-							    </td>
-					         	<td class="text-center align-middle">
-							      	<div th:if="${lconsolidado.totalDefinitivamenteSi} > 0">
-									    <h6><small class="badge badge-dark"><span th:text="${lconsolidado.totalDefinitivamenteSi}"></span></small></h6>
-									</div>																										
-							    </td>     														         	
-				         	</tr>
-			         	</tbody>	         	
-			         </table>			       			        
-		         </div>
-	         </div>
-         </div>           
+                  
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -230,72 +135,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-
-<script>
-$(document).ready(function() {
-    var table = $('#datatableconsolidadoencuesta').DataTable( {    	
-    	"paging":   false,    	
-    	"searching": false,
-    	"lengthChange": false,    	
-    	"responsive": true,
-    	"ordering": false,    	
-    	"pagingType": "full_numbers",
-    	dom: 'Blfrtip',    	
-    	 "buttons": {
-             "dom": {
-                "button": {
-                  "tag": "div",
-                  "className": "flexcontent"
-                },
-                buttonLiner: {
-					tag: null
-                }                    
-             },
-             "buttons": [
-
-            	 {
-                     extend:    'excelHtml5',
-                     text:      '<i class="fas fa-file-excel"></i>Excel',
-                     /*title:'Titulo de tabla en excel',*/
-                     titleAttr: 'Exportar Excel',
-                     className: 'btn btn-app export excel',
-                     exportOptions: {
-                         columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ]
-                     }                     
-                 },
-
-                 ]   
-          },          
-
-          "language": {
-              "lengthMenu": "Mostrar _MENU_ registros por página",
-              "zeroRecords": "Nada Encontrado - Lo sentimos!",
-              "info": "Mostrando página _PAGE_ de _PAGES_",
-              "search": "Buscar",
-              "infoEmpty": "No hay registros disponibles",
-              "infoFiltered": "(filtrado de _MAX_ registros totales)",
-              
-              
-              "paginate": {
-              	      "previous": "Anterior",
-              	      "first": "Primera",
-              	      "last": "Última",
-              	      "next": "Siguiente"
-              	    }
-          },
-          
-          "columnDefs": [        	  
-          	  { "width": "10%", "targets": [0] },
-          	{ "width": "7%", "targets": [4] }
-          ],
-            
-    
-    } );
-    table.buttons().container().appendTo( '#botonxls' );
-    //table.column(1).data().sum();
-    
-} );
-</script>
 
 <script>
             $( "#fechaInicial" ).datepicker({

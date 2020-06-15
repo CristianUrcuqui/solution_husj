@@ -25,8 +25,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private String idServicio;
-	private String servicio;
+	private GenAreSer genAreSer;
 	private ComGenero comGenero;
 	private String edad;	
 	private String respuesta1;	
@@ -65,30 +64,18 @@ public class AtenEncuDatoBasico implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}	
-	
-	@NotEmpty
-	@Column(name = "id_servicio", length = 20, nullable = false)
-	public String getIdServicio() {
-		return idServicio;
 	}
 
-
-	public void setIdServicio(String idServicio) {
-		this.idServicio = idServicio;
+	@NotNull	
+	@ManyToOne
+	@JoinColumn(name = "id_servicio", nullable = false)
+	public GenAreSer getGenAreSer() {
+		return genAreSer;
 	}
 
-	
-	@Column(name = "nombre_servicio", length = 100)
-	public String getServicio() {
-		return servicio;
+	public void setGenAreSer(GenAreSer genAreSer) {
+		this.genAreSer = genAreSer;
 	}
-
-
-	public void setServicio(String servicio) {
-		this.servicio = servicio;
-	}
-
 
 	@NotNull	
 	@ManyToOne
