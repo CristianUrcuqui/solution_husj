@@ -157,17 +157,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lprocpat: ${listprocpat}">
-					         	<td th:text="${lprocpat.codigo}"></td>					         	
-					         	<td th:text="${#dates.format(lprocpat.fechaAsignacion, 'dd-MM-yyy h:mm a')}"></td>
-					         	<td th:text="${lprocpat.historia}"></td>
-					         	<td th:text="${lprocpat.paciente}"></td>
-					         	<td th:text="${lprocpat.procedimiento}"></td>
-					         	<td th:text="${lprocpat.tipoMuestra}"></td>
-					         	<td th:text="${lprocpat.patologo}"></td>
-					         	<td th:text="${lprocpat.patologoReasignado}"></td>
-					         	<td th:text="${lprocpat.correccion}"></td>
-					         	<td th:text="${lprocpat.observacion}"></td>
-					         	<td th:text="${lprocpat.pacienteInternoExterno}"></td>					         						         						         	
+					         	<td th:text="${lprocpat.codigo}" class="align-middle"></td>					         	
+					         	<td th:text="${#dates.format(lprocpat.fechaAsignacion, 'dd-MM-yyy h:mm a')}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.historia}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.paciente}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.procedimiento}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.tipoMuestra}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.patologo}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.patologoReasignado}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.correccion}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.observacion}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.pacienteInternoExterno}" class="align-middle"></td>					         						         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
 						         		<a class="btn bg-gradient-primary btn-sm" th:href="@{/editarpatologiaprocesada(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">

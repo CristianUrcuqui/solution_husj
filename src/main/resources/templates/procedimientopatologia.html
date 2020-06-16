@@ -90,13 +90,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lprocpat: ${listprocpat}">
-					         	<td th:text="${lprocpat.pacNumDoc}"></td>
-					         	<td th:text="${lprocpat.pacPriNom+ ' ' +lprocpat.pacSegNom+ ' ' + lprocpat.pacPriApe+ ' ' +lprocpat.pacSegApe}"></td>
-					         	<td th:text="${lprocpat.ainConsec}"></td>
-					         	<td th:text="${lprocpat.hcNumFol}"></td>
-					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}"></td>
-					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}"></td>
-					         	<td class="text-center">
+					         	<td th:text="${lprocpat.pacNumDoc}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.pacPriNom+ ' ' +lprocpat.pacSegNom+ ' ' + lprocpat.pacPriApe+ ' ' +lprocpat.pacSegApe}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.ainConsec}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.hcNumFol}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}" class="align-middle"></td>
+					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}" class="align-middle"></td>
+					         	<td class="class="align-middle"">
 							      	<div th:if="${lprocpat.gasNombre} == null">
 									    <span>EXTERNO</span>
 									</div>

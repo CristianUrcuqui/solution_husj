@@ -574,6 +574,8 @@ public class HcnSolPatController {
 					
 		model.addAttribute("medicos", medicos);			
 		model.addAttribute("titulo", utf8(this.tituloprocedimientosprocesados));
+		model.addAttribute("patologia", enlaceprincipalpatologia);
+		model.addAttribute("enlace1", enlace1);
 		model.addAttribute("listprocpat", newPatProcedimiento);		
 		//flash.addFlashAttribute("error", errorFechas);
 		return "procedimientopatologiageneral";

@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lprocpat: ${listrol}">
-					         	<td th:text="${lprocpat.nombre}"></td>					         	       						         						         	
+					         	<td th:text="${lprocpat.nombre}" class="align-middle"></td>					         	       						         						         	
 					         	<td class="text-center align-middle">
 					         		<div class="d-inline">
 						         		<a class="btn bg-gradient-primary btn-sm"  th:href="@{/rolformedit(id=${lprocpat.id})}" data-toggle="tooltip" data-placement="top" title="Editar" role="button">

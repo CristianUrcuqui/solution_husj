@@ -56,14 +56,15 @@ $browser-context: 16;
 
 /******Estilo para los tamaños de texto en los datatables******/
 .table-condensed{
-  font-size: 12px;
+  font-size: 12px;  
 }
 
-/******Estilo para quitar los padding o espacios en las filas y columnas de los datatables******/
-table.dataTable tbody th, table.dataTable tbody td {
-    padding: 4px 4px; 
-}
-
+/******Estilo adicional para las tablas quitar espacios columnas y filas***** */
+.custom-table table, td{	
+	padding: 0px !important;
+	padding-left: 5px !important;	
+} 
+ 
 /******Estilo para personalizar sub-items del menu lateral******/
 .custom-icon{	
 	font-size: 10px !important;
@@ -314,9 +315,3 @@ input[type=number] {
 	text-transform: none;  
 }
 
-/******Estilo adicional para las tablas******/
-.custom-table table, th, td{
-	font-size: 12px !important;
-	padding: 0px !important;
-} 
- 

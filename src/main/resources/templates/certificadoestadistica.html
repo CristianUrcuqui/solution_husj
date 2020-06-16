@@ -105,14 +105,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				         	</tr>
 			         	</thead>
 			         	<tbody>			         		
-				         	<tr th:each="lcertificado: ${listcertificado}">
-					         	<td th:text="${lcertificado.estSerial.serial}"></td>
-					         	<td th:text="${lcertificado.genPacien.pacNumDoc}"></td>
-					         	<td th:text="${lcertificado.genPacien.pacPriNom +' '+ lcertificado.genPacien.pacSegNom +' '+ lcertificado.genPacien.pacPriApe +' '+ lcertificado.genPacien.pacSegApe}"></td>
-					         	<td th:text="${lcertificado.estSerial.estTipoCertificado.tipoCertificado}"></td>
-					         	<td th:text="${lcertificado.comUsuario.nombreCompleto}">
-					         	<td th:text="${lcertificado.genAreSer.gasNombre}"></td>						         	
-					         	<td th:text="${#dates.format(lcertificado.fechaRegistro, 'dd-MM-yyy h:mm a')}"></td>					         	
+				         	<tr th:each="lcertificado: ${listcertificado}" class="align-middle">
+					         	<td th:text="${lcertificado.estSerial.serial}" class="align-middle"></td>
+					         	<td th:text="${lcertificado.genPacien.pacNumDoc}" class="align-middle"></td>
+					         	<td th:text="${lcertificado.genPacien.pacPriNom +' '+ lcertificado.genPacien.pacSegNom +' '+ lcertificado.genPacien.pacPriApe +' '+ lcertificado.genPacien.pacSegApe}" class="align-middle"></td>
+					         	<td th:text="${lcertificado.estSerial.estTipoCertificado.tipoCertificado}" class="align-middle"></td>
+					         	<td th:text="${lcertificado.comUsuario.nombreCompleto}" class="align-middle">
+					         	<td th:text="${lcertificado.genAreSer.gasNombre}" class="align-middle"></td>						         	
+					         	<td th:text="${#dates.format(lcertificado.fechaRegistro, 'dd-MM-yyy h:mm a')}" class="align-middle"></td>					         	
 							    <td class="text-center align-middle">					         		
 									<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_ESTADISTICA')" class="d-inline">
 						         		<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-eliminar-certificado" th:attr="data-target='#modal-eliminar-certificado'+${lcertificado.id}" data-placement="top" title="Eliminar" role="button">

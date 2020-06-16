@@ -88,8 +88,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lprocpat: ${listusuario}">
-					         	<td th:text="${lprocpat.usuario}"></td>
-					         	<td th:text="${lprocpat.nombreCompleto}"></td>
+					         	<td th:text="${lprocpat.usuario}" class="align-middle"></td>
+					         	<td th:text="${lprocpat.nombreCompleto}" class="align-middle"></td>
 					         	<td class="text-center align-middle">
 							      	<div th:if="${lprocpat.estado} eq true">
 									    <h6><small class="badge badge-success"><i class="fas fa-thumbs-up"></i> Activo</small></h6>

@@ -103,9 +103,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			         	</thead>
 			         	<tbody>			         		
 				         	<tr th:each="lemplead: ${listempleado}">
-					         	<td th:text="${lemplead.nombreCompleto}"></td>
-					         	<td th:text="${#dates.format(lemplead.fechaNacimiento, 'dd-MM-yyy')}"></td>
-					         	<td th:text="${lemplead.correo}"></td>	         	
+					         	<td th:text="${lemplead.nombreCompleto}" class="align-middle"></td>
+					         	<td th:text="${#dates.format(lemplead.fechaNacimiento, 'dd-MM-yyy')}" class="align-middle"></td>
+					         	<td th:text="${lemplead.correo}" class="align-middle"></td>	         	
 					         	<td class="text-center align-middle">
 							      	<div th:if="${lemplead.enviado} eq true">
 									    <h6><small class="badge badge-success"><i class="fas fa-thumbs-up"></i>Enviado</small></h6>
