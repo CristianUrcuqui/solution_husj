@@ -68,32 +68,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        	<div class="container">
-			  <div class="row">
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/procedimientopatologia}">
-			      <div class="card-counter primary">
-			      	<h3 th:text=${procesar}></h3>
-			        <i class="fas fa-hospital-alt"></i>			        
-			        <span class="count-name">Procesar</span>
-			      </div>
-			      </a>
-			    </div>			    
-			
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/procedimientopatologiageneral}">
-			      <div class="card-counter success">
-			      	<h3 th:text=${procesados}></h3>
-			        <i class="fas fa-search-plus"></i>			        
-			        <span class="count-name">Consulta General</span>
-			      </div>
-			      </a>
-			    </div>    
-			    
-			    				    			    
-			  </div><!-- /.row-card -->
-			</div><!-- /.container-card -->
-			
+           <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-boxes"></i>
+                  Modulos
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- MODULOS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/procesar.jpg" alt="procesar"/>
+							  <figcaption>
+							    <h3>Procesar</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/procedimientopatologia}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/consulta.jpg" alt="consulta"/>
+							  <figcaption>
+							    <h3>Consulta</h3>
+							    <div>
+							      <p>general</p>
+							    </div><a th:href="@{/procedimientopatologiageneral}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>  		    
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>  			
 			                
         </div>
         <!-- /.row -->

@@ -24,7 +24,7 @@ import com.chapumix.solution.app.models.entity.ComRole;
 import com.chapumix.solution.app.models.service.IComRoleService;
 
 @Controller
-@SessionAttributes("comRol")
+@SessionAttributes("comRole")
 @PropertySource(value = "application.properties", encoding="UTF-8")
 public class ComRolController {
 	
@@ -38,8 +38,8 @@ public class ComRolController {
 	@Value("${app.enlaceprincipalajustes}")
 	private String enlaceprincipalajustes;
 	
-	@Value("${app.enlace4}")
-	private String enlace4;
+	@Value("${app.enlace3}")
+	private String enlace3;
 	
 	
 	/* ----------------------------------------------------------
@@ -53,7 +53,7 @@ public class ComRolController {
 		model.addAttribute("titulo", utf8(this.titulorol));
 		model.addAttribute("listrol", iComRoleService.findAll());
 		model.addAttribute("ajustes", enlaceprincipalajustes);
-		model.addAttribute("enlace4", enlace4);		
+		model.addAttribute("enlace3", enlace3);		
 		return "rollistado";
 	}
 	
@@ -64,7 +64,7 @@ public class ComRolController {
 		model.put("titulo", utf8(this.titulorol));
 		model.put("comRole", comRole);		
 		model.put("ajustes", enlaceprincipalajustes);
-		model.put("enlace4", enlace4);
+		model.put("enlace3", enlace3);
 		return "rolform";
 	}
 	
@@ -75,7 +75,7 @@ public class ComRolController {
 			model.addAttribute("titulo", utf8(this.titulorol));
 			model.addAttribute("comRole", comRole);				
 			model.addAttribute("ajustes", enlaceprincipalajustes);
-			model.addAttribute("enlace4", enlace4);
+			model.addAttribute("enlace3", enlace3);
 			return "rollistado";
 		}
 		
@@ -88,8 +88,9 @@ public class ComRolController {
 		}
 	
 	// Este metodo me permite cargar los datos para editar el rol del sistema
-	@RequestMapping(value = "/rolformedit")
-	public String editarRol(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash) {		
+	@RequestMapping(value = "/rolformf")
+	public String editarRol(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash) {
+		
 				
 		ComRole comRole = null;
 							
@@ -107,7 +108,7 @@ public class ComRolController {
 		model.put("titulo", utf8(this.titulorol));	
 		model.put("comRole", comRole);		
 		model.put("ajustes", enlaceprincipalajustes);
-		model.put("enlace4", enlace4);
+		model.put("enlace3", enlace3);
 		return "rolform";
 	}
 	

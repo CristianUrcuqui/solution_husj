@@ -45,21 +45,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-        <div class="row"><!-- CONTENIDO DESDE AQUI-->
-        
-        	<div class="container">
-			    <div class="row">
-				    <div class="col-md-2 grow">
-				      <a id="link" th:href="@{/indexcalendario}">
-				      <div class="card-counter primary">			      	
-				        <i class="fas fa-birthday-cake"></i>			        
-				        <span class="count-name">Cumpleaños Empleados</span>
-				      </div>
-				      </a>
-				    </div>
-				</div>
-			</div>
-			
+        <div class="row"><!-- CONTENIDO DESDE AQUI--> 		
+		  
+		  <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-mobile-alt"></i>
+                  Apps
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- APPS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/cumpleanosf.jpg" alt="cumpleanosf"/>
+							  <figcaption>
+							    <h3>Cumpleaños</h3>
+							    <div>
+							      <p>Empleados</p>
+							    </div><a th:href="@{/indexcalendario}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>	
 			                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -75,5 +92,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
+
 </body>
 </html>

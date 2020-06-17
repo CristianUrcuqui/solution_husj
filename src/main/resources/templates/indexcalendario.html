@@ -69,43 +69,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        
-        	<div class="container">
-			  <div class="row">
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/empleadocumple}">
-			      <div class="card-counter primary">			      	
-			        <i class="fas fa-user-tie"></i>			        
-			        <span class="count-name">Empleados</span>
-			      </div>
-			      </a>
-			    </div>
-			    
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/empleadohoy}">
-			      <div class="card-counter info">			      	
-			        <i class="fas fa-birthday-cake"></i>			        
-			        <span class="count-name">Hoy</span>
-			      </div>
-			      </a>
-			    </div>			
-			    
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/cumplecarform}">
-			      <div class="card-counter danger">			      	
-			        <i class="fas fa-upload"></i>			        
-			        <span class="count-name">Cargar Empleados CSV</span>
-			      </div>
-			      </a>
-			    </div>		    			    
-			
-			  		    			    
-			  </div><!-- /.row-card -->
-			</div><!-- /.container-card -->
-        
-        		
-			
-			                
+        <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-boxes"></i>
+                  Modulos
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- MODULOS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/empleados.jpg" alt="empleados"/>
+							  <figcaption>
+							    <h3>Empleados</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/empleadocumple}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/hoy.jpg" alt="hoy"/>
+							  <figcaption>
+							    <h3>Hoy</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/empleadohoy}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/cargar.jpg" alt="cargar"/>
+							  <figcaption>
+							    <h3>Cargar</h3>
+							    <div>
+							      <p>Empleados CSV</p>
+							    </div><a th:href="@{/cumplecarform}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>         
+          	                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

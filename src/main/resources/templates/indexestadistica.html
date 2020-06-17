@@ -47,30 +47,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        	<div class="container">
-			    <div class="row">
-				    
-				    <div class="col-md-2 grow">
-				      <a id="link" th:href="@{/indexcertificado}">
-				      <div class="card-counter primary">			      	
-				        <i class="fab fa-wpforms"></i>			        
-				        <span class="count-name">Certificados DF - NV</span>
-				      </div>
-				      </a>				    
-				    </div>
-				    
-				     <!-- <div class="col-md-2 grow">
-				      <a id="link" th:href="@{/indexmortalidad}">
-				      <div class="card-counter primary">			      	
-				        <i class="fas fa-cross"></i>			        
-				        <span class="count-name">Mortalidad</span>
-				      </div>
-				      </a>
-				    </div> -->
-				    
-				</div>
-			</div>
-			
+        
+        <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-mobile-alt"></i>
+                  Apps
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- APPS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/certificado.jpg" alt="certificado"/>
+							  <figcaption>
+							    <h3>Certificado</h3>
+							    <div>
+							      <p>Defunción - Nacido Vivo</p>
+							    </div><a th:href="@{/indexcertificado}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+<!-- 					    <div class="col-md-3"> -->
+<!-- 					    	</figure> -->
+<!-- 							<figure class="snip1166 navy"> -->
+<!-- 							  <img src="dist/img/mortalidad.jpg" alt="mortalidad"/> -->
+<!-- 							  <figcaption> -->
+<!-- 							    <h3>Mortalidad</h3> -->
+<!-- 							    <div> -->
+<!-- 							      <p></p> -->
+<!-- 							    </div><a th:href="@{/indexmortalidad}"></a> -->
+<!-- 							  </figcaption> -->
+<!-- 							</figure>					     -->
+<!-- 					    </div>					     -->
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>	     
 			                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

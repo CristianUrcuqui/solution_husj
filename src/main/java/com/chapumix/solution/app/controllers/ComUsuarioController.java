@@ -135,8 +135,9 @@ public class ComUsuarioController {
 	public String sincroniza(Map<String, Object> model) {
 		ComUsuario comUsuario = new ComUsuario();
 		model.put("titulo", utf8(this.titulosincronizarusuario));
+		model.put("ajustes", enlaceprincipalajustes);
 		model.put("comUsuario", comUsuario);
-		model.put("enlace8", enlace8);
+		model.put("enlace3", enlace3);
 		return "sincronizaform";
 	}
 	
@@ -176,7 +177,7 @@ public class ComUsuarioController {
 
 		//iComRoleService.save(comRole);
 		model.addAttribute("titulo", utf8(this.titulousuarios));
-		model.addAttribute("enlace8", enlace8);
+		model.addAttribute("enlace3", enlace3);
 		status.setComplete();
 		flash.addFlashAttribute("success", "Usuario sincronizado correctamente");
 		return "redirect:sincronizaform";

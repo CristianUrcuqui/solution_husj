@@ -17,7 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Favicon Icon -->
   <link rel="icon" type="image/png" th:href="@{../../dist/img/logologin.png}">
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" th:href="@{/plugins/fontawesome/css/all.css}">
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome/css/all.css}">  
   <!-- DataTables -->
   <link rel="stylesheet" th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables/extensions/Buttons/css/buttons.bootstrap4.min.css}">
@@ -99,8 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <aside th:fragment="menulateral" class="main-sidebar sidebar-dark-primary elevation-4 text-sm">
     <!-- Brand Logo -->
     <a th:href="@{/index}" class="brand-link">
-      <img src="dist/img/logo.png" alt="Solution Logo" class="brand-image img-circle elevation-3"
-           style="opacity: .8">
+      <img src="dist/img/logo.png" alt="Solution Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text h4 font-weight-light ">Solution</span>
     </a>
 
@@ -301,28 +300,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
               <li class="nav-item">
-                <a th:href="@{/usuariolistado}" th:class="${enlace3} ? 'nav-link active' : 'nav-link'">
+                <a th:href="@{/indexajustes}" th:class="${enlace3} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
-                  <p>Usuarios</p>
+                  <p>Menú Principal</p>
                 </a>
               </li>                         
-            </ul>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
-              <li class="nav-item">
-                <a th:href="@{/rollistado}" th:class="${enlace4} ? 'nav-link active' : 'nav-link'">
-                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
-                  <p>Roles</p>
-                </a>
-              </li>                         
-            </ul>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
-              <li class="nav-item">
-                <a th:href="@{/sincronizaform}" th:class="${enlace8} ? 'nav-link active' : 'nav-link'">
-                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
-                  <p>Sincronización Usuarios</p>
-                </a>
-              </li>                         
-            </ul>                         
+            </ul>                               
           </li>          
         </ul>
       </nav>
@@ -389,7 +372,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.8.16
+      <b>Version</b> 0.8.18
     </div>
   </footer>
 </div>

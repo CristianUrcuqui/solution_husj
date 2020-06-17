@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Patología</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Ajustes Sistema</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -40,8 +40,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->    
-
+    <!-- /.content-header -->
+      
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
@@ -52,33 +52,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="fas fa-mobile-alt"></i>
-                  Apps
+                  Modulos
                 </h3>
               </div>
               <div class="card-body pad table-responsive">                 
                 	<div class="row">
                 	
-                		<!-- APPS --> 					    
+                		<!-- MODULOS --> 					    
 					    <div class="col-md-3">
 					    	</figure>
-							<figure class="snip1166 navy">
-							  <img src="dist/img/procedimiento.jpg" alt="procedimiento"/>
+							<figure class="snip1166 red">
+							  <img src="dist/img/usuarios.jpg" alt="encuestau"/>
 							  <figcaption>
-							    <h3>Resultados</h3>
+							    <h3>Usuarios</h3>
 							    <div>
-							      <p>a procedimientos</p>
-							    </div><a th:href="@{/indexprocesar}"></a>
+							      <p></p>
+							    </div><a th:href="@{/usuariolistado}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>				    
+					    </div>					    
+					   			    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 red">
+							  <img src="dist/img/rol.jpg" alt="rol"/>
+							  <figcaption>
+							    <h3>Roles</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/rollistado}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>					    
+					    				    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 red">
+							  <img src="dist/img/sincronizar.jpg" alt="sincronizar"/>
+							  <figcaption>
+							    <h3>Sincronizar</h3>
+							    <div>
+							      <p>usuarios</p>
+							    </div><a th:href="@{/sincronizaform}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>					    
 					   
 					    
 				    </div><!-- /.row -->          
               </div>         
             </div><!-- /.card -->
-          </div>         
-	          
-	          			                
+          </div>	
+			
+			                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

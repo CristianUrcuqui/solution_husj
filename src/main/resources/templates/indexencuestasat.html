@@ -70,34 +70,51 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
         
-        	<div class="container">
-			  <div class="row">
-			    <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/encuestaform}">
-			      <div class="card-counter primary">			      	
-			        <i class="fas fa-poll-h"></i>			        
-			        <span class="count-name">Encuesta</span>
-			      </div>
-			      </a>
-			    </div>
-			    
-			    
-			     <div class="col-md-2 grow">
-			      <a id="link" th:href="@{/consolidadoencuesta}">
-			      <div class="card-counter info">			      	
-			        <i class="fas fa-clipboard-list"></i>			        
-			        <span class="count-name">Consolidado</span>
-			      </div>
-			      </a>
-			    </div>	    			        			    
-			
-			  		    			    
-			  </div><!-- /.row-card -->
-			</div><!-- /.container-card -->
-        
-        		
-			
-			                
+           <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-boxes"></i>
+                  Modulos
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- MODULOS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/encuesta.jpg" alt="encuesta"/>
+							  <figcaption>
+							    <h3>Encuesta</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/encuestaform}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
+					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/consulta.jpg" alt="consulta"/>
+							  <figcaption>
+							    <h3>Consolidado</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/consolidadoencuesta}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>  
+          
+          		                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
