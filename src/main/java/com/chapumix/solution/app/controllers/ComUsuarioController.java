@@ -171,12 +171,15 @@ public class ComUsuarioController {
 			
 		}else {
 			flash.addFlashAttribute("error", "El documento del usuario es requerido.");
+			model.addAttribute("ajustes", enlaceprincipalajustes);
+			model.addAttribute("enlace3", enlace3);
 			return "redirect:sincronizaform";
 		}
 		//String mensajeFlash = (comRole.getId() != null) ? "El rol fue editado correctamente" : "El rol fue creado correctamente";
 
 		//iComRoleService.save(comRole);
 		model.addAttribute("titulo", utf8(this.titulousuarios));
+		model.addAttribute("ajustes", enlaceprincipalajustes);
 		model.addAttribute("enlace3", enlace3);
 		status.setComplete();
 		flash.addFlashAttribute("success", "Usuario sincronizado correctamente");

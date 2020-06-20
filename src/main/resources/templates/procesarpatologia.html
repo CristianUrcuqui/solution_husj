@@ -25,7 +25,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
-     <div th:replace="layout/layout ::mensajes"></div>
+    
+    <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>     
+     
+     <!-- Lista para mostrar los errorer antes del formulario -->
+	 <div class="col-sm-12">
+		 <div th:object="${patProcedimiento}" th:remove="tag">
+			 <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+			 	<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			 </ul>
+		 </div>
+	 </div>
+     
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
@@ -88,16 +103,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container py-2">
-        <div class="row"><!-- CONTENIDO DESDE AQUI-->
-        
-        <!-- Lista para mostrar los errorer antes del formulario -->
-	        <div class="col-md-12">
-	        	<div th:object="${patProcedimiento}" th:remove="tag">
-					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-			</div>
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->      
         
         	<!-- detalle 1 -->
         	<div class="card col-md-12">

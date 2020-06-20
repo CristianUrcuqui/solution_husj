@@ -24,8 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
-     <div th:replace="layout/layout ::mensajes"></div>
+    <div class="content-header">     
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
@@ -47,19 +46,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        	<div class="container">
-			    <div class="row">
-				    <div class="col-md-2 grow">
-				      <a id="link" th:href="@{/indexasignacioncamas}">
-				      <div class="card-counter primary">			      	
-				        <i class="fas fa-bed"></i>			        
-				        <span class="count-namev2">Solicitud y asignación de camas</span>
-				      </div>
-				      </a>
-				    </div>
-				</div>
-			</div>
-			
+          <div class="col-md-12 mt-3">
+            <div class="card card-primary card-outline animacion">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-mobile-alt"></i>
+                  Apps
+                </h3>
+              </div>
+              <div class="card-body pad table-responsive">                 
+                	<div class="row">
+                	
+                		<!-- APPS --> 					    
+					    <div class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 navy">
+							  <img src="dist/img/cama.jpg" alt="cama"/>
+							  <figcaption>
+							    <h3>Solicitud</h3>
+							    <div>
+							      <p>Y asignación de camas</p>
+							    </div><a th:href="@{/indexasignacioncamas}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
+					   
+					    
+				    </div><!-- /.row -->          
+              </div>         
+            </div><!-- /.card -->
+          </div>
+                		
 			                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

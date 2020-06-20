@@ -146,7 +146,7 @@ public class EstCertificadoController {
 		return "certificadocsvform";
 	}
 	
-	// Este metodo me permite los seriales por medio de un archivo CSV
+	// Este metodo me permite cargar los seriales por medio de un archivo CSV
 	@PostMapping("/uploadcsvserial")
     public String uploadCSVFileSerial(@RequestParam("archivo") MultipartFile file, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 
@@ -238,14 +238,12 @@ public class EstCertificadoController {
 	// Este metodo me permite visualizar o cargar el formulario del certificado
 	@GetMapping("/certificadoform")
 	public String crearCertificado(Map<String, Object> model) {		
-		EstCertificado estCertificado = new EstCertificado();		
 		
-		//obtengo el listado de servicios
-		List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();		
+		EstCertificado estCertificado = new EstCertificado();			
 		
 		model.put("titulo", utf8(this.titulocertificado));
 		model.put("tipos", iEstTipoCertificadoService.findAll());
-		model.put("servicio", servicio);
+		model.put("servicio", iGenAreSerService.findByOrderNombre());
 		model.put("estCertificado", estCertificado);
 		model.put("enlace7", enlace7);
 		return "certificadoform";
@@ -255,14 +253,11 @@ public class EstCertificadoController {
 	@RequestMapping(value = "/certificadoform", method = RequestMethod.POST)
 	public String guardarCertificado(@Valid EstCertificado estCertificado, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 		
-		if (result.hasErrors()) {
-			
-			//obtengo el listado de servicios
-			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
-			
+		if (result.hasErrors()) {			
+						
 			model.addAttribute("titulo", utf8(this.tituloestadistica));
 			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
-			model.addAttribute("servicio", servicio);			
+			model.addAttribute("servicio", iGenAreSerService.findByOrderNombre());			
 			model.addAttribute("estCerticado", estCertificado);
 			model.addAttribute("enlace7", enlace7);
 			return "certificadoform";
@@ -280,21 +275,7 @@ public class EstCertificadoController {
 			model.addAttribute("error", "El tipo de certificado es requerido.");
 			return "certificadoform";
 		}
-		
-		if(estCertificado.getGenAreSer() == null) {
-			//obtengo el listado de servicios
-			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
-			
-			model.addAttribute("titulo", utf8(this.tituloestadistica));
-			model.addAttribute("tipos", iEstTipoCertificadoService.findAll());
-			model.addAttribute("servicio", servicio);			
-			model.addAttribute("estCerticado", estCertificado);
-			model.addAttribute("enlace7", enlace7);
-			model.addAttribute("error", "El servicio es requerido.");
-			return "certificadoform";
-		}
-		
-		if(estCertificado.getGenPacien().getPacNumDoc() == "") {
+		else if(estCertificado.getGenPacien().getPacNumDoc() == "") {
 			//obtengo el listado de servicios
 			List<GenAreSer> servicio = iGenAreSerService.findByOrderNombre();
 			

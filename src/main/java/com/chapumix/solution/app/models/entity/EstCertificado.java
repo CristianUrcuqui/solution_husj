@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "est_certificado", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_serial"})})
@@ -97,6 +98,7 @@ public class EstCertificado implements Serializable {
 		this.fechaAltaAct = fechaAltaAct;
 	}	
 		
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_servicio", nullable = false)
 	public GenAreSer getGenAreSer() {

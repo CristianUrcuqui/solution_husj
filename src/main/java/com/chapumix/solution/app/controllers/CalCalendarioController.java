@@ -226,11 +226,14 @@ public class CalCalendarioController {
                 
                 // muestra mensaje despues de guardar correctamente
                 status.setComplete();
-                String mensajeFlash = "El archivo CSV se proceso correctamente";                
+                String mensajeFlash = "El archivo CSV se proceso correctamente";
+                model.addAttribute("calidad", enlaceprincipalcalidad);
+        		model.addAttribute("enlace5", enlace5);	
                 model.addAttribute("success", mensajeFlash);
 
             } catch (Exception ex) {
-            	System.out.println(ex);
+            	model.addAttribute("calidad", enlaceprincipalcalidad);
+        		model.addAttribute("enlace5", enlace5);	
                 model.addAttribute("error", "Se produjo un error al procesar el archivo CSV.");                
             }
         }

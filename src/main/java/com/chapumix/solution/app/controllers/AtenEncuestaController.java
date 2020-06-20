@@ -165,6 +165,8 @@ public class AtenEncuestaController {
 			if (fechaInicial.equals("") && fechaFinal.equals("")) {
 				errorFechas = "Debes establecer una fecha inicial y fecha final";
 				model.addAttribute("error", errorFechas);
+				model.addAttribute("siau", enlaceprincipalsiau);
+				model.addAttribute("enlace9", enlace9);
 				return "consolidadoencuesta";
 			}
 			
@@ -172,6 +174,8 @@ public class AtenEncuestaController {
 			if (fechaInicial.equals("") || fechaFinal.equals("")) {
 				errorFechas = "Debes establecer una fecha inicial y fecha final";
 				model.addAttribute("error", errorFechas);
+				model.addAttribute("siau", enlaceprincipalsiau);
+				model.addAttribute("enlace9", enlace9);
 				return "consolidadoencuesta";
 			}
 			
@@ -300,28 +304,16 @@ public class AtenEncuestaController {
 			
 			//model.addAttribute("medicos", medicos);
 			model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
-			model.addAttribute("listprocpat", atenEncuConsolidadoDTO);
+			model.addAttribute("listprocpat", atenEncuConsolidadoDTO);			
+			model.addAttribute("siau", enlaceprincipalsiau);
 			model.addAttribute("enlace9", enlace9);
 			model.addAttribute("success", mensajeReporte);
 			return  null;
 			
-	  }		
-
-	
-
-	// Este metodo me permite visualizar o cargar el formulario para consultar consolidado de encuestas negativas
-	@GetMapping("/negativaencuesta")
-	public String crearListaConsolidadoNegativo(Map<String, Object> model) {
-		AtenEncuDatoBasico atenEncuDatoBasico = new AtenEncuDatoBasico();
-		model.put("titulo", utf8(this.titulonegativa));
-		model.put("atenEncuDatoBasico", atenEncuDatoBasico);
-		model.put("siau", enlaceprincipalsiau);
-		model.put("enlace9", enlace9);
-		return "negativaencuesta";
-	}
-	
-	
-	
+	  }	
+	  
+	  
+	  
 	/* ----------------------------------------------------------
      * METODOS ADICIONALES 
      * ---------------------------------------------------------- */

@@ -25,7 +25,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
-     <div th:replace="layout/layout ::mensajes"></div>
+    
+    <!-- Lista para mostrar los errorer antes del formulario -->
+	<div class="col-md-12">
+		<div th:object="${calCalendario}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+	</div>
+         
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
@@ -88,17 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container py-5">
-        <div class="row"><!-- CONTENIDO DESDE AQUI-->
-        
-        <!-- Lista para mostrar los errorer antes del formulario -->
-	         <div class="col-md-12">
-	        	<div th:object="${calCalendario}" th:remove="tag">
-					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-			</div>
-         	
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->        	
          	
          	<div class="col-md-8 mx-auto">
          		<div class="card card-primary animacion">
