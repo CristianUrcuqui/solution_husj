@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_PROCESAR')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/procesar.jpg" alt="procesar"/>
@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_CONSULTAS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/consulta.jpg" alt="consulta"/>

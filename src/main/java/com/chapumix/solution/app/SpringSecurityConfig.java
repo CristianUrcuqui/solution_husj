@@ -22,33 +22,40 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/dist/**", "/plugins/**").permitAll() //rutas permitidas
-		.antMatchers("/indexpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/indexprocesar/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procedimientopatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procesarpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/editarpatologiaprocesada/**").hasAnyRole("ADMIN", "PATOLOGIA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y PATOLOGIA, se puede usar con mas rutas
-		.antMatchers("/eliminarpatologiaprocesada/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/usuarioform/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/usuariolistado/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/rolform/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/rollistado/**").hasAnyRole("ADMIN") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, se puede usar con mas rutas
-		.antMatchers("/indexcalidad/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
-		.antMatchers("/indexcalendario/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
-		.antMatchers("/empleadocumple/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
-		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y CALIDAD, se puede usar con mas rutas
-		.antMatchers("/indexmedicinainterna/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN y MEDICINA_INTERNA, se puede usar con mas rutas
-		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "MEDICINA_INTERNA", "ENFERMERA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, MEDICINA_INTERNA, ENFERMERAS se puede usar con mas rutas
-		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
-		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
-		.antMatchers("/certificadoestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA", "ESTADISTICA_MEDICO") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA, MEDICO se puede usar con mas rutas
-		.antMatchers("/certificadocsvform/**").hasAnyRole("ADMIN", "ESTADISTICA") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, ESTADISTICA se puede usar con mas rutas
-		.antMatchers("/indexsiau/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
-		.antMatchers("/indexencuestasat/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
-		.antMatchers("/encuestaformt/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
-		.antMatchers("/consolidadoencuesta/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
-		.antMatchers("/negativaencuesta/**").hasAnyRole("ADMIN", "SIAU") //este me permite solo visualizar la ruta a quienes tengan el role ADMIN, SIAU se puede usar con mas rutas
+		//usuarios administradores
+		.antMatchers("/usuarioform/**").hasAnyRole("ADMIN") 
+		.antMatchers("/usuariolistado/**").hasAnyRole("ADMIN") 
+		.antMatchers("/rolform/**").hasAnyRole("ADMIN") 
+		.antMatchers("/rollistado/**").hasAnyRole("ADMIN") 
+		//servicio calidad cumpleaños
+		.antMatchers("/indexcalidad/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS") 
+		.antMatchers("/indexcalendario/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_EMPLEADOS", "CALIDAD_CUMPLEANOS_HOY", "ROLE_CALIDAD_CUMPLEANOS_CARGAR") 
+		.antMatchers("/empleadocumple/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_EMPLEADOS", "CALIDAD_CUMPLEANOS_HOY", "ROLE_CALIDAD_CUMPLEANOS_CARGAR") 		
+		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_EMPLEADOS", "CALIDAD_CUMPLEANOS_HOY", "ROLE_CALIDAD_CUMPLEANOS_CARGAR") 
+		//servicio estadistica certificado
+		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO", "ESTADISTICA_MORTALIDAD") 
+		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_CERTIFICADO", "ESTADISTICA_CERTIFICADO_CARGAR") 
+		.antMatchers("/certificadoestadistica/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_CERTIFICADO", "ESTADISTICA_CERTIFICADO_CARGAR") 
+		.antMatchers("/certificadocsvform/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_CERTIFICADO", "ESTADISTICA_CERTIFICADO_CARGAR")
+		//servicio estadistica mortalidad
+		.antMatchers("/indexmortalidad/**").hasAnyRole("ADMIN", "ESTADISTICA_MORTALIDAD_ANALISIS", "ESTADISTICA_MORTALIDAD_REPORTE")
+		.antMatchers("/mortalidadform/**").hasAnyRole("ADMIN", "ESTADISTICA_MORTALIDAD_ANALISIS", "ESTADISTICA_MORTALIDAD_REPORTE")
+		.antMatchers("/reportemortalidad/**").hasAnyRole("ADMIN", "ESTADISTICA_MORTALIDAD_ANALISIS", "ESTADISTICA_MORTALIDAD_REPORTE")		
+		//servicio medicina interna
+		.antMatchers("/indexmedicinainterna/**").hasAnyRole("ADMIN", "MEDICINAINTERNA_ASIGNACIONCAMAS") 
+		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "MEDICINAINTERNA_ASIGNACIONCAMAS_SOLICITUDES", "MEDICINAINTERNA_ASIGNACIONCAMAS_TRAMITADAS","MEDICINAINTERNA_ASIGNACIONCAMAS_RECHAZADAS") 
+		//servicio patologia
+		.antMatchers("/indexpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS") 
+		.antMatchers("/indexprocesar/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS_PROCESAR","PATOLOGIA_PROCEDIMIENTOS_CONSULTAS") 
+		.antMatchers("/procedimientopatologia/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS_PROCESAR","PATOLOGIA_PROCEDIMIENTOS_CONSULTAS") 
+		.antMatchers("/procesarpatologia/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS_PROCESAR","PATOLOGIA_PROCEDIMIENTOS_CONSULTAS") 
+		.antMatchers("/procedimientopatologiageneral/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS_PROCESAR","PATOLOGIA_PROCEDIMIENTOS_CONSULTAS")		
+		.antMatchers("/editarpatologiaprocesada/**").hasAnyRole("ADMIN", "PATOLOGIA_PROCEDIMIENTOS_PROCESAR","PATOLOGIA_PROCEDIMIENTOS_CONSULTAS")			
+		//servicio siau
+		.antMatchers("/indexsiau/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS") 
+		.antMatchers("/indexencuestasat/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 
+		.antMatchers("/encuestaformt/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 
+		.antMatchers("/consolidadoencuesta/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 		
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()

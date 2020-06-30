@@ -8,6 +8,7 @@ if (nodes != null){
 	setTimeout(() => {
 		for(let i = 0, j = nodes.length; i < j; i++) {
 		    nodes[i].remove()
+		    //nodes[i].style.visibility = "hidden";		    
 		}	
 	}, 7000);
 }

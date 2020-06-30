@@ -300,6 +300,8 @@ input[type=number] {
  .fieldset {
 	font-family: 'Coda', cursive;
 	font-family: 14px;		
+	color: #0078FA;
+				
 }
 
 /******Estilo para los textos de los input******/
@@ -480,4 +482,9 @@ figure.snip1166.hover figcaption p {
   opacity: 0.8;
   -webkit-transform: translateY(0);
   transform: translateY(0);
+}
+
+/******Estilo para los checkbox******/
+.checkbox {    
+    font-size: 12px;
 }

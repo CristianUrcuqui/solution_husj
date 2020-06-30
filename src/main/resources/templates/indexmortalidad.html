@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Encuesta De Satisfacción Del Usuario</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Mortalidad</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn bg-gradient-primary" th:href="@{/indexsiau}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/indexestadistica}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -68,7 +68,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        
            <div class="col-md-12 mt-3">
             <div class="card card-primary card-outline animacion">
               <div class="card-header">
@@ -81,40 +80,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SIAU_ENCUESTAS_ENCUESTA')" class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_ESTADISTICA_MORTALIDAD_ANALISIS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
-							  <img src="dist/img/encuesta.jpg" alt="encuesta"/>
+							  <img src="dist/img/analisis.jpg" alt="analisis"/>
 							  <figcaption>
-							    <h3>Encuesta</h3>
+							    <h3>Análisis</h3>
 							    <div>
 							      <p></p>
-							    </div><a th:href="@{/encuestaform}"></a>
+							    </div><a th:href="@{/mortalidadform}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>				    
+					    </div>
 					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SIAU_ENCUESTAS_CONSOLIDADO')" class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_ESTADISTICA_MORTALIDAD_REPORTE')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
-							  <img src="dist/img/consulta.jpg" alt="consulta"/>
+							  <img src="dist/img/reporte.jpg" alt="reporte"/>
 							  <figcaption>
-							    <h3>Consolidado</h3>
+							    <h3>Reporte</h3>
 							    <div>
 							      <p></p>
-							    </div><a th:href="@{/consolidadoencuesta}"></a>
+							    </div><a th:href="@{/reportemortalidad}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>				    
+					    </div>			    
 					   
 					    
 				    </div><!-- /.row -->          
               </div>         
             </div><!-- /.card -->
-          </div>  
-          
-          		                
-        </div><!-- /.row -->
+          </div> 
+                     
+        </div><!-- /.row -->     
+        
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
@@ -128,5 +127,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
+<script>
+	window.onload = function(){
+		let contenedor = document.getElementById('contenedor_carga');
+		contenedor.style.visibility = 'hidden';
+		contenedor.style.opacity = '0';
+	}
+</script>
 </body>
 </html>

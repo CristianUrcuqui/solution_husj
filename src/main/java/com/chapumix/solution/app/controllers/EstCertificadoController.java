@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,31 +294,11 @@ public class EstCertificadoController {
 		
 		//valido si el paciente existe en solution para ir alimentando tabla de pacientes en solution
 		GenPacien validarPaciente = iGenPacienService.findByNumberDoc(estCertificado.getGenPacien().getPacNumDoc());
-		if(validarPaciente == null) {
-			
-			// proceso API para buscar el paciente
-			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + estCertificado.getGenPacien().getPacNumDoc(), HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
-			List<GenPacienDTO> dinamica = respuestaa.getBody();
-			
-			//buscamos el sexo del paciente			
-			ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
-			
-			//buscamos el tipo de documento del paciente			
-			ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());
-			
-			GenPacien agregarPaciente = new GenPacien();
-			agregarPaciente.setOid(dinamica.get(0).getOid());
-			agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
-			agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
-			agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
-			agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
-			agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
-			agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
-			agregarPaciente.setComGenero(sexoPaciente);
-			agregarPaciente.setComTipoDocumento(tipoDocumento);
-			iGenPacienService.save(agregarPaciente);
-			
-		}
+		
+		
+		// sincronizo paciente de dinamica a solution en caso de que no exista
+		sincronizarPaciente(validarPaciente, estCertificado.getGenPacien().getPacNumDoc());		
+		
 		
 		//busco el paciente para agregarlo al certificado
 		GenPacien paciente = iGenPacienService.findByNumberDoc(estCertificado.getGenPacien().getPacNumDoc());
@@ -352,8 +333,9 @@ public class EstCertificadoController {
 			flash.addFlashAttribute("error", "El paciente ya posee un certificado de " + estCertificado.getEstSerial().getEstTipoCertificado().getTipoCertificado());
 			return "redirect:certificadoform";			
 		}		
-	}
+	}	
 	
+
 	// Este metodo me permite eliminar el certificado
 	@RequestMapping(value = "/eliminarcertificado/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash, Principal principal) {
@@ -410,15 +392,48 @@ public class EstCertificadoController {
      * ---------------------------------------------------------- */							
 	
 	//Se usa para codificacion ISO-8859-1 a UTF-8  
-		public String utf8(String input) {
-			String output = "";
-			try {
-				/* From ISO-8859-1 to UTF-8 */
-				output = new String(input.getBytes("ISO-8859-1"), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			return output;
+	public String utf8(String input) {
+		String output = "";
+		try {
+			/* From ISO-8859-1 to UTF-8 */
+			output = new String(input.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
+		return output;
+	}
+		
+	
+	// Se usa para sincronizar el paciente de dinamica a solution en caso de que no exista
+	private void sincronizarPaciente(GenPacien validarPaciente, @NotEmpty String pacNumDoc) {
+		if(validarPaciente == null) {
+			
+			// proceso API para buscar el paciente
+			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
+			List<GenPacienDTO> dinamica = respuestaa.getBody();
+			
+			//buscamos el sexo del paciente			
+			ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
+			
+			//buscamos el tipo de documento del paciente			
+			ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());
+			
+			GenPacien agregarPaciente = new GenPacien();
+			agregarPaciente.setOid(dinamica.get(0).getOid());
+			agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
+			agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
+			agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
+			agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
+			agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
+			agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
+			agregarPaciente.setComGenero(sexoPaciente);
+			agregarPaciente.setComTipoDocumento(tipoDocumento);
+			iGenPacienService.save(agregarPaciente);
+			
+		}
+		
+	}
+
+		
 
 }

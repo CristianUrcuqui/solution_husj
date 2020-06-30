@@ -20,6 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
 
+
   <!-- INICIO CONTENIDO -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -80,7 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_CALIDAD_CUMPLEANOS_EMPLEADOS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/empleados.jpg" alt="empleados"/>
@@ -93,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_CALIDAD_CUMPLEANOS_HOY')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/hoy.jpg" alt="hoy"/>
@@ -106,7 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_CALIDAD_CUMPLEANOS_CARGAR')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/cargar.jpg" alt="cargar"/>

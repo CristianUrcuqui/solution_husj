@@ -132,7 +132,7 @@ public class AtenEncuestaController {
 	
 	// Este metodo me permite guardar la encuesta
 	@RequestMapping(value = "/encuestaform", method = RequestMethod.POST)
-	public String guardarRol(@Valid AtenEncuDatoBasico atenEncuDatoBasico, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
+	public String guardarEncuesta(@Valid AtenEncuDatoBasico atenEncuDatoBasico, BindingResult result, Model model, Principal principal, RedirectAttributes flash, SessionStatus status) {
 		
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
@@ -298,16 +298,13 @@ public class AtenEncuestaController {
 				
 			} catch (IOException e) {						
 				e.printStackTrace();
-			}
-			
-			String mensajeReporte = "Reporte generado correctamente en el escritorio";
+			}			
 			
 			//model.addAttribute("medicos", medicos);
 			model.addAttribute("titulo", utf8(this.tituloencuestasatisfaccion));
 			model.addAttribute("listprocpat", atenEncuConsolidadoDTO);			
 			model.addAttribute("siau", enlaceprincipalsiau);
-			model.addAttribute("enlace9", enlace9);
-			model.addAttribute("success", mensajeReporte);
+			model.addAttribute("enlace9", enlace9);			
 			return  null;
 			
 	  }	
@@ -380,7 +377,7 @@ public class AtenEncuestaController {
         c00.setCellValue(title);
         c00.setCellStyle(titleStyle);
         // Combinar celdas. Los parámetros son fila inicial, fila final, columna inicial y columna final (comienza el índice 0)
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 61));//Operación celda de combinación en encabezado, el número total de columnas es 16       
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 61));//Operación celda de combinación en encabezado, el número total de columnas es 61       
          
         
         //Segundo elemento       
@@ -687,9 +684,7 @@ public class AtenEncuestaController {
                 tempCell.setCellValue(tempValue);
                                 
             }
-		}     
-       
-        
+		} 
         
         
         //este me permite exportar y abrir dialogo para guardar el archivo

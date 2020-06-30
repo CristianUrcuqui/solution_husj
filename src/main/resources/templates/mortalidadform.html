@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+     
+     <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>     
+     
+     <!-- Lista para mostrar los errorer antes del formulario -->
+	 <div class="col-sm-12">
+		 <div th:object="${estMortalidad}" th:remove="tag">
+			 <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+			 	<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			 </ul>
+		 </div>
+	 </div>
+     
+          
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Mortalidad</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">					
+					  	<div class="col-md-12">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-secondary" th:href="@{/indexmortalidad}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>   
+
+    <!-- Main content -->    
+    <div class="content">
+      <div class="container py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->    
+			
+			
+			<div class="col-md-12 mx-auto">
+				
+				<div class="card card-primary animacion">
+					<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Analizar Mortalidad</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    <form id="editarmortalidad"  class="form-horizontal" th:action="@{/mortalidadform}" th:object="${estMortalidad}" role="form" method="post">
+                    	
+                    	<h5 class="fieldset">Datos Paciente</h5>                    	
+                    	
+                    	<div class="form-row">
+                    		
+                    		<!--fila1--> 
+                    		<div class="col-md-3 pb-3 required">	                            
+	                            <label class="control-label" for="paciente">Documento Paciente</label>	                            
+	                            <input id="paciente" type="text" th:field="*{genPacien.pacNumDoc}" name="buscar_paciente" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">	                            
+	                        </div>	                        
+	                        <div class="col-md-9 pb-3">	                        	
+	                        </div>
+	                        
+	                        <!--fila2-->	                        
+	                        <div class="col-md-6 pb-3">	                            
+	                            <label class="control-label" for="nombre">Nombres</label>	                            
+	                            <input id="nombre" type="text" name="pacNombre" th:value="${pacNombre}"  class="form-control form-control-sm" readonly>	                            
+	                        </div>
+	                        
+	                        <div class="col-md-6 pb-3">	                            
+	                            <label class="control-label" for="apellido">Apellidos</label>	                            
+	                            <input id="apellido" type="text" name="pacApellido" th:value="${pacApellido}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <!--fila3-->
+	                        <div class="col-md-2 pb-3">
+	                        	<label class="control-label" for="ingreso">Ingreso</label>	                            
+	                        	<input id="ingreso" type="text" name="ingreso" th:value="${ingreso}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <div class="col-md-2 pb-3">	                            
+	                            <label class="control-label" for="edad">Edad</label>	                            
+	                            <input id="edad" type="text" name="edad" th:value="${edad}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <div class="col-md-2 pb-3">	                            
+	                            <label class="control-label" for="genero">Genero</label>	                            
+	                            <input id="genero" type="text" name="genero" th:value="${genero}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <div class="col-md-2 pb-3">	                            
+	                            <label class="control-label" for="municipio">Municipio</label>	                            
+	                            <input id="municipio" type="text" name="municipio" th:value="${municipio}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <div class="col-md-2 pb-3">	                            
+	                            <label class="control-label" for="regimen">Régimen</label>	                            
+	                            <input id="regimen" type="text" name="regimen" th:value="${regimen}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <div class="col-md-2 pb-3">	                            
+	                            <label class="control-label" for="tipoingreso">Tipo Ingreso</label>	                            
+	                            <input id="tipoingreso" type="text" name="tipoIngreso" th:value="${tipoIngreso}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <!--fila4-->
+	                        <div class="col-md-12 pb-3">	                            
+	                            <label class="control-label" for="diagprincipal">Diagnóstico Según Rips</label>	                            
+	                            <input id="diagprincipal" type="text" name="diagnostico" th:value="${diagnostico}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <!--fila5-->
+	                        <div class="col-md-12 pb-3">	                            
+	                            <label class="control-label" for="entidad">Entidad</label>	                            
+	                            <input id="entidad" type="text" name="entidad" th:value="${entidad}" class="form-control form-control-sm" readonly>
+	                        </div>
+	                        
+	                        <!--fila6-->
+	                        <div class="col-md-6 pb-3">
+	                        	<label class="control-label" for="fechaingreso">Fecha y Hora De Ingreso</label>	                            
+	                        	<input id="fechaingreso" type="text" name="fechaIngreso" th:value="${fechaIngreso}" class="form-control form-control-sm customtxt" readonly>
+	                        </div>
+	                        <div class="col-md-6 pb-3">	                            
+	                            <label class="control-label" for="fechadefuncion">Fecha y Hora De Defunción</label>	                            
+	                            <input id="fechadefuncion" type="text" name="fechaDefuncion" th:value="${fechaDefuncion}" class="form-control form-control-sm customtxt" readonly>
+	                        </div>	                        
+	                        
+	                        <!--fila7-->
+	                        <div class="col-md-12 pb-3 required">
+	                        	<label class="control-label" for="servicio">Servicio Donde Se Presento La Defunción</label>	                            
+	                        	<select id="servicio"  th:field="*{genAreSer}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="serv : ${servicio}" th:value="${serv.id}" th:text="${serv.gasNombre}"></option>	                          
+		                        </select>
+	                        </div>
+	                        
+	                        <!--fila8-->
+	                        <div class="col-md-12 pb-3 required">
+	                        	<label class="control-label" for="estadohoras">Estado En Horas</label>	                            
+	                        	<select id="estadohoras"  th:field="*{comEstadoHora}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="esthora : ${estadoHora}" th:value="${esthora.id}" th:text="${esthora.nombre}"></option>	                          
+		                        </select>
+	                        </div>	                        	                        
+	                                           	
+                    	</div>
+                    	
+                    	<hr>
+                    	
+                    	<h5 class="fieldset">Asistentes</h5>
+                    	
+                    	 <div class="form-row">
+                    	 
+	                    	 <!--fila9-->	                        
+		                     <div class="col-md-6 pb-3">	                            
+			                     <label class="control-label" for="nombresAsistentes">Nombres Completos</label>	                            
+			                     <input type="text" th:field="*{estAsistentes[0].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" tabindex="1">
+			                     <input type="text" th:field="*{estAsistentes[1].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="3">
+			                     <input type="text" th:field="*{estAsistentes[2].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="5">
+			                     <input type="text" th:field="*{estAsistentes[3].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="7">
+			                     <input type="text" th:field="*{estAsistentes[4].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="9">
+			                     <input type="text" th:field="*{estAsistentes[5].nombre}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="11">			                     
+			                     	                            
+		                     </div>
+		                        
+		                     <div class="col-md-6 pb-3">	                            
+			                     <label class="control-label" for="actividad">Actividades Dentro Del Grupo Asistencial</label>	                            
+			                     <input type="text" th:field="*{estAsistentes[0].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" tabindex="2">
+			                     <input type="text" th:field="*{estAsistentes[1].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="4">
+			                     <input type="text" th:field="*{estAsistentes[2].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="6">
+			                     <input type="text" th:field="*{estAsistentes[3].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="8">
+			                     <input type="text" th:field="*{estAsistentes[4].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="10">
+			                     <input type="text" th:field="*{estAsistentes[5].actividad}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" tabindex="12">			                     			                     
+		                     </div>                 
+		                      
+	                     </div>
+	                     
+	                    <hr>
+	                    
+	                    <h5 class="fieldset">Presentación Resumida Del Caso</h5>
+	                    
+	                    <div class="form-row">
+	                    
+	                    	 <!--fila10-->	                        
+		                     <div class="col-md-12 pb-3">                 
+			                     <textarea id="resumencaso" name="resumencaso" th:field="*{resumenCaso}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>	                     	                            
+		                     </div>
+		                     
+		                     <!--fila11-->
+		                     <div class="col-md-6 pb-3">
+		                     	 <label class="control-label" for="retraso">Retraso</label>
+		                     </div>
+		                     
+		                     <div class="col-md-6 pb-3">
+		                     	<label class="control-label" for="observaciones">Observaciones</label>
+		                     </div>		                     
+		                                       
+			                 <div class="form-group col-md-6 mt-3">
+			                 	<div class="form-check">
+			                 		<input id="retrasobox1" type="checkbox" th:field="*{estRetrasos[0].comRetraso}" value="1" class="form-check-input">
+                   				 	<label class="form-check-label">FALLA EN EL MANEJO AMBULATORIO</label>
+			                 	</div>
+			                 	
+			                 	<div class="form-check">
+			                 		<input id="retrasobox2" type="checkbox" th:field="*{estRetrasos[1].comRetraso}" value="2" class="form-check-input">
+                   				 	<label class="form-check-label">FALLA EN EL ACCESO AL SERVICIO, TIEMPO DE TRASLADO PROLONGADO</label>
+			                 	</div> 
+			                 	
+			                 	<div class="form-check">
+			                 		<input id="retrasobox3" type="checkbox" th:field="*{estRetrasos[2].comRetraso}" value="3" class="form-check-input">
+                   				 	<label class="form-check-label">FALLA DE LA OPORTUNIDAD DEL SERVICIO</label>
+			                 	</div> 
+			                 	
+			                 	<div class="form-check">
+			                 		<input id="retrasobox4" type="checkbox" th:field="*{estRetrasos[3].comRetraso}" value="4" class="form-check-input">
+                   				 	<label class="form-check-label">EVENTO ADVERSO</label>
+			                 	</div>               
+			                 </div>
+		                     
+		                     <div class="col-md-6 pb-3">		                                          
+			                     <textarea id="retrasotext1" th:field="*{estRetrasos[0].observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="1"></textarea>
+			                     <textarea id="retrasotext2" th:field="*{estRetrasos[1].observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" rows="1"></textarea>
+			                     <textarea id="retrasotext3" th:field="*{estRetrasos[2].observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" rows="1"></textarea>
+			                     <textarea id="retrasotext4" th:field="*{estRetrasos[3].observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" rows="1"></textarea>                 	                     	                            
+		                     </div>
+		                     
+		                     <div class="col-md-6 pb-3">
+	                        	<label class="control-label" for="apache">Apache(prints)</label>	                            
+	                        	<select id="apache"  th:field="*{comApache}" class="form-control form-control-sm">
+		                          <!--  <option value="" selected="selected">Seleccione</option>-->
+		                            <option th:each="apach : ${apache}" th:value="${apach.id}" th:text="${apach.nombre}"></option>	                          
+		                        </select>
+	                        </div>
+	                        
+	                        <div class="form-group col-md-12">			                 	
+			                 	<div class="form-check">			                 		
+			                 		<input id="codigolila" type="checkbox" th:field="*{codigoLila}" value="1" class="form-check-input">
+                   				 	<label class="form-check-label">CODIGO LILA</label>
+			                 	</div>              	               
+			                 </div>                
+	                    
+	                    </div>
+	                    
+	                    <hr>
+	                    
+	                    <h5 class="fieldset">Análisis</h5>
+	                    
+	                    <div class="form-row">
+	                    	
+	                    	<!--fila12-->	                        
+		                     <div class="col-md-12 pb-3">                 
+			                     <textarea id="analisis" name="analisis" th:field="*{analisis}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>	                     	                            
+		                     </div>
+		                     
+		                     <div class="col-md-12 pb-3">
+		                     	 <label class="control-label" for="retraso">Causas De La Defunción</label>
+		                     </div>
+		                     
+		                     <div class="col-md-12 pb-3">
+		                     	<label class="control-label" for="causadirecta">Causa Directa</label>	                            
+	                        	<select id="causadirecta"  th:field="*{estCausas[0].causaDirecta}" class="form-control form-control-sm">
+		                          	<option value="" selected="selected">Seleccione</option>
+		                            <option th:each="cie : ${cie10}" th:value="${cie.id}" th:text="${cie.nombre}"></option>	                          
+		                        </select>
+		                     </div>
+		                     
+		                     <div class="col-md-12 pb-3">
+		                     	<label class="control-label" for="causaantecedentes">Causas Antecedentes</label>	                            
+	                        	<select id="causaantecedentes"  th:field="*{estCausas[0].causaAntedecente}" class="form-control form-control-sm">
+		                          	<option value="" selected="selected">Seleccione</option>
+		                            <option th:each="cie : ${cie10}" th:value="${cie.id}" th:text="${cie.nombre}"></option>	                          
+		                        </select>
+		                        <input id="causaantecedentesa" type="text" th:field="*{estCausas[0].otraCausaA}"  onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-2">
+		                        <input id="causaantecedenteb" type="text" th:field="*{estCausas[0].otraCausaB}"  onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-2">		                        
+		                     </div> 
+		                     
+		                     <div class="col-md-12 pb-3">
+		                     	<label class="control-label" for="causaantecedentes">Otros Estados Patológicos</label>                 	
+		                        <input id="paciente" type="text" th:field="*{estCausas[0].otros}"  onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">		                        
+		                     </div>                
+	                    
+	                    </div>
+	                    
+	                     <hr>
+	                     
+	                     <div class="form-row">
+	                     
+	                     	<!--fila13-->
+	                     	<div class="col-md-4 pb-3 required">
+		                     	<label class="control-label" for="planmejora">Plan De Mejora</label>                 	
+		                        <select id="planmejora"  th:field="*{planMejora}" class="form-control form-control-sm">
+		                          	<option value="" selected="selected">Seleccione</option>
+		                            <option value="SI">SI</option>
+									<option value="NO">NO</option>							                          
+		                        </select>		                        
+		                     </div>
+		                     
+		                     <div class="col-md-8 pb-3">		                     	 
+		                     </div>
+		                     
+		                    
+		                     <div class="col-md-4">
+		                     	 <label class="control-label" for="accion">Acción</label>
+		                     </div>
+		                     
+		                     <div class="col-md-4">
+		                     	<label class="control-label" for="tiempo">Tiempo</label>
+		                     </div>
+		                     
+		                     <div class="col-md-4">
+		                     	<label class="control-label" for="responsable">Responsable</label>
+		                     </div>
+		                     
+		                     <div class="col-md-4 pb-3">                 
+			                     <textarea id="accion" name="accion" th:field="*{accion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>	                     	                            
+		                     </div>
+		                     
+		                     <div class="col-md-4 pb-3">                 
+			                     <textarea id="tiempo" name="tiempo" th:field="*{tiempo}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>	                     	                            
+		                     </div>
+		                     
+		                     <div class="col-md-4 pb-3">                 
+			                     <textarea id="responsable" name="responsable" th:field="*{responsable}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" rows="3" ></textarea>	                     	                            
+		                     </div>	 	                     
+	                     
+	                     </div>	                    
+	                    
+                    	
+                    	<div class="row mb-1">
+						    <div class="col-md-12">					      
+						      <button type="submit" form="editarmortalidad" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+						      <button type="reset" form="editarmortalidad" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+						    </div>
+					  	</div> 
+					  
+					 
+                    
+                    </form>             
+                    </div><!-- /.card-body -->				
+				</div><!-- /.card -->
+			
+			</div> 
+         	         
+          </div>    
+        <!-- /.row -->      
+        
+      </div><!-- /.container-->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+<script>		
+		//buscar paciente por un autocompletar	
+		$(function () {			
+			$("#paciente").autocomplete({
+					minLength: 4,
+					source : function(request, response) {
+					$.ajax({
+						url : "/pacientemortalidad/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								//console.log(item);
+								//console.log(data);
+								return {									
+									value : item.pacNumDoc,
+									label : item.pacNombre +" "+ item.pacApellido,
+									nombres : item.pacNombre,
+									apellidos : item.pacApellido,
+									ingreso : item.ingreso,
+									edad : item.edad,
+									genero : item.genero,
+									municipio : item.municipio,
+									regimen : item.regimen,
+									tipoingreso : item.tipoIngreso,
+									diagnostico : item.diagnostico,
+									entidad : item.entidad,
+									fechaingreso : item.fechaIngreso,
+									fechadefuncion : item.fechaDefuncion,
+								};
+							}));
+						},
+					});
+				},
+				select : function(event, ui) {
+					
+					let matched = $(".pacienteinfo p");
+					//console.log(matched.length);
+					//console.log(ui);
+					if(matched.length == 0){
+						let pass = $("#paciente").val();
+						if(pass.length > 0){
+							$("#paciente").val(ui.item.value);
+							$("#nombre").val(ui.item.nombres);
+							$("#apellido").val(ui.item.apellidos);
+							$("#ingreso").val(ui.item.ingreso);
+							$("#edad").val(ui.item.edad);
+							$("#genero").val(ui.item.genero);
+							$("#municipio").val(ui.item.municipio);
+							$("#regimen").val(ui.item.regimen);
+							$("#tipoingreso").val(ui.item.tipoingreso);
+							$("#diagprincipal").val(ui.item.diagnostico);
+							$("#entidad").val(ui.item.entidad);
+							$("#fechaingreso").val(ui.item.fechaingreso);
+							$("#fechadefuncion").val(ui.item.fechadefuncion);				
+							return false;
+						}
+					}				
+				}
+			});
+		});
+</script>
+
+<script>
+
+	$(document).ready(function(){
+		
+		let a = $("#planmejora option:selected" ).text();		
+		
+		//me permite desactivar los campos de observacion al cargar la aplicacion
+		$("#retrasotext1").prop("disabled", true);
+		$("#retrasotext2").prop("disabled", true);
+		$("#retrasotext3").prop("disabled", true);
+		$("#retrasotext4").prop("disabled", true);
+		$("#accion").prop("disabled", true);
+		$("#tiempo").prop("disabled", true);
+		$("#responsable").prop("disabled", true);
+		
+		
+		//$("#planmejora option[value=SI]").attr('selected', 'selected'); //planmejora
+		
+		
+		//me permite al dar click en el checkbox1 habilitar la observacion1 
+		$("#retrasobox1").click(function(){
+            if($(this).prop("checked") == true){
+                $("#retrasotext1").prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $("#retrasotext1").prop("disabled", true);
+            }
+        });
+		
+		//me permite al dar click en el checkbox2 habilitar la observacion2
+		$("#retrasobox2").click(function(){
+            if($(this).prop("checked") == true){
+                $("#retrasotext2").prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $("#retrasotext2").prop("disabled", true);
+            }
+        });
+		
+		//me permite al dar click en el checkbox3 habilitar la observacion3
+		$("#retrasobox3").click(function(){
+            if($(this).prop("checked") == true){
+                $("#retrasotext3").prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $("#retrasotext3").prop("disabled", true);
+            }
+        });
+		
+		//me permite al dar click en el checkbox4 habilitar la observacion4
+		$("#retrasobox4").click(function(){
+            if($(this).prop("checked") == true){
+                $("#retrasotext4").prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $("#retrasotext4").prop("disabled", true);
+            }
+        });
+		
+		
+		//me permite al seleccionar en SI del plan de mejora, me habilita los text area accion, tiempo y responsable.
+		$("#planmejora").on("change", function() {		
+			
+			let selectedCountry = $(this).children("option:selected").val();
+			
+			if(selectedCountry === "SI"){
+				$("#accion").prop("disabled", false);
+				$("#tiempo").prop("disabled", false);
+				$("#responsable").prop("disabled", false);	
+			}else{
+				$("#accion").prop("disabled", true);
+				$("#tiempo").prop("disabled", true);
+				$("#responsable").prop("disabled", true);	
+			}		
+		         
+		});	
+		
+	});
+
+</script>
+
+<script>
+
+	
+
+</script>
+
+</body>
+</html>
