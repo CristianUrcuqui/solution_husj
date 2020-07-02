@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -49,8 +50,10 @@ import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadTMPDTO;
 import com.chapumix.solution.app.models.entity.AtenEncuDatoBasico;
+import com.chapumix.solution.app.models.entity.ComApache;
 import com.chapumix.solution.app.models.entity.ComCie10;
 import com.chapumix.solution.app.models.entity.ComGenero;
+import com.chapumix.solution.app.models.entity.ComPrism;
 import com.chapumix.solution.app.models.entity.ComRegimen;
 import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoIngreso;
@@ -63,6 +66,7 @@ import com.chapumix.solution.app.models.service.IComApacheService;
 import com.chapumix.solution.app.models.service.IComCie10Service;
 import com.chapumix.solution.app.models.service.IComEstadoHoraService;
 import com.chapumix.solution.app.models.service.IComGeneroService;
+import com.chapumix.solution.app.models.service.IComPrismService;
 import com.chapumix.solution.app.models.service.IComRegimenService;
 import com.chapumix.solution.app.models.service.IComRetrasoService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
@@ -112,6 +116,9 @@ public class EstMortalidadController {
 	
 	@Autowired
 	private IComApacheService iComApacheService;
+	
+	@Autowired
+	private IComPrismService iComPrismService;
 		
 	@Autowired
 	private RestTemplate restTemplate;
@@ -153,6 +160,7 @@ public class EstMortalidadController {
 		model.put("retraso", iComRetrasoService.findAll());
 		model.put("estadoHora", iComEstadoHoraService.findAll());
 		model.put("apache", iComApacheService.findAll());
+		model.put("prism", iComPrismService.findAll());
 		model.put("cie10", iComCie10Service.findAllAsc());
 		model.put("estadistica", enlaceprincipalestadistica);
 		model.put("enlace7", enlace7);
@@ -178,6 +186,7 @@ public class EstMortalidadController {
 			model.addAttribute("retraso", iComRetrasoService.findAll());
 			model.addAttribute("estadoHora", iComEstadoHoraService.findAll());
 			model.addAttribute("apache", iComApacheService.findAll());
+			model.addAttribute("prism", iComPrismService.findAll());
 			model.addAttribute("cie10", iComCie10Service.findAllAsc());
 			model.addAttribute("pacNombre", pacNombre);
 			model.addAttribute("pacApellido", pacApellido);
@@ -205,7 +214,7 @@ public class EstMortalidadController {
 			sincronizarPaciente(validarPaciente, estMortalidad.getGenPacien().getPacNumDoc());
 		}				
 		
-		//busco el analisis para verificar que solo se encuentre registrado tan solo un registro
+		//busco el analisis para verificar que solo se encuentre tan solo un registro
 		EstMortalidad mortalidad = iEstMortalidadService.pacienteMortalidad(estMortalidad.getGenPacien().getPacNumDoc());
 		
 		if(mortalidad == null) {
@@ -237,6 +246,11 @@ public class EstMortalidadController {
 			//busco el diagnostico segun rips para ser seteado en estMortalidad
 			String codigoDiagnostico = recortarDiagnostico(diagnostico);
 			estMortalidad.setComCie10(iComCie10Service.findByCodigo(codigoDiagnostico));
+			
+			
+			//filtro para guardar el predictor seleccionado
+			filtroPredictor(estMortalidad.getEscala(), estMortalidad);
+			
 			
 			estMortalidad.setFechaIngreso(convertirFecha(fechaIngreso));
 			estMortalidad.setFechaDefuncion(convertirFecha(fechaDefuncion));
@@ -481,6 +495,18 @@ public class EstMortalidadController {
 		
 	}
 	
+	//filtro para guardar el predictor seleccionado
+	private void filtroPredictor(String escala, EstMortalidad estMortalidad) {
+		
+		if(escala.equals("0")) {
+			estMortalidad.setComPrism(null);				
+		}
+		if(escala.equals("1")) {
+			estMortalidad.setComApache(null);
+		}
+			
+	}
+	
 	//Se usa para crear el archivo en EXCEL
 	private void crearExcel(List<EstMortalidad> listadoMortalidad, HttpServletResponse response) {
 		//EJEMPLO DE RANGOS EN FILAS Y COLUMNAS
@@ -520,14 +546,14 @@ public class EstMortalidadController {
 		c00.setCellValue(title);
 		c00.setCellStyle(titleStyle);
 		// Combinar celdas. Los parámetros son fila inicial, fila final, columna inicial y columna final (comienza el índice 0)
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 28));//Operación celda de combinación en encabezado, el número total de columnas es 28
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 31));//Operación celda de combinación en encabezado, el número total de columnas es 28
 		
 		
 		//Segundo elemento       
         Row row1 = sheet.createRow(rowNum++);
         //sheet.setColumnWidth(3, 25 * 256);
         row1.setHeight((short)450);        
-        String[] row_first = {"","","","","","","DIAGNOSTICO SEGUN RIPS","","CAUSA DIRECTA","","CAUSA ANTECEDENTES","","","","","","RETRASO","","","","OBSERVACION","","","","","APLICA PLAN DE MEJORA"};
+        String[] row_first = {"","","","","","","DIAGNOSTICO SEGUN RIPS","","CAUSA DIRECTA","","CAUSA ANTECEDENTES","","","","","","RETRASO","","","","OBSERVACION","","","","","APLICA PLAN DE MEJORA","","","","","",""};
         for (int i = 0; i < row_first.length; i++) {
             Cell tempCell = row1.createCell(i);
             tempCell.setCellValue(row_first[i]);
@@ -539,14 +565,14 @@ public class EstMortalidadController {
         sheet.addMergedRegion(new CellRangeAddress(1, 1, 10, 14));//CAUSA ANTECEDENTES
         sheet.addMergedRegion(new CellRangeAddress(1, 1, 16, 19));//RETRASO
         sheet.addMergedRegion(new CellRangeAddress(1, 1, 20, 23));//OBSERVACION
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 25, 28));//APLICA PLAN DE MEJORA
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 25, 28));//APLICA PLAN DE MEJORA        
         
         
       //Tercer elemento        
         Row row2 = sheet.createRow(rowNum++);
         row2.setHeight((short)1250);
         
-        String[] row_second = {"SERVICIO","HISTORIA","EDAD","SEXO","FECHA DE INGRESO","FECHA DEFUNCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","OTRO ANTECEDENTE","OTRO ANTECEDENTE","OTROS ESTADOS PATOLÓGICOS","RESUMEN DEL CASO","1","2","3","4","1","2","3","4","ANALISIS","APLICA","TIEMPO","ACCION","RESPONSABLE"};
+        String[] row_second = {"SERVICIO","HISTORIA","EDAD","SEXO","FECHA DE INGRESO","FECHA DEFUNCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","OTRO ANTECEDENTE","OTRO ANTECEDENTE","OTROS ESTADOS PATOLÓGICOS","RESUMEN DEL CASO","1","2","3","4","1","2","3","4","ANALISIS","APLICA","TIEMPO","ACCION","RESPONSABLE","CODIGO LILA","APACHE","PRISM"};
         for (int i = 0; i < row_second.length; i++) {
             Cell tempCell = row2.createCell(i);
             tempCell.setCellValue(row_second[i]);
@@ -566,7 +592,7 @@ public class EstMortalidadController {
         	Row tempRow = sheet.createRow(rowNum++);
             tempRow.setHeight((short) 800);
             // Recorrido para relleno de celdas
-            for (int j = 0; j < 29; j++) {
+            for (int j = 0; j < 32; j++) {
             	
             	Cell tempCell = tempRow.createCell(j);
                 tempCell.setCellStyle(contentStyle);
@@ -813,7 +839,22 @@ public class EstMortalidadController {
                 	// Plan De Mejora Responsable
                 	String planmejoraresponsable = listadoMortalidad.get(i).getResponsable();
                     tempValue = planmejoraresponsable;
-                }          
+                }
+                else if(j == 29) {
+                	// Codigo Lila
+                	String codigolila = validarLila(listadoMortalidad.get(i).isCodigoLila());            	
+                    tempValue = codigolila;
+                }
+                else if(j == 30) {
+                	// Apache
+                	String apache = validarApache(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComApache());            	
+                    tempValue = apache;
+                }
+                else if(j == 31) {
+                	// Prism
+                	String prism = validarPrism(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComPrism());            	
+                    tempValue = prism;
+                }
                 
                 // Creamos la celda con el contenido
                 tempCell.setCellValue(tempValue);
@@ -838,6 +879,35 @@ public class EstMortalidadController {
             e.printStackTrace();
         }  
 		
+	}
+
+
+	//me sirve para obtener el valor del apache
+	private String validarApache(String escala, ComApache comApache) {
+		if(escala.equals("0")) {
+			return comApache.getNombre();
+		}else {
+			return "";
+		}
+	}
+	
+	//me sirve para obtener el valor del prism
+	private String validarPrism(String escala, ComPrism comPrism) {
+		if(escala.equals("1")) {
+			return comPrism.getNombre();
+		}else {
+			return "";
+		}
+	}
+
+
+	//me sirve para convertir el booleano en un string SI o NO
+	private String validarLila(boolean codigoLila) {
+		if(String.valueOf(codigoLila).equals("false")) {
+			return "NO";
+		}else {
+			return "SI";
+		}		
 	}
 	
 }

@@ -38,6 +38,7 @@ public class EstMortalidad implements Serializable {
 	private Date fechaDefuncion;
 	private String resumenCaso;
 	private boolean codigoLila;
+	private String escala;
 	private String analisis;
 	private String planMejora;
 	private String accion;
@@ -55,6 +56,7 @@ public class EstMortalidad implements Serializable {
 	private GenAreSer genAreSer;
 	private ComEstadoHora comEstadoHora; 
 	private ComApache comApache;
+	private ComPrism comPrism;
 	private List<EstAsistente> estAsistentes;
 	private List<EstRetraso> estRetrasos;
 	private List<EstCausa> estCausas;
@@ -130,6 +132,16 @@ public class EstMortalidad implements Serializable {
 
 	public void setCodigoLila(boolean codigoLila) {
 		this.codigoLila = codigoLila;
+	}	
+
+	@NotEmpty
+	@Column(name = "escala", length = 10)
+	public String getEscala() {
+		return escala;
+	}
+
+	public void setEscala(String escala) {
+		this.escala = escala;
 	}
 
 	@Lob
@@ -291,13 +303,24 @@ public class EstMortalidad implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "id_apache", nullable = false)
+	@JoinColumn(name = "id_apache")
 	public ComApache getComApache() {
 		return comApache;
 	}
 
 	public void setComApache(ComApache comApache) {
 		this.comApache = comApache;
+	}	
+	
+
+	@ManyToOne
+	@JoinColumn(name = "id_prism")	
+	public ComPrism getComPrism() {
+		return comPrism;
+	}
+
+	public void setComPrism(ComPrism comPrism) {
+		this.comPrism = comPrism;
 	}
 
 	@OneToMany(mappedBy = "estMortalidad", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
