@@ -274,20 +274,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			                     <textarea id="retrasotext4" th:field="*{estRetrasos[3].observacion}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm mt-1" rows="1"></textarea>                 	                     	                            
 		                     </div>
 		                     
-		                     <div class="col-md-6 pb-3">
-	                        	<label class="control-label" for="apache">Apache(prints)</label>	                            
+		                     <div class="col-md-12 predictor">
+		                     		                     
+		                     <div class="col-md-6 required">
+		                     	 <label class="control-label" for="retraso">Predictor</label>
+		                     </div>
+		                     
+		                     <div class="form-group col-md-12">			                 	
+			                 	<div class="form-check">			                 		
+			                 		<input type="radio" name="escala" th:field="*{escala}" value="0" class="form-check-input">
+                   				 	<label class="form-check-label">APACHE</label>
+			                 	</div>              	               
+			                 </div>
+			                 
+			                 <div class="form-group col-md-12">			                 	
+			                 	<div class="form-check">                				                 		
+			                 		<input type="radio" name="escala" th:field="*{escala}" value="1" class="form-check-input">
+                   				 	<label class="form-check-label">PRISM</label>
+			                 	</div>              	               
+			                 </div>
+			                 </div>              
+		                     
+		                     <div class="col-md-6 pb-3 apache">
+	                        	<label class="control-label" for="apache">Apache</label>	                            
 	                        	<select id="apache"  th:field="*{comApache}" class="form-control form-control-sm">
 		                          <!--  <option value="" selected="selected">Seleccione</option>-->
 		                            <option th:each="apach : ${apache}" th:value="${apach.id}" th:text="${apach.nombre}"></option>	                          
 		                        </select>
-	                        </div>
+	                        </div>	                        
+	                        
+	                        <div class="col-md-6 pb-3 prism">
+	                        	<label class="control-label" for="prism">Prism</label>	                            
+	                        	<select id="prism"  th:field="*{comPrism}" class="form-control form-control-sm">
+		                          <!--  <option value="" selected="selected">Seleccione</option>-->
+		                            <option th:each="pri : ${prism}" th:value="${pri.id}" th:text="${pri.nombre}"></option>	                          
+		                        </select>
+	                        </div>	                        
 	                        
 	                        <div class="form-group col-md-12">			                 	
 			                 	<div class="form-check">			                 		
 			                 		<input id="codigolila" type="checkbox" th:field="*{codigoLila}" value="1" class="form-check-input">
                    				 	<label class="form-check-label">CODIGO LILA</label>
 			                 	</div>              	               
-			                 </div>                
+			                 </div>
+			                 
+			                 <div class="form-group col-md-12">			                 	
+			                 	<div class="form-check">			                 		
+			                 		<input id="codigoblanco" type="checkbox" th:field="*{codigoBlanco}" value="1" class="form-check-input">
+                   				 	<label class="form-check-label">CODIGO BLANCO</label>
+			                 	</div>              	               
+			                 </div>                 
 	                    
 	                    </div>
 	                    
@@ -486,6 +522,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		$("#accion").prop("disabled", true);
 		$("#tiempo").prop("disabled", true);
 		$("#responsable").prop("disabled", true);
+		//me permite ocultar los select de apache y prism
+		$('.apache').hide('fast');
+		$('.prism').hide('fast');
 		
 		
 		//$("#planmejora option[value=SI]").attr('selected', 'selected'); //planmejora
@@ -547,7 +586,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				$("#responsable").prop("disabled", true);	
 			}		
 		         
-		});	
+		});
+		
+		$(".predictor").change(function(){
+			escala = $("input[name='escala']:checked").val();
+            //console.log(escala);
+			if(escala === "0"){
+            	console.log("0");
+            	$('.apache').show('fast');
+        		$('.prism').hide('fast');
+            }
+            if(escala === "1"){
+            	console.log("1");
+            	$('.prism').show('fast');
+            	$('.apache').hide('fast');
+        		
+            }
+        });
+		
+		/*if($("input[name='escalaapache']:checked").val() === "0"){
+			console.log(prueba);	
+		}*/		
 		
 	});
 

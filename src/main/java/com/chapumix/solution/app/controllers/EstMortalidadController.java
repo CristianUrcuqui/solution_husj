@@ -1,6 +1,5 @@
 package com.chapumix.solution.app.controllers;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -45,11 +42,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.chapumix.solution.app.entity.dto.AtenEncuConsolidadoDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadTMPDTO;
-import com.chapumix.solution.app.models.entity.AtenEncuDatoBasico;
 import com.chapumix.solution.app.models.entity.ComApache;
 import com.chapumix.solution.app.models.entity.ComCie10;
 import com.chapumix.solution.app.models.entity.ComGenero;
@@ -546,14 +541,14 @@ public class EstMortalidadController {
 		c00.setCellValue(title);
 		c00.setCellStyle(titleStyle);
 		// Combinar celdas. Los parámetros son fila inicial, fila final, columna inicial y columna final (comienza el índice 0)
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 31));//Operación celda de combinación en encabezado, el número total de columnas es 28
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 32));//Operación celda de combinación en encabezado, el número total de columnas es 28
 		
 		
 		//Segundo elemento       
         Row row1 = sheet.createRow(rowNum++);
         //sheet.setColumnWidth(3, 25 * 256);
         row1.setHeight((short)450);        
-        String[] row_first = {"","","","","","","DIAGNOSTICO SEGUN RIPS","","CAUSA DIRECTA","","CAUSA ANTECEDENTES","","","","","","RETRASO","","","","OBSERVACION","","","","","APLICA PLAN DE MEJORA","","","","","",""};
+        String[] row_first = {"","","","","","","DIAGNOSTICO SEGUN RIPS","","CAUSA DIRECTA","","CAUSA ANTECEDENTES","","","","","","RETRASO","","","","OBSERVACION","","","","","APLICA PLAN DE MEJORA","","","","","","",""};
         for (int i = 0; i < row_first.length; i++) {
             Cell tempCell = row1.createCell(i);
             tempCell.setCellValue(row_first[i]);
@@ -572,7 +567,7 @@ public class EstMortalidadController {
         Row row2 = sheet.createRow(rowNum++);
         row2.setHeight((short)1250);
         
-        String[] row_second = {"SERVICIO","HISTORIA","EDAD","SEXO","FECHA DE INGRESO","FECHA DEFUNCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","OTRO ANTECEDENTE","OTRO ANTECEDENTE","OTROS ESTADOS PATOLÓGICOS","RESUMEN DEL CASO","1","2","3","4","1","2","3","4","ANALISIS","APLICA","TIEMPO","ACCION","RESPONSABLE","CODIGO LILA","APACHE","PRISM"};
+        String[] row_second = {"SERVICIO","HISTORIA","EDAD","SEXO","FECHA DE INGRESO","FECHA DEFUNCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","CODIGO","DESCRIPCION","OTRO ANTECEDENTE","OTRO ANTECEDENTE","OTROS ESTADOS PATOLÓGICOS","RESUMEN DEL CASO","1","2","3","4","1","2","3","4","ANALISIS","APLICA","TIEMPO","ACCION","RESPONSABLE","CODIGO LILA","CODIGO BLANCO","APACHE","PRISM"};
         for (int i = 0; i < row_second.length; i++) {
             Cell tempCell = row2.createCell(i);
             tempCell.setCellValue(row_second[i]);
@@ -592,7 +587,7 @@ public class EstMortalidadController {
         	Row tempRow = sheet.createRow(rowNum++);
             tempRow.setHeight((short) 800);
             // Recorrido para relleno de celdas
-            for (int j = 0; j < 32; j++) {
+            for (int j = 0; j < 33; j++) {
             	
             	Cell tempCell = tempRow.createCell(j);
                 tempCell.setCellStyle(contentStyle);
@@ -842,15 +837,20 @@ public class EstMortalidadController {
                 }
                 else if(j == 29) {
                 	// Codigo Lila
-                	String codigolila = validarLila(listadoMortalidad.get(i).isCodigoLila());            	
+                	String codigolila = validarBooleano(listadoMortalidad.get(i).isCodigoLila());            	
                     tempValue = codigolila;
                 }
                 else if(j == 30) {
+                	// Codigo Blanco
+                	String codigoblanco = validarBooleano(listadoMortalidad.get(i).isCodigoBlanco());            	
+                    tempValue = codigoblanco;
+                }
+                else if(j == 31) {
                 	// Apache
                 	String apache = validarApache(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComApache());            	
                     tempValue = apache;
                 }
-                else if(j == 31) {
+                else if(j == 32) {
                 	// Prism
                 	String prism = validarPrism(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComPrism());            	
                     tempValue = prism;
@@ -902,8 +902,8 @@ public class EstMortalidadController {
 
 
 	//me sirve para convertir el booleano en un string SI o NO
-	private String validarLila(boolean codigoLila) {
-		if(String.valueOf(codigoLila).equals("false")) {
+	private String validarBooleano(boolean codigo) {
+		if(String.valueOf(codigo).equals("false")) {
 			return "NO";
 		}else {
 			return "SI";

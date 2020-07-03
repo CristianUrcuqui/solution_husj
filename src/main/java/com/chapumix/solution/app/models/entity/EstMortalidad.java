@@ -38,6 +38,7 @@ public class EstMortalidad implements Serializable {
 	private Date fechaDefuncion;
 	private String resumenCaso;
 	private boolean codigoLila;
+	private boolean codigoBlanco;
 	private String escala;
 	private String analisis;
 	private String planMejora;
@@ -133,6 +134,15 @@ public class EstMortalidad implements Serializable {
 	public void setCodigoLila(boolean codigoLila) {
 		this.codigoLila = codigoLila;
 	}	
+	
+	@Column(name = "codigo_blanco", columnDefinition="BIT")
+	public boolean isCodigoBlanco() {
+		return codigoBlanco;
+	}
+
+	public void setCodigoBlanco(boolean codigoBlanco) {
+		this.codigoBlanco = codigoBlanco;
+	}
 
 	@NotEmpty
 	@Column(name = "escala", length = 10)
