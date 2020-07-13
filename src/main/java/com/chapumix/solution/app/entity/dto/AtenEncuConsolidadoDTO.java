@@ -10,9 +10,12 @@ public class AtenEncuConsolidadoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String servicio;
-	private String numeroEncuestas;
-	private String totalPregunta1Si;
-	private String totalPregunta1No;
+	private String numeroEncuestas;	
+	private String totalPregunta1MuyMala;
+	private String totalPregunta1Mala;
+	private String totalPregunta1Regular;
+	private String totalPregunta1Buena;
+	private String totalPregunta1MuyBuena;
 	private String totalPregunta2MuyMala;
 	private String totalPregunta2Mala;
 	private String totalPregunta2Regular;
@@ -75,9 +78,10 @@ public class AtenEncuConsolidadoDTO implements Serializable {
 
 	public AtenEncuConsolidadoDTO() {
 	}
-	
-	public AtenEncuConsolidadoDTO(String servicio, String numeroEncuestas, String totalPregunta1Si,
-			String totalPregunta1No, String totalPregunta2MuyMala, String totalPregunta2Mala,
+
+	public AtenEncuConsolidadoDTO(String servicio, String numeroEncuestas, String totalPregunta1MuyMala,
+			String totalPregunta1Mala, String totalPregunta1Regular, String totalPregunta1Buena,
+			String totalPregunta1MuyBuena, String totalPregunta2MuyMala, String totalPregunta2Mala,
 			String totalPregunta2Regular, String totalPregunta2Buena, String totalPregunta2MuyBuena,
 			String totalPregunta2NoAplica, String totalPregunta3MuyMala, String totalPregunta3Mala,
 			String totalPregunta3Regular, String totalPregunta3Buena, String totalPregunta3MuyBuena,
@@ -97,11 +101,15 @@ public class AtenEncuConsolidadoDTO implements Serializable {
 			String totalPregunta11Mala, String totalPregunta11Regular, String totalPregunta11Buena,
 			String totalPregunta11MuyBuena, String totalPregunta12DefinitivamenteNo,
 			String totalPregunta12ProbablementeNo, String totalPregunta12ProbablementeSi,
-			String totalPregunta12DefinitivamenteSi) {		
+			String totalPregunta12DefinitivamenteSi) {
+		super();
 		this.servicio = servicio;
 		this.numeroEncuestas = numeroEncuestas;
-		this.totalPregunta1Si = totalPregunta1Si;
-		this.totalPregunta1No = totalPregunta1No;
+		this.totalPregunta1MuyMala = totalPregunta1MuyMala;
+		this.totalPregunta1Mala = totalPregunta1Mala;
+		this.totalPregunta1Regular = totalPregunta1Regular;
+		this.totalPregunta1Buena = totalPregunta1Buena;
+		this.totalPregunta1MuyBuena = totalPregunta1MuyBuena;
 		this.totalPregunta2MuyMala = totalPregunta2MuyMala;
 		this.totalPregunta2Mala = totalPregunta2Mala;
 		this.totalPregunta2Regular = totalPregunta2Regular;
@@ -166,6 +174,7 @@ public class AtenEncuConsolidadoDTO implements Serializable {
 
 
 
+
 	public String getServicio() {
 		return servicio;
 	}
@@ -180,22 +189,46 @@ public class AtenEncuConsolidadoDTO implements Serializable {
 
 	public void setNumeroEncuestas(String numeroEncuestas) {
 		this.numeroEncuestas = numeroEncuestas;
+	}	
+
+	public String getTotalPregunta1MuyMala() {
+		return totalPregunta1MuyMala;
 	}
 
-	public String getTotalPregunta1Si() {
-		return totalPregunta1Si;
+	public void setTotalPregunta1MuyMala(String totalPregunta1MuyMala) {
+		this.totalPregunta1MuyMala = totalPregunta1MuyMala;
 	}
 
-	public void setTotalPregunta1Si(String totalPregunta1Si) {
-		this.totalPregunta1Si = totalPregunta1Si;
+	public String getTotalPregunta1Mala() {
+		return totalPregunta1Mala;
 	}
 
-	public String getTotalPregunta1No() {
-		return totalPregunta1No;
+	public void setTotalPregunta1Mala(String totalPregunta1Mala) {
+		this.totalPregunta1Mala = totalPregunta1Mala;
 	}
 
-	public void setTotalPregunta1No(String totalPregunta1No) {
-		this.totalPregunta1No = totalPregunta1No;
+	public String getTotalPregunta1Regular() {
+		return totalPregunta1Regular;
+	}
+
+	public void setTotalPregunta1Regular(String totalPregunta1Regular) {
+		this.totalPregunta1Regular = totalPregunta1Regular;
+	}
+
+	public String getTotalPregunta1Buena() {
+		return totalPregunta1Buena;
+	}
+
+	public void setTotalPregunta1Buena(String totalPregunta1Buena) {
+		this.totalPregunta1Buena = totalPregunta1Buena;
+	}
+
+	public String getTotalPregunta1MuyBuena() {
+		return totalPregunta1MuyBuena;
+	}
+
+	public void setTotalPregunta1MuyBuena(String totalPregunta1MuyBuena) {
+		this.totalPregunta1MuyBuena = totalPregunta1MuyBuena;
 	}
 
 	public String getTotalPregunta2MuyMala() {

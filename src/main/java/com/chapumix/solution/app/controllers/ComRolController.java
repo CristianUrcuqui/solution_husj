@@ -85,7 +85,7 @@ public class ComRolController {
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);		
 		return "redirect:rollistado";
-		}
+	}
 	
 	// Este metodo me permite cargar los datos para editar el rol del sistema
 	@RequestMapping(value = "/rolformf")

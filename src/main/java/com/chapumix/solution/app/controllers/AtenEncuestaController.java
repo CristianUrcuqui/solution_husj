@@ -13,7 +13,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -59,10 +61,7 @@ public class AtenEncuestaController {
 	private IComGeneroService iComGeneroService;
 	
 	@Autowired
-	private IGenAreSerService iGenAreSerService;
-	
-	@Autowired
-	private RestTemplate restTemplate;
+	private IGenAreSerService iGenAreSerService;	
 	 
 	@Value("${app.tituloencuestasatisfaccion}")
 	private String tituloencuestasatisfaccion;
@@ -191,11 +190,14 @@ public class AtenEncuestaController {
 					List<AtenEncuDatoBasico> atenEncuDatoBasico = iAtenEncuDatoBasicoService.findByStartDateBetween(fechaI, fechaF);			
 					
 					//obtenemos el numero de encuentas
-					long numeroEncuestas = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId())).count();
+					long numeroEncuestas = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId())).count();					
 					
 					//obtenemos consolidado pregunta 1
-					long totalPregunta1Si = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "1".equals(a.getRespuesta1())).count();
-					long totalPregunta1No = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "0".equals(a.getRespuesta1())).count();
+					long totalPregunta1MuyMala = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "3".equals(a.getRespuesta1())).count();
+					long totalPregunta1Mala = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "4".equals(a.getRespuesta1())).count();
+					long totalPregunta1Regular = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "5".equals(a.getRespuesta1())).count();
+					long totalPregunta1Buena = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "6".equals(a.getRespuesta1())).count();
+					long totalPregunta1MuyBuena = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "7".equals(a.getRespuesta1())).count();					
 					
 					//obtenemos consolidado pregunta 2
 					long totalPregunta2MuyMala = atenEncuDatoBasico.stream().filter(a -> s.getId().equals(a.getGenAreSer().getId()) && "3".equals(a.getRespuesta2())).count();
@@ -280,7 +282,7 @@ public class AtenEncuestaController {
 					
 					//creamos un arreglo nuevo con la informacion consolidada
 					if(numeroEncuestas > 0) {
-						atenEncuConsolidadoDTO.add(new AtenEncuConsolidadoDTO(s.getGasNombre(), Long.toString(numeroEncuestas), Long.toString(totalPregunta1Si), Long.toString(totalPregunta1No), Long.toString(totalPregunta2MuyMala), Long.toString(totalPregunta2Mala), Long.toString(totalPregunta2Regular), Long.toString(totalPregunta2Buena), Long.toString(totalPregunta2MuyBuena), Long.toString(totalPregunta2NoAplica), 
+						atenEncuConsolidadoDTO.add(new AtenEncuConsolidadoDTO(s.getGasNombre(), Long.toString(numeroEncuestas), Long.toString(totalPregunta1MuyMala), Long.toString(totalPregunta1Mala), Long.toString(totalPregunta1Regular), Long.toString(totalPregunta1Buena), Long.toString(totalPregunta1MuyBuena), Long.toString(totalPregunta2MuyMala), Long.toString(totalPregunta2Mala), Long.toString(totalPregunta2Regular), Long.toString(totalPregunta2Buena), Long.toString(totalPregunta2MuyBuena), Long.toString(totalPregunta2NoAplica), 
 								Long.toString(totalPregunta3MuyMala), Long.toString(totalPregunta3Mala), Long.toString(totalPregunta3Regular), Long.toString(totalPregunta3Buena), Long.toString(totalPregunta3MuyBuena), Long.toString(totalPregunta3NoAplica), Long.toString(totalPregunta4MuyMala), Long.toString(totalPregunta4Mala), Long.toString(totalPregunta4Regular), Long.toString(totalPregunta4Buena), Long.toString(totalPregunta4MuyBuena), Long.toString(totalPregunta4NoAplica),
 								Long.toString(totalPregunta5MuyMala), Long.toString(totalPregunta5Mala), Long.toString(totalPregunta5Regular), Long.toString(totalPregunta5Buena), Long.toString(totalPregunta5MuyBuena), Long.toString(totalPregunta5NoAplica), Long.toString(totalPregunta6MuyMala), Long.toString(totalPregunta6Mala), Long.toString(totalPregunta6Regular), Long.toString(totalPregunta6Buena), Long.toString(totalPregunta6MuyBuena),
 								Long.toString(totalPregunta7MuyMala), Long.toString(totalPregunta7Mala), Long.toString(totalPregunta7Regular), Long.toString(totalPregunta7Buena), Long.toString(totalPregunta7MuyBuena), Long.toString(totalPregunta8MuyMala), Long.toString(totalPregunta8Mala), Long.toString(totalPregunta8Regular), Long.toString(totalPregunta8Buena), Long.toString(totalPregunta8MuyBuena), Long.toString(totalPregunta8NoAplica),
@@ -293,8 +295,12 @@ public class AtenEncuestaController {
 			}
 			
 			try {
-				//creamos el reporte en EXCEL
-				crearExcel(atenEncuConsolidadoDTO, response);						
+				//creamos el reporte en EXCEL de consolidado y respuestas negativas
+				Date fechaI = convertirfecha(fechaInicial);
+				Date fechaF = convertirfecha(fechaFinal);
+				List<AtenEncuDatoBasico> negativasOnce = iAtenEncuDatoBasicoService.findByNegativasOnceStartDateBetween(fechaI, fechaF);
+				List<AtenEncuDatoBasico> negativasDoce = iAtenEncuDatoBasicoService.findByNegativasDoceStartDateBetween(fechaI, fechaF);
+				crearExcel(atenEncuConsolidadoDTO, response, negativasOnce, negativasDoce);						
 				
 			} catch (IOException e) {						
 				e.printStackTrace();
@@ -307,10 +313,10 @@ public class AtenEncuestaController {
 			model.addAttribute("enlace9", enlace9);			
 			return  null;
 			
-	  }	
-	  
-	  
-	  
+	  }		  
+	
+
+
 	/* ----------------------------------------------------------
      * METODOS ADICIONALES 
      * ---------------------------------------------------------- */
@@ -333,16 +339,57 @@ public class AtenEncuestaController {
 	private Date convertirfecha(String fecha) throws ParseException {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);
 		return fechaTranformada;
-	}	
+	}
 	
-
+	// Se usa para dar formato a fechas de dinamica
+	private String formatoFecha(Date fecha) {
+		// convierto la fecha que entra en formato Date
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		String fechaConversion = sdf.format(fecha);		
+		return fechaConversion;
+	}
+	
+	//Me permite convertir valores de respuesta numericos a valores en cadena de texto
+	private String convertirValor(String respuesta) {
+		if(respuesta.equals("3")) {
+			return "Muy Mala";
+		}
+		else if(respuesta.equals("4")) {
+			return "Mala";
+		}
+		else if(respuesta.equals("5")) {
+			return "Regular";
+		}
+		else if(respuesta.equals("6")) {
+			return "Buena";
+		}
+		else if(respuesta.equals("7")) {
+			return "Muy Buena";
+		}
+		else if(respuesta.equals("8")) {
+			return "Definitivamente NO";
+		}
+		else if(respuesta.equals("9")) {
+			return "Probablemente NO";
+		}
+		else if(respuesta.equals("10")) {
+			return "Probablemente SI";
+		}
+		else {
+			return "Definitivamente SI";
+		}		
+	}
+	
 	
 	//Se usa para crear el archivo en EXCEL
-	private void crearExcel(List<AtenEncuConsolidadoDTO> atenEncuConsolidadoDTO, HttpServletResponse response) throws IOException {		
+	private void crearExcel(List<AtenEncuConsolidadoDTO> atenEncuConsolidadoDTO, HttpServletResponse response, List<AtenEncuDatoBasico> negativasOnce, List<AtenEncuDatoBasico> negativasDoce) throws IOException {		
 		
+		//CREO EL PRIMER LIBRO CONSOLIDADO LLAMADO consolidado_encuestas.xlsx
 		//EJEMPLO DE RANGOS EN FILAS Y COLUMNAS
 		//sheet.addMergedRegion(new CellRangeAddress(fila_inicial, fila_final, columna_inicial, columna_final))		
 		
+		
+		//CREO EL PRIMER LIBRO CONSOLIDADO LLAMADO consolidado_encuestas.xlsx
 		//Se crea variable para el nombre del archivo de EXCEL
         String fileName = "consolidado_encuestas.xlsx";
 		
@@ -377,39 +424,40 @@ public class AtenEncuestaController {
         c00.setCellValue(title);
         c00.setCellStyle(titleStyle);
         // Combinar celdas. Los parámetros son fila inicial, fila final, columna inicial y columna final (comienza el índice 0)
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 61));//Operación celda de combinación en encabezado, el número total de columnas es 61       
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 64));//Operación celda de combinación en encabezado, el número total de columnas es 61       
          
         
         //Segundo elemento       
         Row row1 = sheet.createRow(rowNum++);
         row1.setHeight((short)350);        
-        String[] row_first = {"SERVICIO","NUMERO DE ENCUESTAS","PREGUNTA1","","PREGUNTA2","","","","","","PREGUNTA3","","","","","","PREGUNTA4","","","","","","PREGUNTA5","","","","","","PREGUNTA6","","","","","PREGUNTA7","","","","","PREGUNTA8","","","","","","PREGUNTA9","","","","","","PREGUNTA10","","","PREGUNTA11","","","","","PREGUNTA12"};
+        String[] row_first = {"SERVICIO","NUMERO DE ENCUESTAS","PREGUNTA1","","","","","PREGUNTA2","","","","","","PREGUNTA3","","","","","","PREGUNTA4","","","","","","PREGUNTA5","","","","","","PREGUNTA6","","","","","PREGUNTA7","","","","","PREGUNTA8","","","","","","PREGUNTA9","","","","","","PREGUNTA10","","","PREGUNTA11","","","","","PREGUNTA12"};
         for (int i = 0; i < row_first.length; i++) {
             Cell tempCell = row1.createCell(i);
             tempCell.setCellValue(row_first[i]);
-            tempCell.setCellStyle(headerStyle);            
+            tempCell.setCellStyle(headerStyle);
+            sheet.setColumnWidth(i, sheet.getColumnWidth(i) * 20 / 10);
         }
         
         sheet.addMergedRegion(new CellRangeAddress(1, 2, 0, 0));//SERVICIO
         sheet.addMergedRegion(new CellRangeAddress(1, 2, 1, 1));//ENCUESTAS
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 3));//PREGUNTA1
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 4, 9));//PREGUNTA2
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 10, 15));//PREGUNTA3
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 16, 21));//PREGUNTA4
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 22, 27));//PREGUNTA5
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 28, 32));//PREGUNTA6
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 33, 37));//PREGUNTA7
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 38, 43));//PREGUNTA8
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 44, 49));//PREGUNTA9
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 50, 52));//PREGUNTA10
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 53, 57));//PREGUNTA11
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 58, 61));//PREGUNTA12
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 6));//PREGUNTA1
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 7, 12));//PREGUNTA2
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 13, 18));//PREGUNTA3
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 19, 24));//PREGUNTA4
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 25, 30));//PREGUNTA5
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 31, 35));//PREGUNTA6
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 36, 40));//PREGUNTA7
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 41, 46));//PREGUNTA8
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 47, 52));//PREGUNTA9
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 53, 55));//PREGUNTA10
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 56, 60));//PREGUNTA11
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 61, 64));//PREGUNTA12
        
         
         //Tercer elemento        
         Row row2 = sheet.createRow(rowNum++);
         row2.setHeight((short)350);
-        String[] row_second = {"","","Si","No","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","Muy Mala","Mala","Regular","Buena","Muy Buena","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Si","No","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","Definitivamente NO","Probablemente NO","Probablemente SI","Definitivamente SI"};
+        String[] row_second = {"","","Muy Mala","Mala","Regular","Buena","Muy Buena","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","Muy Mala","Mala","Regular","Buena","Muy Buena","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","NO APLICA","Si","No","NO APLICA","Muy Mala","Mala","Regular","Buena","Muy Buena","Definitivamente NO","Probablemente NO","Probablemente SI","Definitivamente SI"};
         for (int i = 0; i < row_second.length; i++) {
             Cell tempCell = row2.createCell(i);
             tempCell.setCellValue(row_second[i]);
@@ -423,7 +471,7 @@ public class AtenEncuestaController {
         	Row tempRow = sheet.createRow(rowNum++);
             tempRow.setHeight((short) 800);
             // Recorrido para relleno de celdas
-            for (int j = 0; j < 62; j++) {
+            for (int j = 0; j < 65; j++) {
                 Cell tempCell = tempRow.createCell(j);
                 tempCell.setCellStyle(contentStyle);
                 String tempValue = "";
@@ -440,241 +488,253 @@ public class AtenEncuestaController {
                 }
                 else if(j == 2) {
                 	// Pregunta 1
-                    tempValue = consolidado.getTotalPregunta1Si();             
+                    tempValue = consolidado.getTotalPregunta1MuyMala();             
                 }
                 else if(j == 3) {
-                	// Pregunta 1
-                    tempValue = consolidado.getTotalPregunta1No();             
+                	// Pregunta 2
+                    tempValue = consolidado.getTotalPregunta1Mala();             
                 }
                 else if(j == 4) {
-                	// Pregunta 1
-                    tempValue = consolidado.getTotalPregunta2MuyMala();             
+                	// Pregunta 2
+                    tempValue = consolidado.getTotalPregunta1Regular();             
                 }
                 else if(j == 5) {
                 	// Pregunta 2
-                    tempValue = consolidado.getTotalPregunta2Mala();             
+                    tempValue = consolidado.getTotalPregunta1Buena();             
                 }
                 else if(j == 6) {
                 	// Pregunta 2
-                    tempValue = consolidado.getTotalPregunta2Regular();             
+                    tempValue = consolidado.getTotalPregunta1MuyBuena();             
                 }
                 else if(j == 7) {
-                	// Pregunta 2
-                    tempValue = consolidado.getTotalPregunta2Buena();             
+                	// Pregunta 1
+                    tempValue = consolidado.getTotalPregunta2MuyMala();             
                 }
                 else if(j == 8) {
                 	// Pregunta 2
-                    tempValue = consolidado.getTotalPregunta2MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta2Mala();             
                 }
                 else if(j == 9) {
                 	// Pregunta 2
-                    tempValue = consolidado.getTotalPregunta2NoAplica();             
+                    tempValue = consolidado.getTotalPregunta2Regular();             
                 }
                 else if(j == 10) {
-                	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3MuyMala();             
+                	// Pregunta 2
+                    tempValue = consolidado.getTotalPregunta2Buena();             
                 }
                 else if(j == 11) {
-                	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3Mala();             
+                	// Pregunta 2
+                    tempValue = consolidado.getTotalPregunta2MuyBuena();             
                 }
                 else if(j == 12) {
-                	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3Regular();            
+                	// Pregunta 2
+                    tempValue = consolidado.getTotalPregunta2NoAplica();             
                 }
                 else if(j == 13) {
                 	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3Buena();             
+                    tempValue = consolidado.getTotalPregunta3MuyMala();             
                 }
                 else if(j == 14) {
                 	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta3Mala();             
                 }
                 else if(j == 15) {
                 	// Pregunta 3
-                    tempValue = consolidado.getTotalPregunta3NoAplica();             
+                    tempValue = consolidado.getTotalPregunta3Regular();            
                 }
                 else if(j == 16) {
-                	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4MuyMala();             
+                	// Pregunta 3
+                    tempValue = consolidado.getTotalPregunta3Buena();             
                 }
                 else if(j == 17) {
-                	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4Mala();             
+                	// Pregunta 3
+                    tempValue = consolidado.getTotalPregunta3MuyBuena();             
                 }
                 else if(j == 18) {
-                	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4Regular();            
+                	// Pregunta 3
+                    tempValue = consolidado.getTotalPregunta3NoAplica();             
                 }
                 else if(j == 19) {
                 	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4Buena();             
+                    tempValue = consolidado.getTotalPregunta4MuyMala();             
                 }
                 else if(j == 20) {
                 	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta4Mala();             
                 }
                 else if(j == 21) {
                 	// Pregunta 4
-                    tempValue = consolidado.getTotalPregunta4NoAplica();             
+                    tempValue = consolidado.getTotalPregunta4Regular();            
                 }
                 else if(j == 22) {
-                	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5MuyMala();             
+                	// Pregunta 4
+                    tempValue = consolidado.getTotalPregunta4Buena();             
                 }
                 else if(j == 23) {
-                	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5Mala();             
+                	// Pregunta 4
+                    tempValue = consolidado.getTotalPregunta4MuyBuena();             
                 }
                 else if(j == 24) {
-                	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5Regular();            
+                	// Pregunta 4
+                    tempValue = consolidado.getTotalPregunta4NoAplica();             
                 }
                 else if(j == 25) {
                 	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5Buena();             
+                    tempValue = consolidado.getTotalPregunta5MuyMala();             
                 }
                 else if(j == 26) {
                 	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta5Mala();             
                 }
                 else if(j == 27) {
                 	// Pregunta 5
-                    tempValue = consolidado.getTotalPregunta5NoAplica();             
+                    tempValue = consolidado.getTotalPregunta5Regular();            
                 }
                 else if(j == 28) {
-                	// Pregunta 6
-                    tempValue = consolidado.getTotalPregunta6MuyMala();             
+                	// Pregunta 5
+                    tempValue = consolidado.getTotalPregunta5Buena();             
                 }
                 else if(j == 29) {
-                	// Pregunta 6
-                    tempValue = consolidado.getTotalPregunta6Mala();             
+                	// Pregunta 5
+                    tempValue = consolidado.getTotalPregunta5MuyBuena();             
                 }
                 else if(j == 30) {
-                	// Pregunta 6
-                    tempValue = consolidado.getTotalPregunta6Regular();            
+                	// Pregunta 5
+                    tempValue = consolidado.getTotalPregunta5NoAplica();             
                 }
                 else if(j == 31) {
                 	// Pregunta 6
-                    tempValue = consolidado.getTotalPregunta6Buena();             
+                    tempValue = consolidado.getTotalPregunta6MuyMala();             
                 }
                 else if(j == 32) {
                 	// Pregunta 6
-                    tempValue = consolidado.getTotalPregunta6MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta6Mala();             
                 }
                 else if(j == 33) {
-                	// Pregunta 7
-                    tempValue = consolidado.getTotalPregunta7MuyMala();             
+                	// Pregunta 6
+                    tempValue = consolidado.getTotalPregunta6Regular();            
                 }
                 else if(j == 34) {
-                	// Pregunta 7
-                    tempValue = consolidado.getTotalPregunta7Mala();             
+                	// Pregunta 6
+                    tempValue = consolidado.getTotalPregunta6Buena();             
                 }
                 else if(j == 35) {
-                	// Pregunta 7
-                    tempValue = consolidado.getTotalPregunta7Regular();            
+                	// Pregunta 6
+                    tempValue = consolidado.getTotalPregunta6MuyBuena();             
                 }
                 else if(j == 36) {
                 	// Pregunta 7
-                    tempValue = consolidado.getTotalPregunta7Buena();             
+                    tempValue = consolidado.getTotalPregunta7MuyMala();             
                 }
                 else if(j == 37) {
                 	// Pregunta 7
-                    tempValue = consolidado.getTotalPregunta7MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta7Mala();             
                 }
                 else if(j == 38) {
-                	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8MuyMala();             
+                	// Pregunta 7
+                    tempValue = consolidado.getTotalPregunta7Regular();            
                 }
                 else if(j == 39) {
-                	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8Mala();             
+                	// Pregunta 7
+                    tempValue = consolidado.getTotalPregunta7Buena();             
                 }
                 else if(j == 40) {
-                	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8Regular();            
+                	// Pregunta 7
+                    tempValue = consolidado.getTotalPregunta7MuyBuena();             
                 }
                 else if(j == 41) {
                 	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8Buena();             
+                    tempValue = consolidado.getTotalPregunta8MuyMala();             
                 }
                 else if(j == 42) {
                 	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta8Mala();             
                 }
                 else if(j == 43) {
                 	// Pregunta 8
-                    tempValue = consolidado.getTotalPregunta8NoAplica();             
+                    tempValue = consolidado.getTotalPregunta8Regular();            
                 }
                 else if(j == 44) {
-                	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9MuyMala();             
+                	// Pregunta 8
+                    tempValue = consolidado.getTotalPregunta8Buena();             
                 }
                 else if(j == 45) {
-                	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9Mala();             
+                	// Pregunta 8
+                    tempValue = consolidado.getTotalPregunta8MuyBuena();             
                 }
                 else if(j == 46) {
-                	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9Regular();            
+                	// Pregunta 8
+                    tempValue = consolidado.getTotalPregunta8NoAplica();             
                 }
                 else if(j == 47) {
                 	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9Buena();             
+                    tempValue = consolidado.getTotalPregunta9MuyMala();             
                 }
                 else if(j == 48) {
                 	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9MuyBuena();             
+                    tempValue = consolidado.getTotalPregunta9Mala();             
                 }
                 else if(j == 49) {
                 	// Pregunta 9
-                    tempValue = consolidado.getTotalPregunta9NoAplica();             
+                    tempValue = consolidado.getTotalPregunta9Regular();            
                 }
                 else if(j == 50) {
+                	// Pregunta 9
+                    tempValue = consolidado.getTotalPregunta9Buena();             
+                }
+                else if(j == 51) {
+                	// Pregunta 9
+                    tempValue = consolidado.getTotalPregunta9MuyBuena();             
+                }
+                else if(j == 52) {
+                	// Pregunta 9
+                    tempValue = consolidado.getTotalPregunta9NoAplica();             
+                }
+                else if(j == 53) {
                 	// Pregunta 10
                     tempValue = consolidado.getTotalPregunta10Si();             
                 }
-                else if(j == 51) {
+                else if(j == 54) {
                 	// Pregunta 10
                     tempValue = consolidado.getTotalPregunta10No();             
                 }
-                else if(j == 52) {
+                else if(j == 55) {
                 	// Pregunta 10
                     tempValue = consolidado.getTotalPregunta10NoAplica();             
                 }
-                else if(j == 53) {
+                else if(j == 56) {
                 	// Pregunta 11
                     tempValue = consolidado.getTotalPregunta11MuyMala();             
                 }
-                else if(j == 54) {
+                else if(j == 57) {
                 	// Pregunta 11
                     tempValue = consolidado.getTotalPregunta11Mala();             
                 }
-                else if(j == 55) {
+                else if(j == 58) {
                 	// Pregunta 11
                     tempValue = consolidado.getTotalPregunta11Regular();            
                 }
-                else if(j == 56) {
+                else if(j == 59) {
                 	// Pregunta 11
                     tempValue = consolidado.getTotalPregunta11Buena();             
                 }
-                else if(j == 57) {
+                else if(j == 60) {
                 	// Pregunta 11
                     tempValue = consolidado.getTotalPregunta11MuyBuena();             
                 }
-                else if(j == 58) {
+                else if(j == 61) {
                 	// Pregunta 12
                     tempValue = consolidado.getTotalPregunta12DefinitivamenteNo();             
                 }
-                else if(j == 59) {
+                else if(j == 62) {
                 	// Pregunta 12
                     tempValue = consolidado.getTotalPregunta12ProbablementeNo();            
                 }
-                else if(j == 60) {
+                else if(j == 63) {
                 	// Pregunta 12
                     tempValue = consolidado.getTotalPregunta12ProbablementeSi();             
                 }
-                else if(j == 61) {
+                else if(j == 64) {
                 	// Pregunta 12
                     tempValue = consolidado.getTotalPregunta12DefinitivamenteSi();             
                 }
@@ -684,7 +744,111 @@ public class AtenEncuestaController {
                 tempCell.setCellValue(tempValue);
                                 
             }
-		} 
+		}
+        
+        
+      //CREO EL SEGUNDO LIBRO CONSOLIDADO LLAMADO Negativas_Encuestas
+      
+      //1.Se crea otra hoja dentro del libro asignando un nombre
+      Sheet sheetNegativa = workbook.createSheet("Negativas_Encuestas");
+      
+      
+      //2. Crear título y combinar las celdas para el título
+      //Número de línea
+      int rowNumNegativas = 0;
+      
+      //Primer elemento
+      //Crear primera fila con índice a partir de 0 (fila de encabezado)
+      Row rowNegativas0 = sheetNegativa.createRow(rowNumNegativas++);
+      rowNegativas0.setHeight((short) 500);// Establecer altura de fila
+      String titleNegativas = "NEGATIVAS ENCUESTA";
+      Cell c00Negativas = rowNegativas0.createCell(0);
+      c00Negativas.setCellValue(titleNegativas);
+      c00Negativas.setCellStyle(titleStyle);
+      // Combinar celdas. Los parámetros son fila inicial, fila final, columna inicial y columna final (comienza el índice 0)
+      sheetNegativa.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));//Operación celda de combinación en encabezado, el número total de columnas es 5
+      
+      
+      //Segundo elemento        
+      Row rowNegativas1 = sheetNegativa.createRow(rowNumNegativas++);
+      rowNegativas1.setHeight((short)1250);
+      
+      String[] row_negativas_second = {"SERVICIO","FECHA DE REGISTRO","COMO CALIFICARIA SU EXPERIENCIA RESPECTO A LOS SERVICIOS DE SALUD QUE HA RECIBIDO EN EL HOSPITAL UNIVERSITARIO SAN JOSE DE POPAYAN E.S.E","JUSTIFICACION","RECOMENDARIA A SUS FAMILIARES Y AMIGOS EL HOSPITAL UNIVERSITARIO SAN JOSE DE POPAYAN E.S.E","JUSTIFICACION"};
+      for (int i = 0; i < row_negativas_second.length; i++) {
+          Cell tempCell = rowNegativas1.createCell(i);
+          tempCell.setCellValue(row_negativas_second[i]);
+          tempCell.setCellStyle(headerStyle);
+          //esta linea me permite ajustar el ancho
+          sheetNegativa.setColumnWidth(i, sheetNegativa.getColumnWidth(i) * 50 / 10);          
+      }
+      
+      //Tercer elemento
+      //Agrego el contenido de la respuesta 11 desde un arraylist al EXCEL
+      for(int i=0; i<negativasOnce.size(); i++) {
+    	  Row tempRow = sheetNegativa.createRow(rowNumNegativas++);
+          tempRow.setHeight((short) 800);
+          // Recorrido para relleno de celdas
+          for (int j = 0; j < 4; j++) {
+        	  Cell tempCell = tempRow.createCell(j);
+              tempCell.setCellStyle(contentStyle);
+              String tempValue = "";
+              if (j == 0) {
+                  // Servicio
+                  tempValue = negativasOnce.get(i).getGenAreSer().getGasNombre();                   
+              }
+              else if(j == 1) {
+            	  // Fecha Registro
+            	  String fechaRegistro = formatoFecha(negativasOnce.get(i).getFechaRegistro());   
+                  tempValue = fechaRegistro;  
+              }
+              else if(j == 2) {
+            	  // Respuesta 11
+            	  String calificacion11 = convertirValor(negativasOnce.get(i).getRespuesta11());
+                  tempValue = calificacion11;  
+              }
+              else if(j == 3) {
+            	  // Justificacion Respuesta 11            	  
+                  tempValue = negativasOnce.get(i).getJustificacion11();  
+              }              
+              // Creamos la celda con el contenido
+              tempCell.setCellValue(tempValue);
+          }
+      }
+      
+      
+    //Cuarto elemento
+      //Agrego el contenido de la respuesta 11 desde un arraylist al EXCEL
+      for(int i=0; i<negativasDoce.size(); i++) {
+    	  Row tempRow = sheetNegativa.createRow(rowNumNegativas++);
+          tempRow.setHeight((short) 800);
+          // Recorrido para relleno de celdas
+          for (int j = 0; j < 6; j++) {
+        	  Cell tempCell = tempRow.createCell(j);
+              tempCell.setCellStyle(contentStyle);
+              String tempValue = "";
+              if (j == 0) {
+                  // Servicio
+                  tempValue = negativasDoce.get(i).getGenAreSer().getGasNombre();                   
+              }
+              else if(j == 1) {
+            	  // Fecha Registro
+            	  String fechaRegistro = formatoFecha(negativasDoce.get(i).getFechaRegistro());   
+                  tempValue = fechaRegistro;  
+              }
+              else if(j == 4) {
+            	  // Respuesta 11
+            	  String calificacion11 = convertirValor(negativasDoce.get(i).getRespuesta12());
+                  tempValue = calificacion11;  
+              }
+              else if(j == 5) {
+            	  // Justificacion Respuesta 11            	  
+                  tempValue = negativasDoce.get(i).getJustificacion12();  
+              }              
+              // Creamos la celda con el contenido
+              tempCell.setCellValue(tempValue);
+          }
+      }
+      
         
         
         //este me permite exportar y abrir dialogo para guardar el archivo
@@ -701,6 +865,6 @@ public class AtenEncuestaController {
             e.printStackTrace();
         }      
         
-	}
+	}	
 
 }

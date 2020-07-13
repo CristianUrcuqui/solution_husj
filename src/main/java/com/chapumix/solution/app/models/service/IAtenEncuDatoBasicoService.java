@@ -11,10 +11,14 @@ public interface IAtenEncuDatoBasicoService {
 	
 	public List<AtenEncuDatoBasico> findByStartDateBetween(Date fechaInicial, Date fechaFinal);
 
+	public List<AtenEncuDatoBasico> findByNegativasOnceStartDateBetween(Date fechaInicial, Date fechaFinal);
+	
+	public List<AtenEncuDatoBasico> findByNegativasDoceStartDateBetween(Date fechaInicial, Date fechaFinal);
+	
 	public void save(AtenEncuDatoBasico atenEncuDatoBasico);
 	
 	public AtenEncuDatoBasico findById(Long id);
 	
-	public void delete(Long id);
+	public void delete(Long id);	
 
 }

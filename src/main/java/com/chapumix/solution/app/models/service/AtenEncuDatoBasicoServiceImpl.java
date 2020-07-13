@@ -27,7 +27,19 @@ public class AtenEncuDatoBasicoServiceImpl implements IAtenEncuDatoBasicoService
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public List<AtenEncuDatoBasico> findByStartDateBetween(Date fechaInicial, Date fechaFinal) {
 		return atenEncuDatoBasicoDao.findByStartDateBetween(fechaInicial, fechaFinal);
-	}	
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<AtenEncuDatoBasico> findByNegativasOnceStartDateBetween(Date fechaInicial, Date fechaFinal) {
+		return atenEncuDatoBasicoDao.findByNegativasOnceStartDateBetween(fechaInicial, fechaFinal);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<AtenEncuDatoBasico> findByNegativasDoceStartDateBetween(Date fechaInicial, Date fechaFinal) {
+		return atenEncuDatoBasicoDao.findByNegativasDoceStartDateBetween(fechaInicial, fechaFinal);
+	}
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura

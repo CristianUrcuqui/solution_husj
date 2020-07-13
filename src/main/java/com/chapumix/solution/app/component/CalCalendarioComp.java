@@ -138,7 +138,13 @@ public class CalCalendarioComp {
     		}
 		
 	   }    
+   
     
+    
+    /* ----------------------------------------------------------
+     * METODOS ADICIONALES 
+     * ---------------------------------------------------------- */	
+	  
     
   //Se usa para convertir una fecha Date con un String con formato
   	private String convertirFechaString(Date fechaSolicitudInterno) {

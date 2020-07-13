@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+    
+    <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div> 
+    
+    <!-- Lista para mostrar los errorer antes del formulario -->
+	<div class="col-md-12">
+		<div th:object="${farMipres}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+	</div>
+         
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Entrega</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="submit" form="editarentrega" class="btn bg-gradient-primary" data-toggle="tooltip" data-placement="top" title="Guardar">
+										<i class="fas fa-save fa-lg mt-1"></i>
+									</button>																		
+								</div>
+								<div class="btn-group btn-group-sm" role="group">
+									<button type="reset" form="editarentrega" class="btn bg-gradient-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
+										<i class="fas fa-times fa-lg mt-1"></i>									
+									</button>
+								</div>																	
+							</div>
+						</div>
+					  </div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-secondary" th:href="@{/indexmipres}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->        	
+         	
+         	<div class="col-md-8 mx-auto">
+         		<div class="card card-primary animacion">
+         			<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Entrega Mipres</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    <form id="editarentrega"  class="form-horizontal" th:action="@{/entregaform}" th:object="${farMipres}" role="form" method="post">
+                    
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="numeroprescripcion">Número Prescripción</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroprescripcion" type="text" th:field="*{numeroPrescripcion}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="tecnologia">Tipo De Tecnología</label>
+                           <div class="col-md-8">                           		
+                           		<select id="tecnologia"  th:field="*{comTipoTecnologia}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tecn : ${tecnologia}" th:value="${tecn.id}" th:text="${tecn.descripcion}"></option>	                          
+		                        </select>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="consecutivoservicio">Consecutivo Orden Servicio o Tecnología</label>
+                           <div class="col-md-8">                           		
+                           		<input id="consecutivoservicio" type="text" th:field="*{consecutivoTecnologia}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="tipodocumento">Tipo De Documento Paciente</label>
+                           <div class="col-md-8">                           		
+                           		<select id="tecnologia"  th:field="*{comTipoDocumentoMipres}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tipodoc : ${tipodocumento}" th:value="${tipodoc.id}" th:text="${tipodoc.descripcion}"></option>	                          
+		                        </select>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="numeroidentificacion">Número Identificación Paciente</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroidentificacion" type="text" th:field="*{numeroDocumentoPaciente}" class="form-control form-control-sm">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="numeroentrega">Número Entrega</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroentrega" type="text" th:field="*{numeroEntrega}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="codigoservicio">Código Servicio o Tecnología Entregado</label>
+                           <div class="col-md-8">                           		
+                           		<input id="codigoservicio" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="catidadentregada">Cantidad Total Entregada</label>
+                           <div class="col-md-8">                           		
+                           		<input id="catidadentregada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>                
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="causanoentrega">Causa De No Entrega</label>
+                           <div class="col-md-8">                           		
+                           		<select id="causanoentrega"  th:field="*{causaNoEntrega}" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>		                            
+		                            <option th:value="'0'">NINGUNA</option>
+		                            <option th:value="'7'">NO FUE POSIBLE CONTACTAR AL PACIENTE</option>
+		                            <option th:value="'8'">PACIENTE FALLECIDO</option>
+		                            <option th:value="'9'">PACIENTE SE NIEGA A RECIBIR EL SUMINISTRO</option>	                          
+		                        </select>
+                           </div>
+                       </div>                  
+                       
+                       <div class="form-group row required">
+                       		<label class="control-label col-md-4" for="entregatotal">Entrega Total</label>
+                       		<div class="form-check form-check-inline ml-2">
+                       			<input  id="entregatotal1" type="radio" th:field="*{entregaTotal}" value="1" name="inlineRadioOptions" class="form-check-input">
+  								<label class="form-check-label" for="entregatotal1">SI</label>
+                       		</div>
+                       		
+                       		<div class="form-check form-check-inline">
+                       			<input id="entregatotal2" type="radio" th:field="*{entregaTotal}" value="0" name="inlineRadioOptions" class="form-check-input">
+  								<label class="form-check-label" for="entregatotal2">NO</label>
+                       		</div>
+                       		
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="fechaentrega">Fecha De Entrega</label>
+                           <div class="col-md-8">                           		
+                           		<input id="fechaentrega" type="text" th:field="*{fechaEntrega}" class="form-control form-control-sm" autocomplete="off">                           		
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="lote">Lote Entregado (Compra Directa Hepatitis C)</label>
+                           <div class="col-md-8">                           		
+                           		<input id="lote" type="text" th:field="*{loteEntregado}" class="form-control form-control-sm">
+                           </div>
+                       </div> 
+                       
+                         
+                    
+                    
+                    </form>                    
+                    </div><!-- /.card-body -->     
+         		</div>  <!-- /.card -->       	
+         	</div>  	   
+         	     
+                
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+
+
+<script>
+    //parametros para el datepicker
+    $( "#fechaentrega" ).datepicker({
+    	// Mostrar animacion
+	    showAnim: "drop",
+	    // Modificar el mes
+	    changeMonth: true,
+	    // Modificar el año
+	    changeYear: true,
+	    // Formato de la fecha
+	    dateFormat: "dd-mm-yy",              
+	    // Primer dia de la semana - lunes
+	    firstDay: 1,
+	    // Días largo traducido
+	    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+	    // Dias cortos traducido
+	    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+	    // Nombres largos de los meses traducido
+	    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+	    // Nombres cortos de los meses traducido 
+	    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+	    // Al selecconar fecha, se escribe en el campo de texto
+	    onSelect: function(dateText) { 
+	    $('#fechaFinal').val(dateText);
+	     }
+    });
+</script>
+
+<script>
+	//metodo para quitar espacios en los input
+	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
+	$('input').keyup(function(){
+    /* Obtengo el valor contenido dentro del input */
+    var value = $(this).val();
+ 
+    /* Elimino todos los espacios en blanco que tenga la cadena delante y detrás */
+    var value_without_space = $.trim(value);
+ 
+    /* Muestro una alerta al usuario */
+    ////alert('El texto que ha ingresado contiene espacios y serán eliminados');
+ 
+    /* Cambio el valor contenido por el valor sin espacios */
+    $(this).val(value_without_space);
+});
+</script>
+
+</body>
+</html>

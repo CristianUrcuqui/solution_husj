@@ -178,7 +178,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>          
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->   
+      <!-- /.sidebar-menu -->
+      
+      
+      <!--   ----------------------------------------------------------
+	     * MENU FARMACIA
+	     * ---------------------------------------------------------- */-->
+	     
+	     
+	  <!-- Sidebar Menu -->      
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_FARMACIA_MIPRES')" class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" th:class="${farmacia} ? 'nav-link active' : 'nav-link'">
+              <i class="fas fa-pills nav-icon"></i>
+              <p>
+                Farmacia
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_FARMACIA_MIPRES')" class="nav nav-treeview">
+              <li class="nav-item">
+                <a th:href="@{/indexfarmacia}" th:class="${enlace10} ? 'nav-link active' : 'nav-link'">
+                   <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
+                  <p>Menú Principal</p>
+                </a>
+              </li>                         
+            </ul>
+          </li>          
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->     
      
       
       
@@ -372,7 +404,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 0.9.02
+      <b>Version</b> 1.0.0
     </div>
   </footer>
 </div>

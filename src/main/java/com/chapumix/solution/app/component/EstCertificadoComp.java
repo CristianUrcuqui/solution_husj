@@ -57,7 +57,7 @@ public class EstCertificadoComp {
     public Multipart mp;
     public SMTPTransport t;
 	
-	//metodo que se ejecuta de forma automatica todos los dias cada a las 8:00 am y a las 2:00 pm
+	//metodo que se ejecuta de forma automatica todos los dias a las 8:00 am, 11:00 am, 2:00 pm y a las 5:00 pm
     @Scheduled(cron = "00 00 08,11,14,17 * * *", zone="America/Bogota")   
     public void cronCantidadCertificadosSch() throws AddressException, MessagingException {	    
     	

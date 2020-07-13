@@ -29,7 +29,7 @@ public class GenAreSerComp {
 	@Autowired
 	private ResourceLoader loader;
 	
-	//metodo que se ejecuta de forma automatica todos los dias a la 8:00 PM formato de 24 horas
+	//metodo que se ejecuta de forma automatica todos los dias a la 8:00 AM y 8:00 PM formato de 24 horas
     @Scheduled(cron = "00 00 08,20 * * *", zone="America/Bogota")
 	public void cronSincronizaServicio() {    	
     	
