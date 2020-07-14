@@ -318,7 +318,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       
       
       <!-- Sidebar Menu -->      
-      <nav sec:authorize="hasAnyRole('ROLE_ADMIN')" class="mt-2">
+      <nav sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AJUSTES_USUARIOS', 'ROLE_AJUSTES_ROL', 'ROLE_AJUSTES_SINCRONIZAR_USUARIOS', 'ROLE_AJUSTES_SINCRONIZAR_PACIENTES')" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -330,7 +330,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav nav-treeview">
+            <ul sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AJUSTES_USUARIOS', 'ROLE_AJUSTES_ROL', 'ROLE_AJUSTES_SINCRONIZAR_USUARIOS', 'ROLE_AJUSTES_SINCRONIZAR_PACIENTES')" class="nav nav-treeview">
               <li class="nav-item">
                 <a th:href="@{/indexajustes}" th:class="${enlace3} ? 'nav-link active' : 'nav-link'">
                    <i class="fas fa-chevron-circle-right nav-icon custom-icon"></i>				                   
@@ -404,7 +404,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <strong>Copyright &copy; 2020 Solution.</strong>  Todos los derechos reservados.
     
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 1.0.1
+      <b>Version</b> 1.0.8
     </div>
   </footer>
 </div>

@@ -28,24 +28,42 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenUsuarioDTO;
+import com.chapumix.solution.app.models.entity.ComGenero;
 import com.chapumix.solution.app.models.entity.ComRole;
+import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComUsuario;
+import com.chapumix.solution.app.models.entity.GenPacien;
+import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComRoleService;
+import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComUsuarioService;
+import com.chapumix.solution.app.models.service.IGenPacienService;
 
 @Controller
-@SessionAttributes("comUsuario")
+@SessionAttributes({"comUsuario", "genPacien"})
 @PropertySource(value = "application.properties", encoding="UTF-8")
 public class ComUsuarioController {
 	
-	public static final String URLUsuario = "http://localhost:9000/api/usuarios/username"; //se obtuvo de API REST de GenUsuarioRestController	
+	public static final String URLUsuario = "http://localhost:9000/api/usuarios/username"; //se obtuvo de API REST de GenUsuarioRestController
+	
+	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController
 	
 	@Autowired
 	private IComUsuarioService iComUsuarioService;
 	
 	@Autowired
 	private IComRoleService iComRoleService;
+	
+	@Autowired
+	private IGenPacienService iGenPacienService;
+	
+	@Autowired
+	private IComGeneroService iComGeneroService;
+	
+	@Autowired
+	private IComTipoDocumentoService iComTipoDocumentoService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -62,6 +80,8 @@ public class ComUsuarioController {
 	@Value("${app.titulosincronizarusuario}")
 	private String titulosincronizarusuario;
 	
+	@Value("${app.titulosincronizarpaciente}")
+	private String titulosincronizarpaciente;	
 	
 	@Value("${app.enlace3}")
 	private String enlace3;
@@ -131,20 +151,20 @@ public class ComUsuarioController {
 	
 	
 	// Este metodo me permite visualizar o cargar el formulario de la sincronizacion de usuarios
-	@GetMapping("/sincronizaform")
-	public String sincroniza(Map<String, Object> model) {
+	@GetMapping("/sincronizausuarioform")
+	public String crearUsuario(Map<String, Object> model) {
 		ComUsuario comUsuario = new ComUsuario();
 		model.put("titulo", utf8(this.titulosincronizarusuario));
 		model.put("ajustes", enlaceprincipalajustes);
 		model.put("comUsuario", comUsuario);
 		model.put("enlace3", enlace3);
-		return "sincronizaform";
+		return "sincronizausuarioform";
 	}
 	
 	
 	// Este metodo me permite sincronizar los usuarios
-	@RequestMapping(value = "/sincronizaform", method = RequestMethod.POST)
-	public String sincronizaUsuario(@RequestParam(value = "documento", required = false) String documento, Model model, RedirectAttributes flash, SessionStatus status) {
+	@RequestMapping(value = "/sincronizausuarioform", method = RequestMethod.POST)
+	public String guardarUsuario(@RequestParam(value = "documento", required = false) String documento, Model model, RedirectAttributes flash, SessionStatus status) {
 		
 		if(documento != "") {
 			
@@ -156,7 +176,7 @@ public class ComUsuarioController {
 				ComUsuario usuarioBuscar = iComUsuarioService.findByUsuario(doc);				
 				
 				if(usuarioBuscar == null) {
-					// proceso API para consultar el medico.			
+					// proceso API para consultar el usuario en dinamica.			
 					ResponseEntity<GenUsuarioDTO> respuestam = restTemplate.exchange(URLUsuario + '/' + doc, HttpMethod.GET, null, new ParameterizedTypeReference<GenUsuarioDTO>() {});
 					GenUsuarioDTO usuario = respuestam.getBody();
 					
@@ -173,7 +193,7 @@ public class ComUsuarioController {
 			flash.addFlashAttribute("error", "El documento del usuario es requerido.");
 			model.addAttribute("ajustes", enlaceprincipalajustes);
 			model.addAttribute("enlace3", enlace3);
-			return "redirect:sincronizaform";
+			return "redirect:sincronizausuarioform";
 		}
 		//String mensajeFlash = (comRole.getId() != null) ? "El rol fue editado correctamente" : "El rol fue creado correctamente";
 
@@ -183,8 +203,63 @@ public class ComUsuarioController {
 		model.addAttribute("enlace3", enlace3);
 		status.setComplete();
 		flash.addFlashAttribute("success", "Usuario sincronizado correctamente");
-		return "redirect:sincronizaform";
+		return "redirect:sincronizausuarioform";
+	}
+	
+	
+	// Este metodo me permite visualizar o cargar el formulario de la sincronizacion de pacientes
+	@GetMapping("/sincronizapacienteform")
+	public String crearPaciente(Map<String, Object> model) {		
+		GenPacien genPacien = new GenPacien();
+		model.put("titulo", utf8(this.titulosincronizarpaciente));
+		model.put("ajustes", enlaceprincipalajustes);
+		model.put("genPacien", genPacien);
+		model.put("enlace3", enlace3);
+		return "sincronizapacienteform";
+	}
+	
+	// Este metodo me permite sincronizar los pacientes
+	@RequestMapping(value = "/sincronizapacienteform", method = RequestMethod.POST)
+	public String guardarPaciente(@RequestParam(value = "documento", required = false) String documento, Model model, RedirectAttributes flash, SessionStatus status) {
+		
+		if(documento != "") {
+			
+			String sinespaciosdocumento = documento.replace(" ", "");
+			List<String> list = Stream.of(sinespaciosdocumento.trim().split(",")).collect(Collectors.toList());	
+			
+			list.forEach(doc ->{
+				
+				GenPacien genPacien = iGenPacienService.findByNumberDoc(doc);
+				
+				if(genPacien == null) {					
+					
+					// proceso API para buscar el paciente
+					ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + doc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
+					List<GenPacienDTO> dinamica = respuestaa.getBody();
+					
+					GenPacien guardarPaciente = pacienteAgregar(dinamica);					
+					iGenPacienService.save(guardarPaciente);					
+					flash.addFlashAttribute("success", "Paciente(s) sincronizado correctamente");					
+				}				
+			});			
+		}
+		else {
+			flash.addFlashAttribute("error", "El documento del paciente es requerido.");
+			model.addAttribute("ajustes", enlaceprincipalajustes);
+			model.addAttribute("enlace3", enlace3);
+			return "redirect:sincronizapacienteform";
+		}	
+		
+		model.addAttribute("titulo", utf8(this.titulosincronizarpaciente));
+		model.addAttribute("ajustes", enlaceprincipalajustes);
+		model.addAttribute("enlace3", enlace3);
+		status.setComplete();
+		flash.addFlashAttribute("success", "Paciente sincronizado correctamente");
+		return "redirect:sincronizapacienteform";		
 	}	
+
+	
+
 	
 
 	/* ----------------------------------------------------------
@@ -219,7 +294,28 @@ public class ComUsuarioController {
 		nuevo.setEstado(true);
 		nuevo.setRoles(listRoles);	
 		return nuevo;
-	}	
+	}
+	
+	//Se usa para obtener el paciente a guardar
+	private GenPacien pacienteAgregar(List<GenPacienDTO> dinamica) {
+		GenPacien agregarPaciente = new GenPacien();
+		//buscamos el sexo del paciente			
+		ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
+		
+		//buscamos el tipo de documento del paciente			
+		ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());		
+		
+		agregarPaciente.setOid(dinamica.get(0).getOid());
+		agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
+		agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
+		agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
+		agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
+		agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
+		agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
+		agregarPaciente.setComGenero(sexoPaciente);
+		agregarPaciente.setComTipoDocumento(tipoDocumento);
+		return agregarPaciente;
+	}
 
 	// metodo para obtener el primer nombre del funcionario
 	private String recortar(String cadena) {

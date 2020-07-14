@@ -58,10 +58,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_AJUSTES_USUARIOS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 red">
-							  <img src="dist/img/usuarios.jpg" alt="encuestau"/>
+							  <img src="dist/img/usuarios.jpg" alt="usuarios"/>
 							  <figcaption>
 							    <h3>Usuarios</h3>
 							    <div>
@@ -71,7 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>					    
 					   			    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_AJUSTES_ROL')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 red">
 							  <img src="dist/img/rol.jpg" alt="rol"/>
@@ -84,18 +84,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>					    
 					    				    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_AJUSTES_SINCRONIZAR_USUARIOS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 red">
-							  <img src="dist/img/sincronizar.jpg" alt="sincronizar"/>
+							  <img src="dist/img/sincronizarusuarios.jpg" alt="sincronizar_usuarios"/>
 							  <figcaption>
 							    <h3>Sincronizar</h3>
 							    <div>
 							      <p>usuarios</p>
-							    </div><a th:href="@{/sincronizaform}"></a>
+							    </div><a th:href="@{/sincronizausuarioform}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>					    
+					    </div>
+					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_AJUSTES_SINCRONIZAR_PACIENTES')" class="col-md-3">
+					    	</figure>
+							<figure class="snip1166 red">
+							  <img src="dist/img/sincronizarpacientes.jpg" alt="sincronizar_pacientes"/>
+							  <figcaption>
+							    <h3>Sincronizar</h3>
+							    <div>
+							      <p>pacientes</p>
+							    </div><a th:href="@{/sincronizapacienteform}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>						    
 					   
 					    
 				    </div><!-- /.row -->          

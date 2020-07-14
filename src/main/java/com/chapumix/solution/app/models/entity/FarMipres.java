@@ -15,6 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -29,7 +30,6 @@ public class FarMipres implements Serializable {
 	private Long id;	
 	private String numeroPrescripcion;
 	private Integer consecutivoTecnologia;	
-	private String numeroDocumentoPaciente;
 	private Integer numeroEntrega;
 	private String codigoServicio;
 	private String cantidadEntregada;
@@ -47,6 +47,7 @@ public class FarMipres implements Serializable {
 	private Date fechaAltaAct;	
 	private ComTipoTecnologia comTipoTecnologia;
 	private ComTipoDocumentoMipres comTipoDocumentoMipres;
+	private GenPacien genPacien;
 	
 	public FarMipres() {		
 	}
@@ -88,16 +89,6 @@ public class FarMipres implements Serializable {
 	public void setConsecutivoTecnologia(Integer consecutivoTecnologia) {
 		this.consecutivoTecnologia = consecutivoTecnologia;
 	}	
-
-	@NotEmpty
-	@Column(name = "numero_documento_paciente", length = 50)
-	public String getNumeroDocumentoPaciente() {
-		return numeroDocumentoPaciente;
-	}
-
-	public void setNumeroDocumentoPaciente(String numeroDocumentoPaciente) {
-		this.numeroDocumentoPaciente = numeroDocumentoPaciente;
-	}
 
 	@NotNull
 	@Column(name = "numero_entrega")
@@ -265,7 +256,17 @@ public class FarMipres implements Serializable {
 	public void setComTipoDocumentoMipres(ComTipoDocumentoMipres comTipoDocumentoMipres) {
 		this.comTipoDocumentoMipres = comTipoDocumentoMipres;
 	}
-	
-	
+
+	@NotNull
+	@Valid
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)	
+	@JoinColumn(name = "id_paciente")
+	public GenPacien getGenPacien() {
+		return genPacien;
+	}
+
+	public void setGenPacien(GenPacien genPacien) {
+		this.genPacien = genPacien;
+	}	
 
 }

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -79,12 +80,19 @@ public class ComRolController {
 			return "rollistado";
 		}
 		
-		String mensajeFlash = (comRole.getId() != null) ? "El rol fue editado correctamente" : "El rol fue creado correctamente";
+		try {
+			String mensajeFlash = (comRole.getId() != null) ? "El rol fue editado correctamente" : "El rol fue creado correctamente";
 			
-		iComRoleService.save(comRole);
-		status.setComplete();
-		flash.addFlashAttribute("success", mensajeFlash);		
-		return "redirect:rollistado";
+			iComRoleService.save(comRole);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);		
+			return "redirect:rollistado";
+		} catch (Exception e) {			
+			flash.addFlashAttribute("error", "Lo sentimos ha ocurrido un error");
+			return "redirect:rollistado";
+		}
+		
+		
 	}
 	
 	// Este metodo me permite cargar los datos para editar el rol del sistema

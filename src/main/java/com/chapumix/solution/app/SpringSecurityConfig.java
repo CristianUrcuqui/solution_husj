@@ -23,10 +23,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/dist/**", "/plugins/**").permitAll() //rutas permitidas
 		//usuarios administradores
-		.antMatchers("/usuarioform/**").hasAnyRole("ADMIN") 
-		.antMatchers("/usuariolistado/**").hasAnyRole("ADMIN") 
-		.antMatchers("/rolform/**").hasAnyRole("ADMIN") 
-		.antMatchers("/rollistado/**").hasAnyRole("ADMIN") 
+		.antMatchers("/indexajustes/**").hasAnyRole("ADMIN", "AJUSTES_USUARIOS", "AJUSTES_ROL", "AJUSTES_SINCRONIZAR_USUARIOS", "AJUSTES_SINCRONIZAR_PACIENTES")	
 		//servicio calidad cumpleaños
 		.antMatchers("/indexcalidad/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS") 
 		.antMatchers("/indexcalendario/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_EMPLEADOS", "CALIDAD_CUMPLEANOS_HOY", "ROLE_CALIDAD_CUMPLEANOS_CARGAR") 

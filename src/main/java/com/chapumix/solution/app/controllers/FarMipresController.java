@@ -8,10 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,12 +39,19 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.chapumix.solution.app.entity.dto.GenPacienDTO;
+import com.chapumix.solution.app.models.entity.ComGenero;
+import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTokenMipres;
 import com.chapumix.solution.app.models.entity.FarMipres;
+import com.chapumix.solution.app.models.entity.GenPacien;
+import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoMipresService;
+import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComTipoTecnologiaService;
 import com.chapumix.solution.app.models.service.IComTokenMipresService;
 import com.chapumix.solution.app.models.service.IFarMipresService;
+import com.chapumix.solution.app.models.service.IGenPacienService;
 
 
 @Controller
@@ -51,6 +60,8 @@ import com.chapumix.solution.app.models.service.IFarMipresService;
 public class FarMipresController {
 	
 	public static final String MetodoPutEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/EntregaAmbito/"; //url mipres metodo para put entrega
+	
+	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController
 	
 	@Autowired
 	private IComTokenMipresService iComTokenMipresService;
@@ -62,7 +73,16 @@ public class FarMipresController {
 	private IComTipoDocumentoMipresService iComTipoDocumentoMipresService;
 	
 	@Autowired
-	private IFarMipresService iFarMipresService; 
+	private IFarMipresService iFarMipresService;
+	
+	@Autowired
+	private IGenPacienService iGenPacienService;
+	
+	@Autowired
+	private IComGeneroService iComGeneroService;
+	
+	@Autowired
+	private IComTipoDocumentoService iComTipoDocumentoService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -86,10 +106,10 @@ public class FarMipresController {
 	
 	
 	/* ----------------------------------------------------------
-     * INDEX ESTADISTICA MORTALIDAD
+     * INDEX FARMACIA MIPRES
      * ---------------------------------------------------------- */
 	
-	//INDEX ESTADISTICA MORTALIDAD
+	//INDEX FARMACIA MIPRES
 	@GetMapping("/indexmipres")
 	public String index(Model model) {
 		model.addAttribute("titulo", utf8(this.titulomipres));
@@ -177,11 +197,21 @@ public class FarMipresController {
 		
 		
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
+			
+			//sincronizo paciente de dinamica a solution
+			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());
+			GenPacien obtengoPaciente =  SicronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());	
+			
 			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente" : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
 			farMipres.setIdMipress(webServiceInfo.get("Id"));
 			farMipres.setIdEntregaMipress(webServiceInfo.get("IdEntrega"));
 			farMipres.setEnviado(true);
 			farMipres.setLoginUsrAlta(principal.getName());
+			if(genPacien == null) {
+				farMipres.setGenPacien(obtengoPaciente);
+			}else {
+				farMipres.setGenPacien(genPacien);
+			}			
 			iFarMipresService.save(farMipres);
 			status.setComplete();
 			flash.addFlashAttribute("success", mensajeFlash);
@@ -189,26 +219,11 @@ public class FarMipresController {
 		}else {
 			flash.addFlashAttribute("error", webServiceInfo.get("error"));
 			return "redirect:entregaform";
-		}
+		}		
 		
-		/*if(webServiceInfo.get("success").equals("200")) {
-			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente" : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
-			farMipres.setIdMipress(webServiceInfo.get("Id"));
-			farMipres.setIdEntregaMipress(webServiceInfo.get("IdEntrega"));
-			farMipres.setEnviado(true);
-			farMipres.setLoginUsrAlta(principal.getName());
-			iFarMipresService.save(farMipres);
-			status.setComplete();
-			flash.addFlashAttribute("success", mensajeFlash);
-			return "redirect:entregaform";
-		}else {
-			flash.addFlashAttribute("error", webServiceInfo.get("error"));
-			return "redirect:entregaform";
-		}*/
-			
-			
-		
-	}	
+	}
+	
+
 	
 
 	/* ----------------------------------------------------------
@@ -242,30 +257,7 @@ public class FarMipresController {
 	    	return tokenSecundario;
 	    }else {
 	    	return "La solicitud GET no funcionó";	    	
-	    }		
-		
-		
-		/*URL urlEncadenada = new URL(url+nit+'/'+tokenPrincipal);
-		HttpURLConnection con = (HttpURLConnection) urlEncadenada.openConnection();
-		con.setRequestMethod("GET");		
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setConnectTimeout(10000); //10 segundos de espera para la conexion
-		con.setReadTimeout(10000); //10 segundos de lectura para la conexion	
-		int responseCode = con.getResponseCode();		
-		if (responseCode == HttpURLConnection.HTTP_OK) { // verifico respuesta 200 sucess
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();			
-			String tokenSecundario = response.toString().replaceAll("^\\\"+|\\\"+$", "");			
-			return tokenSecundario;
-		} else {			
-			return "La solicitud GET no funcionó";
-		}*/		
+	    }
 	}
 	
 	//Se usa para hacer put en el web service de mipres
@@ -296,7 +288,7 @@ public class FarMipresController {
         parametros.put("TipoTec", farMipres.getComTipoTecnologia().getTipo());
         parametros.put("ConTec", farMipres.getConsecutivoTecnologia());
         parametros.put("TipoIDPaciente", farMipres.getComTipoDocumentoMipres().getTipo());
-        parametros.put("NoIDPaciente", farMipres.getNumeroDocumentoPaciente());
+        parametros.put("NoIDPaciente", farMipres.getGenPacien().getPacNumDoc());
         parametros.put("NoEntrega", farMipres.getNumeroEntrega());
         parametros.put("CodSerTecEntregado", farMipres.getCodigoServicio());
         parametros.put("CantTotEntregada", farMipres.getCantidadEntregada());
@@ -357,5 +349,41 @@ public class FarMipresController {
 		return fechaConversion;
 
 	}
+	
+	private GenPacien SicronizarPaciente(GenPacien genPacien, String pacNumDoc) {
+		if(genPacien == null) {
+			// proceso API para buscar el paciente
+			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
+			List<GenPacienDTO> dinamica = respuestaa.getBody();
+			
+			GenPacien guardarPaciente = pacienteAgregar(dinamica);					
+			iGenPacienService.save(guardarPaciente);
+			GenPacien obtengoPaciente = iGenPacienService.findByNumberDoc(pacNumDoc);		
+			return obtengoPaciente;
+		}
+		
+		return new GenPacien();		
+	}
+	
+	//Se usa para obtener el paciente a guardar
+	private GenPacien pacienteAgregar(List<GenPacienDTO> dinamica) {
+		GenPacien agregarPaciente = new GenPacien();
+		//buscamos el sexo del paciente			
+		ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
+			
+		//buscamos el tipo de documento del paciente			
+		ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());		
+			
+		agregarPaciente.setOid(dinamica.get(0).getOid());
+		agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
+		agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
+		agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
+		agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
+		agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
+		agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
+		agregarPaciente.setComGenero(sexoPaciente);
+		agregarPaciente.setComTipoDocumento(tipoDocumento);
+		return agregarPaciente;
+	}	
 		
 }
