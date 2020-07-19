@@ -68,7 +68,6 @@ public class ComTokenMipres implements Serializable {
 		this.tokenPrincipal = tokenPrincipal;
 	}
 
-	@NotEmpty
 	@Column(name = "token_secundario")
 	public String getTokenSecundario() {
 		return tokenSecundario;

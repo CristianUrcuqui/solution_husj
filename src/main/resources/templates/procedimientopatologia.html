@@ -103,7 +103,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${lprocpat.hcNumFol}" class="align-middle"></td>
 					         	<td th:text="${lprocpat.sipCodigo+ ' - ' + lprocpat.sipNombre}" class="align-middle"></td>
 					         	<td th:text="${#dates.format(lprocpat.hcsfecsol, 'dd-MM-yyy h:mm a')}" class="align-middle"></td>
-					         	<td class="class="align-middle"">
+					         	<td class="align-middle">
 							      	<div th:if="${lprocpat.gasNombre} == null">
 									    <span>EXTERNO</span>
 									</div>

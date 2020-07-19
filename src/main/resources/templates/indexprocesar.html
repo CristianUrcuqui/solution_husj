@@ -79,8 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_PROCESAR')" class="col-md-3">
-					    	</figure>
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_PROCESAR')" class="col-md-3">					    	
 							<figure class="snip1166 navy">
 							  <img src="dist/img/procesar.jpg" alt="procesar"/>
 							  <figcaption>
@@ -92,14 +91,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_CONSULTAS')" class="col-md-3">
-					    	</figure>
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PATOLOGIA_PROCEDIMIENTOS_CONSULTAS')" class="col-md-3">					    	
 							<figure class="snip1166 navy">
 							  <img src="dist/img/consulta.jpg" alt="consulta"/>
 							  <figcaption>
 							    <h3>Consulta</h3>
 							    <div>
-							      <p>general</p>
+							      <p>General</p>
 							    </div><a th:href="@{/procedimientopatologiageneral}"></a>
 							  </figcaption>
 							</figure>					    

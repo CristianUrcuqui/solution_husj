@@ -37,9 +37,15 @@ public class FarMipres implements Serializable {
 	private Integer causaNoEntrega;
 	private Date fechaEntrega;
 	private String loteEntregado;
-	private String idMipress;
+	private String idTraza;
 	private String idEntregaMipress;
-	private Boolean enviado;
+	private String idReporteEntregaMipress;
+	private String idFacturacionMipress;
+	private String idReporteFacturacionMipress;
+	private Boolean procesadoEntrega;
+	private Boolean procesadoReporteEntrega;
+	private Boolean procesadoFacturacion;
+	private String numeroFactura;
 	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
@@ -51,7 +57,8 @@ public class FarMipres implements Serializable {
 	
 	public FarMipres() {		
 	}
-	
+
+
 	@PrePersist
 	public void prePersist() {		
 		this.fechaAlta = new Date();
@@ -158,16 +165,16 @@ public class FarMipres implements Serializable {
 
 	public void setLoteEntregado(String loteEntregado) {
 		this.loteEntregado = loteEntregado;
+	}	
+
+	@Column(name = "id_traza")
+	public String getIdTraza() {
+		return idTraza;
 	}
 
-	@Column(name = "id_mipres")
-	public String getIdMipress() {
-		return idMipress;
-	}
-
-	public void setIdMipress(String idMipress) {
-		this.idMipress = idMipress;
-	}
+	public void setIdTraza(String idTraza) {
+		this.idTraza = idTraza;
+	}	
 
 	@Column(name = "id_entrega_mipres")
 	public String getIdEntregaMipress() {
@@ -178,15 +185,75 @@ public class FarMipres implements Serializable {
 		this.idEntregaMipress = idEntregaMipress;
 	}	
 
-	@Column(name = "enviado", columnDefinition="BIT")
-	public Boolean getEnviado() {
-		return enviado;
+	@Column(name = "id_reporte_entrega_mipres")
+	public String getIdReporteEntregaMipress() {
+		return idReporteEntregaMipress;
 	}
 
-	public void setEnviado(Boolean enviado) {
-		this.enviado = enviado;
+
+	public void setIdReporteEntregaMipress(String idReporteEntregaMipress) {
+		this.idReporteEntregaMipress = idReporteEntregaMipress;
 	}
+
+
+	@Column(name = "id_facturacion_mipres")
+	public String getIdFacturacionMipress() {
+		return idFacturacionMipress;
+	}
+
+
+	public void setIdFacturacionMipress(String idFacturacionMipress) {
+		this.idFacturacionMipress = idFacturacionMipress;
+	}
+
+
+	@Column(name = "id_reporte_facturacion_mipres")
+	public String getIdReporteFacturacionMipress() {
+		return idReporteFacturacionMipress;
+	}
+
+
+	public void setIdReporteFacturacionMipress(String idReporteFacturacionMipress) {
+		this.idReporteFacturacionMipress = idReporteFacturacionMipress;
+	}
+
+
+	@Column(name = "procesado_entrega", columnDefinition="BIT")
+	public Boolean getProcesadoEntrega() {
+		return procesadoEntrega;
+	}
+
+	public void setProcesadoEntrega(Boolean procesadoEntrega) {
+		this.procesadoEntrega = procesadoEntrega;
+	}	
 	
+	@Column(name = "procesado_reporte_entrega", columnDefinition="BIT")
+	public Boolean getProcesadoReporteEntrega() {
+		return procesadoReporteEntrega;
+	}
+
+	public void setProcesadoReporteEntrega(Boolean procesadoReporteEntrega) {
+		this.procesadoReporteEntrega = procesadoReporteEntrega;
+	}
+
+	@Column(name = "procesado_facturacion", columnDefinition="BIT")
+	public Boolean getProcesadoFacturacion() {
+		return procesadoFacturacion;
+	}
+
+	public void setProcesadoFacturacion(Boolean procesadoFacturacion) {
+		this.procesadoFacturacion = procesadoFacturacion;
+	}
+
+	@Column(name = "numero_factura")	
+	public String getNumeroFactura() {
+		return numeroFactura;
+	}
+
+	public void setNumeroFactura(String numeroFactura) {
+		this.numeroFactura = numeroFactura;
+	}
+
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name = "fecha_registro")

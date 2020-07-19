@@ -12,6 +12,10 @@ public interface IFarMipresService {
 	
 	public FarMipres findById(Long id);
 	
+	public FarMipres findByDocumentoPrescripcionTecnologiaCantidad(String numDocumento, String prescripcion, String cantidadEntregada);
+	
+	public List<FarMipres> findByPrescripcion(String prescripcion);
+	
 	public void delete(Long id);
 
 }

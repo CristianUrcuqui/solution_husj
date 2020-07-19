@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Token</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Token Primario</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -102,11 +102,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
          	<div class="col-md-8 mx-auto">
          		<div class="card card-primary animacion">
          			<div class="card-header custom-header p-0">
-                          <h4 class="ml-3 mt-1">Parámetros Token</h4>
+                          <h4 class="ml-3 mt-1">Parámetros Token Primario</h4>
                     </div>
                     <div class="card-body">
                     
-                    <form id="editartoken"  class="form-horizontal" th:action="@{/tokenform}" th:object="${comTokenMipres}" role="form" method="post">
+                    <form id="editartoken"  class="form-horizontal" th:action="@{/tokenformprimario}" th:object="${comTokenMipres}" role="form" method="post">
                     
                     	<div class="form-group row required">
                            <label class="control-label col-md-4" for="url">Metodo Url</label>
@@ -127,15 +127,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            <div class="col-md-8">                           		
                            		<input id="tokenuno" type="text" th:field="*{tokenPrincipal}" class="form-control form-control-sm">	
                            </div>
-                       </div>
-                       
-                       <div class="form-group row required">
-                           <label class="control-label col-md-4" for="tokendos">Token Secundario</label>
-                           <div class="col-md-8">                           		
-                           		<input id="tokendos" type="text" th:field="*{tokenSecundario}" class="form-control form-control-sm" readonly>	
-                           </div>
-                       </div>   
-                    
+                       </div>                 
                     
                     </form>                    
                     </div><!-- /.card-body -->     

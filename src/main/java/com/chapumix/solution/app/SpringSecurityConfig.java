@@ -36,8 +36,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/certificadocsvform/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_CERTIFICADO", "ESTADISTICA_CERTIFICADO_CARGAR")
 		//servicio farmacia mipres
 		.antMatchers("/indexfarmacia/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES") 
-		.antMatchers("/indexmipres/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_ENTREGA", "FARMACIA_MIPRES_PARAMETROS") 
-		.antMatchers("/tokenform/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_ENTREGA", "FARMACIA_MIPRES_PARAMETROS") 		
+		.antMatchers("/indexmipres/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_ENTREGA", "FARMACIA_MIPRES_PARAMETRO_PRINCIPAL", "FARMACIA_MIPRES_PARAMETRO_SECUNDARIO", "FARMACIA_MIPRES_SINCRONIZAR") 
+		.antMatchers("/tokenform/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_ENTREGA", "FARMACIA_MIPRES_PARAMETRO_PRINCIPAL", "FARMACIA_MIPRES_PARAMETRO_SECUNDARIO", "FARMACIA_MIPRES_SINCRONIZAR") 		
 		//servicio estadistica mortalidad
 		.antMatchers("/indexmortalidad/**").hasAnyRole("ADMIN", "ESTADISTICA_MORTALIDAD_ANALISIS", "ESTADISTICA_MORTALIDAD_REPORTE")
 		.antMatchers("/mortalidadform/**").hasAnyRole("ADMIN", "ESTADISTICA_MORTALIDAD_ANALISIS", "ESTADISTICA_MORTALIDAD_REPORTE")

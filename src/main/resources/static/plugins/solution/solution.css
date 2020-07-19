@@ -404,7 +404,7 @@ figure.snip1166 h3:before {
 }
 figure.snip1166 p {
   padding: 8px 45px;
-  opacity: 0;
+  opacity: 0.5;
   font-size: 1.2em;
   font-weight: 500;
   left: 0;
@@ -487,4 +487,10 @@ figure.snip1166.hover figcaption p {
 /******Estilo para los checkbox******/
 .checkbox {    
     font-size: 12px;
+}
+
+/******Estilo para los iconos fontawesome******/
+.fontawesowe > a > i {
+	opacity: 0.8 !important;
+    color: white !important;
 }

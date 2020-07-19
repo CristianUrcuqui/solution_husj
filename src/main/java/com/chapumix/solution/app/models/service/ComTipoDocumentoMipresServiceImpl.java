@@ -26,6 +26,12 @@ public class ComTipoDocumentoMipresServiceImpl implements IComTipoDocumentoMipre
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public ComTipoDocumentoMipres findById(Long id) {
 		return comTipoDocumentoMipresDao.findById(id).orElse(null);//.orElse es que si lo encuentra retorna el objeto y no devuelve null
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public ComTipoDocumentoMipres tipoDocumento(String tipo) {
+		return comTipoDocumentoMipresDao.tipoDocumento(tipo);
 	}	
 		
 	
@@ -40,6 +46,6 @@ public class ComTipoDocumentoMipresServiceImpl implements IComTipoDocumentoMipre
 	@Transactional
 	public void delete(Long id) {
 		comTipoDocumentoMipresDao.deleteById(id);	
-	}	
+	}
 
 }

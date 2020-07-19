@@ -10,7 +10,7 @@ if (nodes != null){
 		    nodes[i].remove()
 		    //nodes[i].style.visibility = "hidden";		    
 		}	
-	}, 15000);
+	}, 8000);
 }
 
 

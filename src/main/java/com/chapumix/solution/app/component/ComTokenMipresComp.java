@@ -61,30 +61,7 @@ public class ComTokenMipresComp {
 	    	return tokenSecundario;
 	    }else {
 	    	return "La solicitud GET no funcionó";
-	    }	
+	    }		
 		
-		
-		
-		/*URL urlEncadenada = new URL(url+nit+'/'+tokenPrincipal);
-		HttpURLConnection con = (HttpURLConnection) urlEncadenada.openConnection();
-		con.setRequestMethod("GET");		
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setConnectTimeout(10000); //10 segundos de espera para la conexion
-		con.setReadTimeout(10000); //10 segundos de lectura para la conexion	
-		int responseCode = con.getResponseCode();		
-		if (responseCode == HttpURLConnection.HTTP_OK) { // verifico respuesta 200 sucess
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();			
-			String tokenSecundario = response.toString().replaceAll("^\\\"+|\\\"+$", "");			
-			return tokenSecundario;
-		} else {			
-			return "La solicitud GET no funcionó";
-		}*/	
 	}
 }

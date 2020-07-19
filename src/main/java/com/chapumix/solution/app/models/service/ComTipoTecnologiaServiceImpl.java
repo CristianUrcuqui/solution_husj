@@ -26,8 +26,13 @@ public class ComTipoTecnologiaServiceImpl implements IComTipoTecnologiaService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public ComTipoTecnologia findById(Long id) {
 		return ComTipoTecnologiaDao.findById(id).orElse(null);//.orElse es que si lo encuentra retorna el objeto y no devuelve null
-	}	
-		
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public ComTipoTecnologia tipoTecnologia(String tipo) {
+		return ComTipoTecnologiaDao.tipoTecnologia(tipo);
+	}		
 	
 	@Override
 	@Transactional
@@ -40,6 +45,6 @@ public class ComTipoTecnologiaServiceImpl implements IComTipoTecnologiaService{
 	@Transactional
 	public void delete(Long id) {
 		ComTipoTecnologiaDao.deleteById(id);	
-	}	
+	}		
 
 }

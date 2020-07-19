@@ -12,6 +12,8 @@ public interface IComTipoDocumentoService {
 	
 	public ComTipoDocumento findById(Long id);
 	
+	public ComTipoDocumento tipoDocumento(String tipo);
+	
 	public void delete(Long id);
 
 }

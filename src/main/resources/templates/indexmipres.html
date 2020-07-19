@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Mipres Entrega Suministro</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Mipres</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -90,31 +90,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	
                 		<!-- MODULOS --> 					    
 					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ENTREGA')" class="col-md-3">
-					    	</figure>
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ENTREGA')" class="col-md-3">					    	
 							<figure class="snip1166 navy">
 							  <img src="dist/img/entrega.jpg" alt="entrega"/>
 							  <figcaption>
-							    <h3>Entrega</h3>
+							    <h3>Procesar</h3>
 							    <div>
-							      <p></p>
-							    </div><a th:href="@{/entregaform}"></a>
+							      <p>Pendientes</p>
+							    </div><a th:href="@{/pendientes}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR')" class="col-md-3">					    	
+							<figure class="snip1166 red">
+							  <img src="dist/img/sincronizarusuarios.jpg" alt="sincronizar_prescripcion"/>
+							  <figcaption>
+							    <h3>Sincronizar</h3>
+							    <div>
+							      <p>Prescripción</p>
+							    </div><a th:href="@{/sincronizaprescripcionform}"></a>
 							  </figcaption>
 							</figure>					    
 					    </div>
 					    		    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO')" class="col-md-3">
-					    	</figure>
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_PRINCIPAL')" class="col-md-3">		
 							<figure class="snip1166 navy">
 							  <img src="dist/img/parametros.jpg" alt="reporte"/>
 							  <figcaption>
 							    <h3>Parámetros</h3>
 							    <div>
-							      <p></p>
-							    </div><a th:href="@{/tokenform(id=1)}"></a>
+							      <p>Token Principal</p>
+							    </div><a th:href="@{/tokenformprimario(id=2)}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>			    
+					    </div>
+					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_SECUNDARIO')" class="col-md-3">				
+							<figure class="snip1166 navy">
+							  <img src="dist/img/parametros.jpg" alt="reporte"/>
+							  <figcaption>
+							    <h3>Parámetros</h3>
+							    <div>
+							      <p>Token Secundario</p>
+							    </div><a th:href="@{/tokenformsecundario(id=1)}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>				    
 					   
 					    
 				    </div><!-- /.row -->          

@@ -26,8 +26,19 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public FarMipres findById(Long id) {
 		return farMipresDao.findById(id).orElse(null);//.orElse es que si lo encuentra retorna el objeto y no devuelve null
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public FarMipres findByDocumentoPrescripcionTecnologiaCantidad(String numDocumento, String prescripcion, String cantidadEntregada) {
+		return farMipresDao.findByDocumentoPrescripcionTecnologiaCantidad(numDocumento, prescripcion, cantidadEntregada);
 	}	
-		
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<FarMipres> findByPrescripcion(String prescripcion) {
+		return farMipresDao.findByPrescripcion(prescripcion);
+	}	
 	
 	@Override
 	@Transactional
