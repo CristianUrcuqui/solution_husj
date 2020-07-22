@@ -3,6 +3,8 @@ package com.chapumix.solution.app.models.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,12 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	public List<FarMipres> findAll() {
 		return (List<FarMipres>) farMipresDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<FarMipres> findAll(Pageable pageable) {
+		return farMipresDao.findAll(pageable);
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura

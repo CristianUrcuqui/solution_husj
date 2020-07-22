@@ -37,6 +37,7 @@ public class FarMipres implements Serializable {
 	private Integer causaNoEntrega;
 	private Date fechaEntrega;
 	private String loteEntregado;
+	private String codEps;
 	private String idTraza;
 	private String idEntregaMipress;
 	private String idReporteEntregaMipress;
@@ -166,6 +167,17 @@ public class FarMipres implements Serializable {
 	public void setLoteEntregado(String loteEntregado) {
 		this.loteEntregado = loteEntregado;
 	}	
+
+	@Column(name = "codigo_eps", length = 10)
+	public String getCodEps() {
+		return codEps;
+	}
+
+
+	public void setCodEps(String codEps) {
+		this.codEps = codEps;
+	}
+
 
 	@Column(name = "id_traza")
 	public String getIdTraza() {

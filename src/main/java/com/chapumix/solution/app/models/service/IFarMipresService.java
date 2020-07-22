@@ -2,12 +2,17 @@ package com.chapumix.solution.app.models.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.chapumix.solution.app.models.entity.FarMipres;
 
 public interface IFarMipresService {
 	
 	public List<FarMipres> findAll();
 
+	public Page<FarMipres> findAll(Pageable pageable);
+	
 	public void save(FarMipres farMipres);
 	
 	public FarMipres findById(Long id);
