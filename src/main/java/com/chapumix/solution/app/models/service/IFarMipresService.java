@@ -13,11 +13,21 @@ public interface IFarMipresService {
 
 	public Page<FarMipres> findAll(Pageable pageable);
 	
+	public Page<FarMipres> findAllCustomPendientes(Pageable pageable);
+	
+	public Page<FarMipres> findAllCustomSearchPendientes(Pageable pageable, String prescripcion);
+	
+	public Page<FarMipres> findAllCustomProcesados(Pageable pageable);
+	
+	public Page<FarMipres> findAllCustomSearchProcesados(Pageable pageable, String prescripcion);	
+	
 	public void save(FarMipres farMipres);
 	
 	public FarMipres findById(Long id);
 	
 	public FarMipres findByDocumentoPrescripcionTecnologiaCantidad(String numDocumento, String prescripcion, String cantidadEntregada);
+	
+	public FarMipres findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(String numDocumento, String prescripcion, String cantidadEntregada, Integer consecutivoTecnologia);
 	
 	public List<FarMipres> findByPrescripcion(String prescripcion);
 	

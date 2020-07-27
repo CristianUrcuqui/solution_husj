@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn bg-gradient-secondary" th:href="@{/pendientes}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-secondary" th:href="@{/pendientesmipres}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -98,7 +98,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                     <div class="card-body">
                     
-                    <form id="editarrepeporteentrega"  class="form-horizontal" th:action="@{/reporteentregaform}" th:object="${farMipres}" role="form" method="post">
+                    <form id="editarreporteentrega"  class="form-horizontal" th:action="@{/reporteentregaform}" th:object="${farMipres}" role="form" method="post">
                     
                        <div class="form-group row">
                            <label class="control-label col-md-4" for="idtraza">Id Traza</label>
@@ -122,13 +122,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        </div>
                        
                        <div class="form-group row">
-                           <label class="control-label col-md-4" for="numerodocumento">Tipo De Documento Paciente</label>
+                           <label class="control-label col-md-4" for="numerodocumento">Número Documento Paciente</label>
                            <div class="col-md-8">                           		
                            		<input id="numerodocumento" type="text" th:field="*{genPacien.pacNumDoc}" class="form-control form-control-sm" readonly>
                            </div>
                        </div>
                        
-                       <div class="form-group row">
+                       <div class="form-group row required">
                            <label class="control-label col-md-4" for="numerofactura">Número Factura</label>
                            <div class="col-md-8">                           		
                            		<input id="numerofactura" type="text" th:field="*{numeroFactura}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
@@ -170,8 +170,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        
                        <div class="row ml-1 mb-1 float-right">
 					    <div class="col-md-12">					      
-					      <button type="submit" form="editarrepeporteentrega" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
-					      <button type="reset" form="editarrepeporteentrega" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					      <button type="submit" form="editarreporteentrega" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+					      <button type="reset" form="editarreporteentrega" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
 					    </div>
 					   </div>   
                     

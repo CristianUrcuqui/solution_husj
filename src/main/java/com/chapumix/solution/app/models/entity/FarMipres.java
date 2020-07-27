@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -47,6 +48,7 @@ public class FarMipres implements Serializable {
 	private Boolean procesadoReporteEntrega;
 	private Boolean procesadoFacturacion;
 	private String numeroFactura;
+	private String nombreMedicamento;
 	private Date fechaRegistro;
 	private String loginUsrAlta;
 	private Date fechaAlta;
@@ -54,7 +56,7 @@ public class FarMipres implements Serializable {
 	private Date fechaAltaAct;	
 	private ComTipoTecnologia comTipoTecnologia;
 	private ComTipoDocumentoMipres comTipoDocumentoMipres;
-	private GenPacien genPacien;
+	private GenPacien genPacien;	
 	
 	public FarMipres() {		
 	}
@@ -264,6 +266,16 @@ public class FarMipres implements Serializable {
 
 	public void setNumeroFactura(String numeroFactura) {
 		this.numeroFactura = numeroFactura;
+	}	
+
+	@Lob
+	@Column(name = "nombre_medicamento")
+	public String getNombreMedicamento() {
+		return nombreMedicamento;
+	}
+
+	public void setNombreMedicamento(String nombreMedicamento) {
+		this.nombreMedicamento = nombreMedicamento;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -346,6 +358,5 @@ public class FarMipres implements Serializable {
 
 	public void setGenPacien(GenPacien genPacien) {
 		this.genPacien = genPacien;
-	}	
-
+	}
 }

@@ -494,3 +494,14 @@ figure.snip1166.hover figcaption p {
 	opacity: 0.8 !important;
     color: white !important;
 }
+
+/******Estilo border radius para los botones******/
+.bordes-botones {	
+	border-radius: 0px 3px 3px 0px !important;
+}
+
+
+/******Estilode border radius para los input******/
+.bordes-input {	
+	border-radius: 3px 0px 0px 3px !important;
+}

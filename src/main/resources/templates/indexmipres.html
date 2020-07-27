@@ -94,10 +94,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<figure class="snip1166 navy">
 							  <img src="dist/img/entrega.jpg" alt="entrega"/>
 							  <figcaption>
-							    <h3>Procesar</h3>
+							    <h3>Pendientes</h3>
 							    <div>
-							      <p>Pendientes</p>
-							    </div><a th:href="@{/pendientes}"></a>
+							      <p></p>
+							    </div><a th:href="@{/pendientesmipres}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PROCESADO')" class="col-md-3">					    	
+							<figure class="snip1166 navy">
+							  <img src="dist/img/ok.jpg" alt="procesado"/>
+							  <figcaption>
+							    <h3>Procesados</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/procesadosmipres}"></a>
 							  </figcaption>
 							</figure>					    
 					    </div>
