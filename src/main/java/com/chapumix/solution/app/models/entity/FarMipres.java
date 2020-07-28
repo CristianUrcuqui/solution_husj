@@ -36,6 +36,11 @@ public class FarMipres implements Serializable {
 	private String cantidadEntregada;
 	private Integer entregaTotal;
 	private Integer causaNoEntrega;
+	private String valorEntregado;
+	private String valorUnitario;
+	private String valorTotal;
+	private String cuotaModeradora;
+	private String copago;
 	private Date fechaEntrega;
 	private String loteEntregado;
 	private String codEps;
@@ -147,6 +152,59 @@ public class FarMipres implements Serializable {
 
 	public void setCausaNoEntrega(Integer causaNoEntrega) {
 		this.causaNoEntrega = causaNoEntrega;
+	}	
+	
+
+	@Column(name = "valor_unitario")
+	public String getValorUnitario() {
+		return valorUnitario;
+	}
+
+
+	public void setValorUnitario(String valorUnitario) {
+		this.valorUnitario = valorUnitario;
+	}
+
+
+	@Column(name = "valor_total")
+	public String getValorTotal() {
+		return valorTotal;
+	}
+
+
+	public void setValorTotal(String valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	@Column(name = "cuota_moderadora")
+	public String getCuotaModeradora() {
+		return cuotaModeradora;
+	}
+
+
+	public void setCuotaModeradora(String cuotaModeradora) {
+		this.cuotaModeradora = cuotaModeradora;
+	}
+	
+
+	@Column(name = "copago")
+	public String getCopago() {
+		return copago;
+	}
+
+
+	public void setCopago(String copago) {
+		this.copago = copago;
+	}
+
+
+	@Column(name = "valor_entregado")
+	public String getValorEntregado() {
+		return valorEntregado;
+	}
+
+	public void setValorEntregado(String valorEntregado) {
+		this.valorEntregado = valorEntregado;
 	}
 
 	@NotNull

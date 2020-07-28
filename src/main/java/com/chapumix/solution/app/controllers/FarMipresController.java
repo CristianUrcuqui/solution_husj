@@ -310,8 +310,8 @@ public class FarMipresController {
 		}else {
 			flash.addFlashAttribute("error", "El ID del consolidado no puede ser 0");
 				return "redirect:/procesadosmipres";
-		}
-					
+		}			
+		
 		model.put("titulo", utf8(this.tituloentrega));
 		model.put("farMipres", farMipres);
 		model.put("tecnologia", iComTipoTecnologiaService.findAll());
@@ -322,6 +322,8 @@ public class FarMipresController {
 	}	
 	
 	
+	
+
 	// Este metodo me permite cargar los datos para editar la entrega y guardar
 	@RequestMapping(value = "/entregaform")
 	public String crear(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
@@ -369,7 +371,7 @@ public class FarMipresController {
 			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());
 			GenPacien obtengoPaciente =  SicronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());	
 			
-			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente" : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
+			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente"+"IdEntrega: "+webServiceInfo.get("IdEntrega") : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
 			farMipres.setIdTraza(webServiceInfo.get("Id"));
 			farMipres.setIdEntregaMipress(webServiceInfo.get("IdEntrega"));
 			farMipres.setProcesadoEntrega(true);
@@ -417,7 +419,7 @@ public class FarMipresController {
 	
 	// Este metodo me permite guardar el reporte de entrega
 	@RequestMapping(value = "/reporteentregaform", method = RequestMethod.POST)
-	public String guardarReporteEntrega(@Valid FarMipres farMipres, @RequestParam(value = "estadoentrega", required = false) Integer estadoentrega, @RequestParam(value = "valor", required = false) String valor, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+	public String guardarReporteEntrega(@Valid FarMipres farMipres, @RequestParam(value = "estadoentrega", required = false) Integer estadoentrega, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
 			model.addAttribute("farMipres", farMipres);			
@@ -431,7 +433,7 @@ public class FarMipresController {
 			return "reporteentregaform";
 		}
 		
-		if(valor.isEmpty()) {			
+		if(farMipres.getValorEntregado().isEmpty()) {			
 			model.addAttribute("error", "El valor es requerido");
 			return "reporteentregaform";
 		}
@@ -442,7 +444,7 @@ public class FarMipresController {
 		}
 		
 		
-		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteEntrega(farMipres, estadoentrega, valor);
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteEntrega(farMipres, estadoentrega);
 		
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
 					
@@ -476,7 +478,9 @@ public class FarMipresController {
 			flash.addFlashAttribute("error", "El ID del empleado no puede ser 0");
 			return "redirect:/pendientesmipres";
 		}				
-				
+			
+		farMipres.setCuotaModeradora("0");
+		farMipres.setCopago("0");
 		model.put("titulo", utf8(this.tituloreportefacturacion));
 		model.put("farMipres", farMipres);
 		model.put("farmacia", enlaceprincipalfarmacia);
@@ -486,9 +490,7 @@ public class FarMipresController {
 	
 	// Este metodo me permite guardar el reporte de facturacion
 	@RequestMapping(value = "/reportefacturacion", method = RequestMethod.POST)
-	public String guardarReporteFacturacion(@Valid FarMipres farMipres, @RequestParam(value = "nit", required = false) String nit, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, 
-											@RequestParam(value = "vunitario", required = false) String vunitario, @RequestParam(value = "vtotal", required = false) String vtotal, 
-											@RequestParam(value = "cuota", required = false) String cuota, @RequestParam(value = "copago", required = false) String copago, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+	public String guardarReporteFacturacion(@Valid FarMipres farMipres, @RequestParam(value = "nit", required = false) String nit, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
 			model.addAttribute("farMipres", farMipres);			
@@ -505,24 +507,24 @@ public class FarMipresController {
 			model.addAttribute("error", "La cantidad en unidades minimas dispensación es requerido");
 			return "reportefacturacion";
 		}
-		if(vunitario.isEmpty()) {			
+		if(farMipres.getValorUnitario().isEmpty()) {			
 			model.addAttribute("error", "El valor unitario es requerido");
 			return "reportefacturacion";
 		}
-		if(vtotal.isEmpty()) {			
+		if(farMipres.getValorTotal().isEmpty()) {			
 			model.addAttribute("error", "El valor total es requerido");
 			return "reportefacturacion";
 		}
-		if(cuota.isEmpty()) {			
+		if(farMipres.getCuotaModeradora().isEmpty()) {			
 			model.addAttribute("error", "La cuota moderadora es requerida");
 			return "reportefacturacion";
 		}
-		if(copago.isEmpty()) {			
+		if(farMipres.getCopago().isEmpty()) {			
 			model.addAttribute("error", "El copago es requerido");
 			return "reportefacturacion";
 		}
 			
-		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, nit, cdispensacion, vunitario, vtotal, cuota, copago);
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, nit, cdispensacion);
 			
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
 						
@@ -681,7 +683,7 @@ public class FarMipresController {
     }
 	
 	//Se usa para hacer put en el web service de mipres REPORTE ENTREGA
-	private Map<String, String> guardarWebServiceMipresReporteEntrega(FarMipres farMipres, Integer estadoentrega, String valor) throws IOException {
+	private Map<String, String> guardarWebServiceMipresReporteEntrega(FarMipres farMipres, Integer estadoentrega) throws IOException {
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -704,7 +706,7 @@ public class FarMipresController {
 		parametros.put("ID", farMipres.getIdTraza());
 		parametros.put("EstadoEntrega", estadoentrega);
 		parametros.put("CausaNoEntrega", farMipres.getCausaNoEntrega());
-		parametros.put("ValorEntregado", valor);
+		parametros.put("ValorEntregado", farMipres.getValorEntregado());
 		
 		//Proporciono la solicitud json en el objeto StringEntity y asígnela al objeto puesto.
         StringEntity stringEntity = new StringEntity(parametros.toString());
@@ -743,7 +745,7 @@ public class FarMipresController {
 	}
 	
 	//Se usa para hacer put en el web service de mipres REPORTE FACTURACION
-	private Map<String, String> guardarWebServiceMipresReporteFacturacion(FarMipres farMipres, String nit, String cdispensacion, String vunitario, String vtotal, String cuota, String copago) throws IOException {
+	private Map<String, String> guardarWebServiceMipresReporteFacturacion(FarMipres farMipres, String nit, String cdispensacion) throws IOException {
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -774,10 +776,10 @@ public class FarMipresController {
 		parametros.put("CodEPS", farMipres.getCodEps());
 		parametros.put("CodSerTecAEntregado", farMipres.getCodigoServicio());
 		parametros.put("CantUnMinDis", cdispensacion);
-		parametros.put("ValorUnitFacturado", vunitario);
-		parametros.put("ValorTotFacturado", vtotal);
-		parametros.put("CuotaModer", cuota);
-		parametros.put("Copago", copago);
+		parametros.put("ValorUnitFacturado", farMipres.getValorUnitario());
+		parametros.put("ValorTotFacturado", farMipres.getValorTotal());
+		parametros.put("CuotaModer", farMipres.getCuotaModeradora());
+		parametros.put("Copago", farMipres.getCopago());
 				
 		//Proporciono la solicitud json en el objeto StringEntity y asígnela al objeto puesto.
 		StringEntity stringEntity = new StringEntity(parametros.toString());
@@ -1033,6 +1035,9 @@ public class FarMipresController {
 		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);		
 		return fechaTranformada;
 	}
+	
+	
+	
 	
 	//Se usa para sincronizar los pacientes de dinamica a solution
 	private GenPacien SicronizarPaciente(GenPacien genPacien, String pacNumDoc) {

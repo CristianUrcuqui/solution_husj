@@ -92,13 +92,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row"><!-- CONTENIDO DESDE AQUI-->        	
          	
          	<div class="col-md-12 mx-auto">
-         		<form id="editarconsolidadomipres"  class="form-horizontal" th:object="${farMipres}" role="form" method="post">         		
+         		<form id="editarconsolidadomipres" class="form-horizontal" th:object="${farMipres}" role="form" method="post">
+         		
+         		<div class="row">      	
+		      		<div class="col-md-4 mx-auto bg-gradient-primary text-center animacion mb-4">
+		      			<h5 class="mt-1">
+		      				<i class="fas fa-info-circle text-dark"></i> 
+		      					Número Prescripción 
+		      				<span th:text=${farMipres.numeroPrescripcion} class="badge badge-success"></span> 
+		      			</h5>
+		      		</div>      	      		
+		      	</div>
+         		
+         		         		
          		
          		<!-- ENTREGA -->
          		<div class="col-md-12">
 		            <div class="card card-primary animacion">
 		              <div class="card-header custom-header">
-		                <h3 class="card-title">Entrega</h3>
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Entrega</h3>
 		
 		                <div class="card-tools">
 		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
@@ -129,8 +141,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						          	
 						          	<div class="col-md-3">
 							          	<div class="form-group">
-								            <label class="control-label" for="cantidad">Cantidad Entregada</label>
-								            <input id="cantidad" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
+								            <label class="control-label" for="cantidadentregada">Cantidad Entregada</label>
+								            <input id="cantidadentregada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
 						                </div>
 						          	</div>
 						          	
@@ -181,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	           <div class="col-md-12">
 		            <div class="card card-primary collapsed-card animacion">
 		              <div class="card-header custom-header">
-		                <h3 class="card-title">Reporte Entrega</h3>
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Reporte Entrega</h3>
 		
 		                <div class="card-tools">
 		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
@@ -201,7 +213,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								            <label class="control-label" for="identrega">ID Reporte Entrega</label>
 								            <input id="identrega" type="text" th:field="*{idReporteEntregaMipress}" class="form-control form-control-sm" readonly>
 						                </div>
-						          	</div>         	
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorentregado">Valor Entregado</label>
+								            <input id="valorentregado" type="text" th:field="*{valorEntregado}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>         	          	
 						          	
 						          	<div class="col-md-3">
 							          	<div class="form-group">
@@ -224,7 +243,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	           <div class="col-md-12">
 		            <div class="card card-primary collapsed-card animacion">
 		              <div class="card-header custom-header">
-		                <h3 class="card-title">Facturación</h3>
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Facturación</h3>
 		
 		                <div class="card-tools">
 		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
@@ -258,7 +277,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								            <label class="control-label" for="tecnologia">Código Tecnología</label>
 								            <input id="tecnologia" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
 						                </div>
-						          	</div>        	             			
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Reporte</label>
+								            <input id="fechaentrega" type="text" th:value="${#dates.format(farMipres.fechaAltaAct, 'dd-MM-yyyy HH:mm:ss')}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorunitario">Valor Unitario</label>
+								            <input id="valorunitario" type="text" th:field="*{valorUnitario}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="cantidadreportada">Cantidad Reportada</label>
+								            <input id="cantidadreportada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="copago">Copago</label>
+								            <input id="copago" type="text" th:field="*{copago}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="cuotamoderadora">Cuota Moderadora</label>
+								            <input id="cuotamoderadora" type="text" th:field="*{cuotaModeradora}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valortotal">Valor Total</label>
+								            <input id="valortotal" type="text" th:field="*{valorTotal}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>                	             			
 		                		
 		                		</div>            	
 		                	</div>           

@@ -164,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="valor">Valor Entregado</label>
                            <div class="col-md-8">                           		
-                           		<input id="valor" type="text" th:name="valor" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="valor" type="text" th:field="*{valorEntregado}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div> 
                        

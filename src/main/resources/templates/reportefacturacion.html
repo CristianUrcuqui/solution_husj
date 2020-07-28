@@ -210,28 +210,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="valorunitario">Valor Unitario</label>
                            <div class="col-md-8">                           		
-                           		<input id="valorunitario" type="text" th:name="vunitario" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="valorunitario" type="text" th:field="*{valorUnitario}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>
                        
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="valortotal">Valor Total</label>
                            <div class="col-md-8">                           		
-                           		<input id="valortotal" type="text" th:name="vtotal" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="valortotal" type="text" th:field="*{valorTotal}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>
                        
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="cuota">Cuota Moderadora</label>
                            <div class="col-md-8">                           		
-                           		<input id="cuota" type="text" th:name="cuota" value="0" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="cuota" type="text" th:field="*{cuotaModeradora}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>
                        
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="copago">Copago</label>
                            <div class="col-md-8">                           		
-                           		<input id="copago" type="text" th:name="copago" value="0" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="copago" type="text" th:field="*{copago}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>      
                        
