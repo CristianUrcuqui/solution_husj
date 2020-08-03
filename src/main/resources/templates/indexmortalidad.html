@@ -92,6 +92,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_ESTADISTICA_MORTALIDAD_CONSOLIDADO')" class="col-md-3">					    	
+							<figure class="snip1166 navy">
+							  <img src="dist/img/consolidado.jpg" alt="reporte"/>
+							  <figcaption>
+							    <h3>Consolidado</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/consolidadomortalidad}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
+					    
 					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_ESTADISTICA_MORTALIDAD_REPORTE')" class="col-md-3">					    	
 							<figure class="snip1166 navy">
 							  <img src="dist/img/reporte.jpg" alt="reporte"/>
@@ -102,7 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							    </div><a th:href="@{/reportemortalidad}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>			    
+					    </div>				    
 					   
 					    
 				    </div><!-- /.row -->          

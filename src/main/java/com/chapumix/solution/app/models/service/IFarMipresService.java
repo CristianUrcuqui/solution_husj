@@ -31,6 +31,8 @@ public interface IFarMipresService {
 	
 	public List<FarMipres> findByPrescripcion(String prescripcion);
 	
+	public List<FarMipres> findByIdMipres(Long id);
+	
 	public void delete(Long id);
 
 }

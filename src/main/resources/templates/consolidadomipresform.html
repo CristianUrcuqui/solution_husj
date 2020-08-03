@@ -210,6 +210,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                		
 		                			<div class="col-md-3">
 							          	<div class="form-group">
+								            <label class="control-label" for="idtraza">ID Traza</label>
+								            <input id="idtraza" type="text" th:field="*{idTraza}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
 								            <label class="control-label" for="identrega">ID Reporte Entrega</label>
 								            <input id="identrega" type="text" th:field="*{idReporteEntregaMipress}" class="form-control form-control-sm" readonly>
 						                </div>
@@ -260,8 +267,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                		
 		                			<div class="col-md-3">
 							          	<div class="form-group">
-								            <label class="control-label" for="identrega">ID Facturación</label>
+								            <label class="control-label" for="identrega">ID</label>
 								            <input id="identrega" type="text" th:field="*{idFacturacionMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">ID Reporte Facturación</label>
+								            <input id="identrega" type="text" th:field="*{idReporteFacturacionMipress}" class="form-control form-control-sm" readonly>
 						                </div>
 						          	</div>
 						          	

@@ -53,6 +53,12 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	public Page<FarMipres> findAllCustomSearchProcesados(Pageable pageable, String prescripcion) {
 		return farMipresDao.findAllCustomSearchProcesados(pageable, prescripcion)		;
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<FarMipres> findByIdMipres(Long id) {
+		return farMipresDao.findByIdMipres(id);
+	}
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura

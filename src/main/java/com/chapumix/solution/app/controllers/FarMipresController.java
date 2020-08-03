@@ -1,6 +1,7 @@
 package com.chapumix.solution.app.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.Principal;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -66,6 +69,14 @@ import com.chapumix.solution.app.models.service.IFarMipresService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.chapumix.solution.app.utils.PageRender;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 
 @Controller
 @SessionAttributes({"farMipres","comTokenMipres"})
@@ -76,7 +87,11 @@ public class FarMipresController {
 	
 	public static final String MetodoPutReporteEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntrega/"; //url mipres metodo para put reporte entrega
 	
+	public static final String MetodoGetReporteEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXPrescripcion/"; //url mipres metodo para get reporte entrega
+	
 	public static final String MetodoPutReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/Facturacion/"; //url mipres metodo para put reporte facturacion
+	
+	public static final String MetodoGetReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/FacturacionXPrescripcion/"; //url mipres metodo para get reporte facturacion
 	
 	public static final String MetodoGetConsulta = "https://wsmipres.sispro.gov.co/wsmipresnopbs/api/Prescripcion/"; //url mipres metodo para get consulta
 	
@@ -319,10 +334,21 @@ public class FarMipresController {
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("enlace10", enlace10);
 		return "consolidadomipresform";
-	}	
+	}
 	
+	// Este metodo me permite generar el certificado
+	@RequestMapping(value = "/certificadomipres")
+	public String certificadoMipres(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal, HttpServletResponse response) throws ParseException, JRException, IOException {
+				
+		List<FarMipres> farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findByIdMipres(id);
+			crearPDF(farMipres, response);			
+		}
+		return null;
+	}
 	
-	
+
 
 	// Este metodo me permite cargar los datos para editar la entrega y guardar
 	@RequestMapping(value = "/entregaform")
@@ -1016,12 +1042,10 @@ public class FarMipresController {
 
 	// Se usa para dar formato a fechas de dinamica
 	private String formatoFecha(Date fecha) {
-
 		// convierto la fecha que entra en formato Date
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String fechaConversion = sdf.format(fecha);		
 		return fechaConversion;
-
 	}
 	
 	//Se usa para convertir parametro fecha solicitud de String a fecha Date con formato
@@ -1036,7 +1060,14 @@ public class FarMipresController {
 		return fechaTranformada;
 	}
 	
-	
+	//Se usa para convertir parametro fecha solicitud de String a fecha Date con formato
+	private Date convertirFechaWebService(String fecha) throws ParseException {
+		Date fechaTranformada = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fecha);
+		/*System.out.println(fechaTranformada);*/
+		//Date fechaTranformada = DateUtils.parseDate(fecha, new String[] { "yyyy-MM-dd HH:mm", "dd-MM-yyyy hh:mm" });
+		//System.out.println(fechaTranformada);
+		return fechaTranformada;
+	}
 	
 	
 	//Se usa para sincronizar los pacientes de dinamica a solution
@@ -1119,6 +1150,226 @@ public class FarMipresController {
 		return agregarPaciente;
 	}
 	
+	//se usa para crear el certificado en PDF
+	private void crearPDF(List<FarMipres> farMipres, HttpServletResponse response) throws JRException, IOException, ParseException {
+		
+		//parametros adicionales para el PDF
+		Map<String, Object> parameters = new HashMap<>();
+		
+		String entregadoTotal = entrega(farMipres.get(0).getEntregaTotal());
+		String causaNoEntrega = causa(farMipres.get(0).getCausaNoEntrega());
+		
+		// Obteniendo el archivo .jrxml de la carpeta de recursos.
+		InputStream jrxmlInput = this.getClass().getResourceAsStream("/reports/certificadomipres.jrxml");
+		
+		// Compilo el informe Jasper de .jrxml a .jasper
+		JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlInput);
+		
+		// Obteniendo a las prescipciones de la fuente de datos.
+		JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(farMipres);
+		
+		//Obtengo datos adicionales del web service Reporte Entrega
+		Map<String, Object> webServiceInfoEntrega =  obtenerReporteEntrega(farMipres.get(0).getNumeroPrescripcion());
+		
+		//Obtengo datos adicionales del web service Reporte Facturacion
+		Map<String, Object> webServiceInfoFacturacion =  obtenerReporteFacturacion(farMipres.get(0).getNumeroPrescripcion());
+				
+		//obtengo el estado del reporte de entrega desde el web service
+		String estadoReporteEntrega = estadoReporte(webServiceInfoEntrega.get("EstRepEntrega"));
+		//obtengo la fecha del reporte de entrega desde el web service
+		Date fecRepEntrega = convertirFechaWebService(webServiceInfoEntrega.get("FecRepEntrega").toString());
+		//obtengo el estado del reporte de facturacion desde el web service
+		String estadoReporteFacturacion = estadoReporte(webServiceInfoFacturacion.get("EstFacturacion"));
+		//obtengo la fecha del reporte de facturacion desde el web service
+		Date fecRepFacturacion = convertirFechaWebService(webServiceInfoFacturacion.get("FecFacturacion").toString());
+		
+		//
+		
+		// Agregar los parámetros adicionales al pdf.
+		parameters.put("logo", this.getClass().getResourceAsStream("/static/dist/img/logohusj.png"));
+		parameters.put("entregaTotal", entregadoTotal);
+		parameters.put("causaNoEntrega", causaNoEntrega);
+		parameters.put("estadoReporteEntrega", estadoReporteEntrega);
+		parameters.put("fecRepEntrega", fecRepEntrega);
+		parameters.put("valorTotalEntrega", Integer.parseInt(farMipres.get(0).getValorEntregado()));
+		parameters.put("cantidadUnidadesMinimas", String.valueOf(webServiceInfoFacturacion.get("CantUnMinDis")).replaceAll(".0", ""));
+		parameters.put("estadoReporteFacturacion", estadoReporteFacturacion);
+		parameters.put("fecRepFacturacion", fecRepFacturacion);
+		parameters.put("valorUnitario", Integer.parseInt(farMipres.get(0).getValorUnitario()));
+		parameters.put("cuotaModeradora", Integer.parseInt(farMipres.get(0).getCuotaModeradora()));
+		parameters.put("copago", Integer.parseInt(farMipres.get(0).getCopago()));
+		parameters.put("valorTotal", Integer.parseInt(farMipres.get(0).getValorTotal()));	
+		
+		
+		// Rellenar el informe con los datos de la prescripcion y la información de parámetros adicionales.
+		JasperPrint jasperPrint  = JasperFillManager.fillReport(jasperReport, parameters, source);
+		
+		
+		//este me permite exportar y abrir dialogo para guardar el archivo
+		String fileName = farMipres.get(0).getNumeroPrescripcion()+".pdf";
+		response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+		response.setContentType("application/pdf");
+		ServletOutputStream servletOutputStream = response.getOutputStream();
+	    JasperExportManager.exportReportToPdfStream(jasperPrint,servletOutputStream);
+	    servletOutputStream.flush();
+	    servletOutputStream.close();
+	    
+	}	
+
+	//se usa para transformar (entero) de la entrega en String 
+	private String entrega(Integer entregaTotal) {
+		if(entregaTotal == 1) {
+			return "SI";
+		}else {
+			return "NO";
+		}
+	}
+	
+	
+	//se usa para transformar (entero) de la entrega en String 
+	private String causa(Integer causaNoEntrega) {
+		if(causaNoEntrega == 0) {
+			return "NINGUNA";
+		}
+		else if(causaNoEntrega == 7) {
+			return "NO FUE POSIBLE CONTACTAR AL PACIENTE";
+		}
+		else if(causaNoEntrega == 8) {
+			return "PACIENTE FALLECIDO";
+		}
+		else {
+			return "PACIENTE SE NIEGA A RECIBIR EL SUMINISTRO";
+		}
+	}
+	
+	//se usa para transformar (entero) de estado reporte entrega en String 
+	private String estadoReporte(Object estado) {
+		if(estado.equals(0)) {
+			return "Anulado";
+		}
+		else if(estado.equals(1)) {
+			return "Activo";
+		}
+		else {
+			return "Procesado";
+		}
+		
+	}
+	
+	//se usa para obtener la informacion del reporte de entrega del web service de mipres
+	private Map<String, Object> obtenerReporteEntrega(String prescripcion) throws IOException, IOException{
+		
+		Map<String, Object> datosAdicionales = new HashMap<>();
+		
+		//obtengo los datos del token primario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L);
+		
+		//genero la url para consultar
+		String urlEncadenada = MetodoGetReporteEntrega+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+prescripcion;
+		
+		//Especificamos la URL y configuro el objeto HttpClient			
+		HttpClient httpclient = HttpClientBuilder.create().build();			
+		HttpResponse response = null;
+		
+		//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpGet httpGet = new HttpGet(urlEncadenada);			
+		httpGet.setHeader("Accept", "application/json");
+		httpGet.setHeader("Content-type", "application/json");
+		
+		response = httpclient.execute(httpGet);
+		
+		//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
+        String content;
+		
+        content = EntityUtils.toString(response.getEntity());
+		JSONArray arregloJSON = new JSONArray(content);
+		
+		for (int i = 0; i < arregloJSON.length(); i++) {
+			
+			JSONObject objetoJSON = arregloJSON.getJSONObject(i);
+        	
+			datosAdicionales.put("ID", objetoJSON.get("ID"));
+			datosAdicionales.put("IDReporteEntrega", objetoJSON.get("IDReporteEntrega"));
+			datosAdicionales.put("NoPrescripcion", objetoJSON.get("NoPrescripcion"));
+			datosAdicionales.put("TipoTec", objetoJSON.get("TipoTec"));
+			datosAdicionales.put("ConTec", objetoJSON.get("ConTec"));
+			datosAdicionales.put("TipoIDPaciente", objetoJSON.get("TipoIDPaciente"));
+			datosAdicionales.put("NoIDPaciente", objetoJSON.get("NoIDPaciente"));
+			datosAdicionales.put("NoEntrega", objetoJSON.get("NoEntrega"));
+			datosAdicionales.put("EstadoEntrega", objetoJSON.get("EstadoEntrega"));
+			datosAdicionales.put("CausaNoEntrega", objetoJSON.get("CausaNoEntrega"));
+			datosAdicionales.put("ValorEntregado", objetoJSON.get("ValorEntregado"));
+			datosAdicionales.put("CodTecEntregado", objetoJSON.get("CodTecEntregado"));
+			datosAdicionales.put("CantTotEntregada", objetoJSON.get("CantTotEntregada"));
+			datosAdicionales.put("NoLote", objetoJSON.get("NoLote"));
+			datosAdicionales.put("FecEntrega", objetoJSON.get("FecEntrega"));
+			datosAdicionales.put("FecRepEntrega", objetoJSON.get("FecRepEntrega"));
+			datosAdicionales.put("EstRepEntrega", objetoJSON.get("EstRepEntrega"));
+			datosAdicionales.put("FecAnulacion", objetoJSON.get("FecAnulacion"));			
+		}
+		
+		return datosAdicionales;
+		
+	}
+	
+	//se usa para obtener la informacion del reporte de facturacion del web service de mipres
+	private Map<String, Object> obtenerReporteFacturacion(String prescripcion) throws IOException, IOException{
+			
+		Map<String, Object> datosAdicionales = new HashMap<>();
+			
+		//obtengo los datos del token primario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L);
+			
+		//genero la url para consultar
+		String urlEncadenada = MetodoGetReporteFacturacion+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+prescripcion;
+			
+		//Especificamos la URL y configuro el objeto HttpClient			
+		HttpClient httpclient = HttpClientBuilder.create().build();			
+		HttpResponse response = null;
+			
+		//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpGet httpGet = new HttpGet(urlEncadenada);			
+		httpGet.setHeader("Accept", "application/json");
+		httpGet.setHeader("Content-type", "application/json");
+			
+		response = httpclient.execute(httpGet);
+			
+		//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
+	    String content;
+			
+	    content = EntityUtils.toString(response.getEntity());
+	    JSONArray arregloJSON = new JSONArray(content);
+			
+	    for (int i = 0; i < arregloJSON.length(); i++) {
+				
+			JSONObject objetoJSON = arregloJSON.getJSONObject(i);
+	        	
+			datosAdicionales.put("ID", objetoJSON.get("ID"));
+			datosAdicionales.put("IDFacturacion", objetoJSON.get("IDFacturacion"));
+			datosAdicionales.put("NoPrescripcion", objetoJSON.get("NoPrescripcion"));
+			datosAdicionales.put("TipoTec", objetoJSON.get("TipoTec"));
+			datosAdicionales.put("ConTec", objetoJSON.get("ConTec"));
+			datosAdicionales.put("TipoIDPaciente", objetoJSON.get("TipoIDPaciente"));
+			datosAdicionales.put("NoIDPaciente", objetoJSON.get("NoIDPaciente"));
+			datosAdicionales.put("NoEntrega", objetoJSON.get("NoEntrega"));
+			datosAdicionales.put("NoFactura", objetoJSON.get("NoFactura"));
+			datosAdicionales.put("NoIDEPS", objetoJSON.get("NoIDEPS"));
+			datosAdicionales.put("CodEPS", objetoJSON.get("CodEPS"));
+			datosAdicionales.put("CodSerTecAEntregado", objetoJSON.get("CodSerTecAEntregado"));
+			datosAdicionales.put("CantUnMinDis", objetoJSON.get("CantUnMinDis"));
+			datosAdicionales.put("ValorUnitFacturado", objetoJSON.get("ValorUnitFacturado"));
+			datosAdicionales.put("ValorTotFacturado", objetoJSON.get("ValorTotFacturado"));
+			datosAdicionales.put("CuotaModer", objetoJSON.get("CuotaModer"));
+			datosAdicionales.put("Copago", objetoJSON.get("Copago"));
+			datosAdicionales.put("FecFacturacion", objetoJSON.get("FecFacturacion"));
+			datosAdicionales.put("EstFacturacion", objetoJSON.get("EstFacturacion"));
+			datosAdicionales.put("FecAnulacion", objetoJSON.get("FecAnulacion"));
+		}
+			
+		return datosAdicionales;
+			
+	}
+
 	//se usa para obtener los id e identrega del web service de mipres
 	private void sincronizoEntrega(String prescripcion){
 		List<FarMipres> farMipres = iFarMipresService.findByPrescripcion(prescripcion);

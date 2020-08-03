@@ -35,4 +35,8 @@ public interface IFarMipresDao extends PagingAndSortingRepository<FarMipres, Lon
 	
 	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g WHERE (f.procesadoEntrega = 1 AND f.procesadoReporteEntrega = 1 AND f.procesadoFacturacion = 1) AND f.numeroPrescripcion LIKE %?1% OR g.pacNumDoc LIKE %?1% ORDER BY f.fechaEntrega ASC")
 	Page<FarMipres> findAllCustomSearchProcesados(Pageable pageable, String prescripcion);
+	
+	@Query("SELECT f FROM FarMipres f WHERE f.id = ?1")
+	List<FarMipres> findByIdMipres(Long prescripcion);
+	
 }
