@@ -855,7 +855,7 @@ public class FarMipresController {
 		LocalDate fFinalLocalDate = fFinalDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		
 		//Me sirve para guardar los tipos de tecnologias
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		
 		
 		for (LocalDate fecha = fInicialLocalDate; !fecha.isAfter(fFinalLocalDate); fecha = fecha.plusDays(1)) {
@@ -879,8 +879,7 @@ public class FarMipresController {
 			
 			//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
 	        String content = EntityUtils.toString(response.getEntity());	        
-	        JSONArray arregloJSON = new JSONArray(content);
-	        
+	        JSONArray arregloJSON = new JSONArray(content);	        
 	        //recorro el arreglo para tranformarlo en un objeto JSON
             for (int i = 0; i < arregloJSON.length(); i++) {
             	//jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));
@@ -911,7 +910,9 @@ public class FarMipresController {
 	            	
             		for(int m=0; m < arrayMedicamentos.length(); m++) {          			
             			map.put("cantidadEntregada"+m, arrayMedicamentos.getJSONObject(m).getString("CantTotalF"));
-	                    map.put("tipoTecnologia"+m, "M");	            		
+            			map.put("nombreMedicamento"+m, arrayMedicamentos.getJSONObject(m).getString("DescMedPrinAct"));
+	                    map.put("tipoTecnologia"+m, "M");	
+	                    map.put("consecutivoTecnologia"+m, arrayMedicamentos.getJSONObject(m).getInt("ConOrden"));
 	            	}
             	} 
             	
@@ -921,7 +922,8 @@ public class FarMipresController {
             		
             		for(int p=0; p < arrayProcedimientos.length(); p++) {           			
             			map.put("cantidadEntregada"+p, arrayProcedimientos.getJSONObject(p).getString("CantTotal"));
-	                    map.put("tipoTecnologia"+p, "P");	            		
+	                    map.put("tipoTecnologia"+p, "P");
+	                    map.put("consecutivoTecnologia"+p, arrayProcedimientos.getJSONObject(p).getInt("ConOrden"));
 	            	}
             	}
             	
@@ -931,7 +933,8 @@ public class FarMipresController {
             		
             		for(int n=0; n < arrayProductosNutricionales.length(); n++) {            			
             			map.put("cantidadEntregada"+n, arrayProductosNutricionales.getJSONObject(n).getString("CantTotalF"));
-	                    map.put("tipoTecnologia"+n, "N");	            		
+	                    map.put("tipoTecnologia"+n, "N");
+	                    map.put("consecutivoTecnologia"+n, arrayProductosNutricionales.getJSONObject(n).getInt("ConOrden"));
 	            	}           		
             	}
             	
@@ -941,14 +944,15 @@ public class FarMipresController {
             		
             		for(int c=0; c < arrayServicioComplementario.length(); c++) {           			
             			map.put("cantidadEntregada"+c, arrayServicioComplementario.getJSONObject(c).getString("CantTotal"));
-	                    map.put("tipoTecnologia"+c, "S");	            		
+	                    map.put("tipoTecnologia"+c, "S");
+	                    map.put("consecutivoTecnologia"+c, arrayServicioComplementario.getJSONObject(c).getInt("ConOrden"));
 	            	}          		
             	}        
                 
             	//este if es cuando es solo una sola tecnologia
-            	if(map.size() == 2) {
+            	if(map.size() == 3 || map.size() == 4) {
             		
-            		FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionTecnologiaCantidad(numDocumento, prescripcion, map.get("cantidadEntregada0"));
+            		FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(numDocumento, prescripcion, map.get("cantidadEntregada0").toString(), (Integer) map.get("consecutivoTecnologia0"));
                     
                     if(buscarSolution == null) {         	
                     	
@@ -967,78 +971,106 @@ public class FarMipresController {
                     	}
                     	
                     	//buscamos la tecnologia para guardar                	  
-                    	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0"));  
+                    	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString());  
+                    	
+                    	//validamos si el medicamento es vacio
+                    	if(map.containsKey("nombreMedicamento0")) {
+                    		farMipres.setNombreMedicamento(map.get("nombreMedicamento0").toString());
+                    	}else {
+                    		farMipres.setNombreMedicamento("NULL");
+                    	}
                     	
                     	farMipres.setNumeroPrescripcion(prescripcion);
-                        farMipres.setCantidadEntregada(map.get("cantidadEntregada0"));
+                        farMipres.setCantidadEntregada(map.get("cantidadEntregada0").toString());
                         farMipres.setProcesadoEntrega(false);
                         farMipres.setProcesadoReporteEntrega(false);
                         farMipres.setProcesadoFacturacion(false);                    
                         farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
                         farMipres.setFechaEntrega(fechaEntregaCustomDate);
-                        farMipres.setConsecutivoTecnologia(1);
+                        farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
                         farMipres.setComTipoTecnologia(comTipoTecnologia);
                         farMipres.setCodigoServicio("NULL");
                         farMipres.setNumeroEntrega(1);
                         farMipres.setEntregaTotal(1);
                         farMipres.setCausaNoEntrega(0);
                         farMipres.setLoginUsrAlta(principal.getName());
-                        farMipres.setCodEps(codEps);
+                        farMipres.setCodEps(codEps);                
+                        
                     	iFarMipresService.save(farMipres);            	
                     }   
                 //este else es cuando son varias tecnologias
             	}else {
-            		for(int z=0; z<map.size()/2; z++) {
-            			
-            			String cantidadEntregada = map.get("cantidadEntregada"+z);                    	
-                    	String tipoTecnologia = map.get("tipoTecnologia"+z);                    	
-            			
-            			FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionTecnologiaCantidad(numDocumento, prescripcion, cantidadEntregada);
-                        
-                        if(buscarSolution == null) {                
-            			
-            			FarMipres farMipres = new FarMipres();
-                        
-                    	//buscamos el tipo documento paciente para guardar
-                    	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
-                    	
-                    	//buscamos el numero de documento del paciente para guardar
-                    	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
-                    	if(genPacien == null) {
-                    		GenPacien obtengoPaciente =  SicronizarPacientePorDocumento(tipoDocumento, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido);
-                    		farMipres.setGenPacien(obtengoPaciente);
-                    	}  else {
-                    		farMipres.setGenPacien(genPacien);
-                    	}                    	
-                    	
-                    	//buscamos la tecnologia para guardar                	  
-                    	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia);  
-                    	
-                    	farMipres.setNumeroPrescripcion(prescripcion);
-                        farMipres.setCantidadEntregada(cantidadEntregada);
-                        farMipres.setProcesadoEntrega(false);
-                        farMipres.setProcesadoReporteEntrega(false);
-                        farMipres.setProcesadoFacturacion(false);                    
-                        farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
-                        farMipres.setFechaEntrega(fechaEntregaCustomDate);
-                        farMipres.setConsecutivoTecnologia(1+z);
-                        farMipres.setComTipoTecnologia(comTipoTecnologia);
-                        farMipres.setCodigoServicio("NULL");
-                        farMipres.setNumeroEntrega(1);
-                        farMipres.setEntregaTotal(0);
-                        farMipres.setCausaNoEntrega(0);
-                        farMipres.setLoginUsrAlta(principal.getName());
-                        farMipres.setCodEps(codEps);
-                    	iFarMipresService.save(farMipres);
-                    	
-                        	}
-            			}
+            		if(map.size() == 6 || map.size() == 8) {
+            			int hasta = 2;
+            			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
             		}
-            	}	
+            		if(map.size() == 9 || map.size() == 12) {
+            			int hasta = 3;
+            			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+            		}
+            	}
+            }	
             	 	
             }//fin for
 	    }	
 	}	
+
+	private void procesarGuardar(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
+			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps) {
+		for(int z=0; z<hasta; z++) {
+			
+			String cantidadEntregada = map.get("cantidadEntregada"+z).toString();                    	
+        	String tipoTecnologia = map.get("tipoTecnologia"+z).toString();
+        	Integer consecutivoTecnologia = Integer.parseInt(map.get("consecutivoTecnologia"+z).toString());
+			
+			FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(numDocumento, prescripcion, cantidadEntregada, consecutivoTecnologia);
+            
+            if(buscarSolution == null) {                
+			
+			FarMipres farMipres = new FarMipres();
+            
+        	//buscamos el tipo documento paciente para guardar
+        	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
+        	
+        	//buscamos el numero de documento del paciente para guardar
+        	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
+        	if(genPacien == null) {
+        		GenPacien obtengoPaciente =  SicronizarPacientePorDocumento(tipoDocumento, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido);
+        		farMipres.setGenPacien(obtengoPaciente);
+        	}  else {
+        		farMipres.setGenPacien(genPacien);
+        	}                    	
+        	
+        	//buscamos la tecnologia para guardar                	  
+        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia);  
+        	
+        	//validamos si el medicamento es vacio
+        	if(map.containsKey("nombreMedicamento"+z)) {
+        		farMipres.setNombreMedicamento(map.get("nombreMedicamento"+z).toString());
+        	}else {
+        		farMipres.setNombreMedicamento("NULL");
+        	}
+        	
+        	farMipres.setNumeroPrescripcion(prescripcion);
+            farMipres.setCantidadEntregada(cantidadEntregada);
+            farMipres.setProcesadoEntrega(false);
+            farMipres.setProcesadoReporteEntrega(false);
+            farMipres.setProcesadoFacturacion(false);                    
+            farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
+            farMipres.setFechaEntrega(fechaEntregaCustomDate);
+            farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia"+z).toString()));                        
+            farMipres.setComTipoTecnologia(comTipoTecnologia);
+            farMipres.setCodigoServicio("NULL");
+            farMipres.setNumeroEntrega(1);
+            farMipres.setEntregaTotal(0);
+            farMipres.setCausaNoEntrega(0);
+            farMipres.setLoginUsrAlta(usuario);
+            farMipres.setCodEps(codEps);                        
+        	iFarMipresService.save(farMipres);
+        	
+            	}
+			}		
+	}
 
 	// Se usa para dar formato a fechas de dinamica
 	private String formatoFecha(Date fecha) {
