@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
@@ -38,6 +39,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -93,7 +95,9 @@ public class FarMipresController {
 	
 	public static final String MetodoGetReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/FacturacionXPrescripcion/"; //url mipres metodo para get reporte facturacion
 	
-	public static final String MetodoGetConsulta = "https://wsmipres.sispro.gov.co/wsmipresnopbs/api/Prescripcion/"; //url mipres metodo para get consulta
+	public static final String MetodoGetConsultaFecha = "https://wsmipres.sispro.gov.co/wsmipresnopbs/api/Prescripcion/"; //url mipres metodo para get consulta por fecha 
+	
+	public static final String MetodoGetConsultaFechaNumeroPrescripcion = "https://wsmipres.sispro.gov.co/wsmipresnopbs/api/PrescripcionXNumero/"; //url mipres metodo para get consulta por numero de prescipcion
 	
 	public static final String MetodoGetPrescripcion = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/EntregaXPrescripcion/"; //url mipres metodo para get consulta	
 	
@@ -265,18 +269,20 @@ public class FarMipresController {
 	// Este metodo me permite listar todas las entregas pendientes en el web service del ministerio
 	@GetMapping("/pendientesmipres")
 	public String listarPendientes(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
-			
+		
 		if(buscando == null || buscando == "") {
-			Pageable pageRequest = PageRequest.of(page, 150);			
+			Pageable pageRequest = PageRequest.of(page, 100);			
 			Page<FarMipres> farMipres = iFarMipresService.findAllCustomPendientes(pageRequest);
 			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipres", farMipres);
 			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("totalItems", farMipres.getTotalElements());			
 			model.addAttribute("page", pageRender);
 		}else {
-			Pageable pageRequest = PageRequest.of(page, 150);			
+			Pageable pageRequest = PageRequest.of(page, 100);			
 			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchPendientes(pageRequest, buscando);
 			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipres", farMipres);
 			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("totalItems", farMipres.getTotalElements());			
 			model.addAttribute("page", pageRender);
 		}		
 								
@@ -583,17 +589,37 @@ public class FarMipresController {
 	
 	
 	// Este metodo me permite guardar e sincronizar las prescripciones por fecha que no estan en solution obtenidas del web service mipres
-	@RequestMapping(value = "/sincronizaprescripcionform")
-	public String guardarSincronizacion(@RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
-		sincronizoPrescripcion(fechaInicial, fechaFinal, principal);		
+	@RequestMapping(value = "/sincronizaprescripcionporfecha")
+	public String guardarSincronizacionPorFecha(@RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
+		if(!fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
+			sincronizoPrescripcion(fechaInicial, fechaFinal, principal);
+		}else {
+			flash.addFlashAttribute("error", "Las fechas son requeridas");
+			return "redirect:sincronizaprescripcionform";
+		}				
 		model.put("titulo", utf8(this.titulosincroniza));				
 		model.put("enlace10", enlace10);		
 		flash.addFlashAttribute("success", "Sincronizacion correcta");		
 		status.setComplete();
 		return "redirect:sincronizaprescripcionform";
 	}
-
 	
+	// Este metodo me permite guardar e sincronizar la prescripcion por numero, que no estan en solution obtenidas del web service mipres
+	@RequestMapping(value = "/sincronizaprescripcionpornumero")
+	public String guardarSincronizacionPorNumeroDePrescripcion(@RequestParam(value = "numeroPrescripcion", required = false) String numeroPrescripcion, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
+		if(!numeroPrescripcion.isEmpty() ) {
+			sincronizoPrescripcion(numeroPrescripcion, principal);
+		}else {
+			flash.addFlashAttribute("error", "El número de prescipción es requerida");
+			return "redirect:sincronizaprescripcionform";
+		}				
+		model.put("titulo", utf8(this.titulosincroniza));				
+		model.put("enlace10", enlace10);		
+		flash.addFlashAttribute("success", "Sincronizacion correcta");		
+		status.setComplete();
+		return "redirect:sincronizaprescripcionform";
+	}	
+
 
 	/* ----------------------------------------------------------
      * METODOS ADICIONALES 
@@ -843,7 +869,7 @@ public class FarMipresController {
         }		
 	}
 	
-	//Se usa para hacer get en el web service de mipres
+	//Se usa para hacer get en el web service de mipres y sincronizar por rango de fechas
 	private void sincronizoPrescripcion(String fechaInicial, String fechaFinal, Principal principal) throws ParseException, IOException, IOException {
 				
 		//convierto String a Date 
@@ -864,7 +890,7 @@ public class FarMipresController {
 			ComTokenMipres comTokenMipres = iComTokenMipresService.findById(2L);
 			
 			//genero la url para consultar
-			String urlEncadenada = MetodoGetConsulta+comTokenMipres.getNit()+'/'+fecha+'/'+comTokenMipres.getTokenPrincipal();
+			String urlEncadenada = MetodoGetConsultaFecha+comTokenMipres.getNit()+'/'+fecha+'/'+comTokenMipres.getTokenPrincipal();
 			
 			//Especificamos la URL y configuro el objeto HttpClient			
 			HttpClient httpclient = HttpClientBuilder.create().build();			
@@ -977,7 +1003,7 @@ public class FarMipresController {
                     	if(map.containsKey("nombreMedicamento0")) {
                     		farMipres.setNombreMedicamento(map.get("nombreMedicamento0").toString());
                     	}else {
-                    		farMipres.setNombreMedicamento("NULL");
+                    		farMipres.setNombreMedicamento("SIN INFORMACION");
                     	}
                     	
                     	farMipres.setNumeroPrescripcion(prescripcion);
@@ -989,7 +1015,7 @@ public class FarMipresController {
                         farMipres.setFechaEntrega(fechaEntregaCustomDate);
                         farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
                         farMipres.setComTipoTecnologia(comTipoTecnologia);
-                        farMipres.setCodigoServicio("NULL");
+                        farMipres.setCodigoServicio("SIN INFORMACION");
                         farMipres.setNumeroEntrega(1);
                         farMipres.setEntregaTotal(1);
                         farMipres.setCausaNoEntrega(0);
@@ -1015,6 +1041,7 @@ public class FarMipresController {
 	    }	
 	}	
 
+	//Se usa para gurdar la prescripcion en la la base de solution
 	private void procesarGuardar(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
 			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps) {
 		for(int z=0; z<hasta; z++) {
@@ -1048,7 +1075,7 @@ public class FarMipresController {
         	if(map.containsKey("nombreMedicamento"+z)) {
         		farMipres.setNombreMedicamento(map.get("nombreMedicamento"+z).toString());
         	}else {
-        		farMipres.setNombreMedicamento("NULL");
+        		farMipres.setNombreMedicamento("SIN INFORMACION");
         	}
         	
         	farMipres.setNumeroPrescripcion(prescripcion);
@@ -1060,7 +1087,7 @@ public class FarMipresController {
             farMipres.setFechaEntrega(fechaEntregaCustomDate);
             farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia"+z).toString()));                        
             farMipres.setComTipoTecnologia(comTipoTecnologia);
-            farMipres.setCodigoServicio("NULL");
+            farMipres.setCodigoServicio("SIN INFORMACION");
             farMipres.setNumeroEntrega(1);
             farMipres.setEntregaTotal(0);
             farMipres.setCausaNoEntrega(0);
@@ -1070,6 +1097,167 @@ public class FarMipresController {
         	
             	}
 			}		
+	}
+	
+	//Se usa para hacer get en el web service de mipres y sincronizar por numero de prescripcion
+	private void sincronizoPrescripcion(String numeroPrescripcion, Principal principal) throws ClientProtocolException, IOException, ParseException {
+		
+		//Me sirve para guardar los tipos de tecnologias
+		Map<String, Object> map = new HashMap<>();		
+		
+		//obtengo los datos del token primario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(2L);
+		
+		//genero la url para consultar
+		String urlEncadenada = MetodoGetConsultaFechaNumeroPrescripcion+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenPrincipal()+'/'+numeroPrescripcion;		
+		
+		//Especificamos la URL y configuro el objeto HttpClient			
+		HttpClient httpclient = HttpClientBuilder.create().build();			
+		HttpResponse response = null;
+		
+		//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpGet httpGet = new HttpGet(urlEncadenada);			
+		httpGet.setHeader("Accept", "application/json");
+		httpGet.setHeader("Content-type", "application/json");			
+		
+		response = httpclient.execute(httpGet);		
+		
+		//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
+        String content = EntityUtils.toString(response.getEntity());	        
+        JSONArray arregloJSON = new JSONArray(content);	        
+        //recorro el arreglo para tranformarlo en un objeto JSON
+        for (int i = 0; i < arregloJSON.length(); i++) {
+        	//jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));
+        	JSONObject objetoJSON = arregloJSON.getJSONObject(i);
+        	Integer codigoAmbitoAtencion = objetoJSON.getJSONObject("prescripcion").getInt("CodAmbAte");
+        	if(codigoAmbitoAtencion == 22 || codigoAmbitoAtencion == 30) {            	
+        	
+        	String prescripcion = objetoJSON.getJSONObject("prescripcion").getString("NoPrescripcion");            	
+        	String tipoDocumento = objetoJSON.getJSONObject("prescripcion").getString("TipoIDPaciente");
+        	String numDocumento = objetoJSON.getJSONObject("prescripcion").getString("NroIDPaciente");
+        	String primerNombre = objetoJSON.getJSONObject("prescripcion").getString("PNPaciente");
+        	String segundoNombre = objetoJSON.getJSONObject("prescripcion").getString("SNPaciente");
+        	String primerApellido = objetoJSON.getJSONObject("prescripcion").getString("PAPaciente");
+        	String segundoApellido = objetoJSON.getJSONObject("prescripcion").getString("SAPaciente");
+        	String codEps = objetoJSON.getJSONObject("prescripcion").getString("CodEPS");
+        	String fechaEntrega = objetoJSON.getJSONObject("prescripcion").getString("FPrescripcion");
+        	
+        	
+        	String fechaEntregaCustomString = fechaEntrega.replace("T00:00:00", "");
+        	Date fechaEntregaCustomDate = convertirFechaParametro(fechaEntregaCustomString);        	
+        	            	
+        	//limpiamos el Map
+        	map.clear();
+        	
+        	//contamos los medicamentos dados
+        	JSONArray arrayMedicamentos = objetoJSON.getJSONArray("medicamentos");            	
+        	if(arrayMedicamentos.length() >= 1) {
+            	
+        		for(int m=0; m < arrayMedicamentos.length(); m++) {          			
+        			map.put("cantidadEntregada"+m, arrayMedicamentos.getJSONObject(m).getString("CantTotalF"));
+        			map.put("nombreMedicamento"+m, arrayMedicamentos.getJSONObject(m).getString("DescMedPrinAct"));
+                    map.put("tipoTecnologia"+m, "M");	
+                    map.put("consecutivoTecnologia"+m, arrayMedicamentos.getJSONObject(m).getInt("ConOrden"));
+            	}
+        	} 
+        	
+        	//contamos los procedimientos dados
+        	JSONArray arrayProcedimientos = objetoJSON.getJSONArray("procedimientos");            	
+        	if(arrayProcedimientos.length() >= 1) {
+        		
+        		for(int p=0; p < arrayProcedimientos.length(); p++) {           			
+        			map.put("cantidadEntregada"+p, arrayProcedimientos.getJSONObject(p).getString("CantTotal"));
+                    map.put("tipoTecnologia"+p, "P");
+                    map.put("consecutivoTecnologia"+p, arrayProcedimientos.getJSONObject(p).getInt("ConOrden"));
+            	}
+        	}
+        	
+        	//contamos los productos nutricionales dados
+        	JSONArray arrayProductosNutricionales = objetoJSON.getJSONArray("productosnutricionales");            	
+        	if(arrayProductosNutricionales.length() >= 1) {
+        		
+        		for(int n=0; n < arrayProductosNutricionales.length(); n++) {            			
+        			map.put("cantidadEntregada"+n, arrayProductosNutricionales.getJSONObject(n).getString("CantTotalF"));
+                    map.put("tipoTecnologia"+n, "N");
+                    map.put("consecutivoTecnologia"+n, arrayProductosNutricionales.getJSONObject(n).getInt("ConOrden"));
+            	}           		
+        	}
+        	
+        	//contamos los servicios complementarios dados
+        	JSONArray arrayServicioComplementario = objetoJSON.getJSONArray("serviciosComplementarios");            	
+        	if(arrayServicioComplementario.length() >= 1) {
+        		
+        		for(int c=0; c < arrayServicioComplementario.length(); c++) {           			
+        			map.put("cantidadEntregada"+c, arrayServicioComplementario.getJSONObject(c).getString("CantTotal"));
+                    map.put("tipoTecnologia"+c, "S");
+                    map.put("consecutivoTecnologia"+c, arrayServicioComplementario.getJSONObject(c).getInt("ConOrden"));
+            	}          		
+        	}
+        	
+        	//este if es cuando es solo una sola tecnologia
+        	if(map.size() == 3 || map.size() == 4) {
+        		
+        		FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(numDocumento, prescripcion, map.get("cantidadEntregada0").toString(), (Integer) map.get("consecutivoTecnologia0"));
+                
+                if(buscarSolution == null) {         	
+                	
+                	FarMipres farMipres = new FarMipres();
+                    
+                	//buscamos el tipo documento paciente para guardar
+                	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
+                	
+                	//buscamos el numero de documento del paciente para guardar
+                	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
+                	if(genPacien == null) {
+                		GenPacien obtengoPaciente =  SicronizarPacientePorDocumento(tipoDocumento, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido);
+                		farMipres.setGenPacien(obtengoPaciente);
+                	}  else {
+                		farMipres.setGenPacien(genPacien);
+                	}
+                	
+                	//buscamos la tecnologia para guardar                	  
+                	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString());  
+                	
+                	//validamos si el medicamento es vacio
+                	if(map.containsKey("nombreMedicamento0")) {
+                		farMipres.setNombreMedicamento(map.get("nombreMedicamento0").toString());
+                	}else {
+                		farMipres.setNombreMedicamento("SIN INFORMACION");
+                	}
+                	
+                	farMipres.setNumeroPrescripcion(prescripcion);
+                    farMipres.setCantidadEntregada(map.get("cantidadEntregada0").toString());
+                    farMipres.setProcesadoEntrega(false);
+                    farMipres.setProcesadoReporteEntrega(false);
+                    farMipres.setProcesadoFacturacion(false);                    
+                    farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
+                    farMipres.setFechaEntrega(fechaEntregaCustomDate);
+                    farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
+                    farMipres.setComTipoTecnologia(comTipoTecnologia);
+                    farMipres.setCodigoServicio("SIN INFORMACION");
+                    farMipres.setNumeroEntrega(1);
+                    farMipres.setEntregaTotal(1);
+                    farMipres.setCausaNoEntrega(0);
+                    farMipres.setLoginUsrAlta(principal.getName());
+                    farMipres.setCodEps(codEps);                
+                    
+                	iFarMipresService.save(farMipres);            	
+                }   
+            //este else es cuando son varias tecnologias
+        	}else {
+        		if(map.size() == 6 || map.size() == 8) {
+        			int hasta = 2;
+        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        		}
+        		if(map.size() == 9 || map.size() == 12) {
+        			int hasta = 3;
+        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        		}
+        	}
+        
+        	}	
+    	 	
+        }//fin for		
 	}
 
 	// Se usa para dar formato a fechas de dinamica

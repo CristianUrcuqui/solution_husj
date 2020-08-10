@@ -60,25 +60,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- TOOLBAR BOTONES -->
 			<div class="content-header py-0">
 			  <div class="container-fluid">
-				<div class="row">
-					<div class="col-sm-6">
-						<!-- Toolbar Botones -->
-						<div class="btn-toolbar" role="toolbar">
-							<div class="btn-group btn-group-justified" role="group">
-								<div class="btn-group btn-group-sm" role="group">
-									<button type="submit" form="prescripcionsincroniza" class="btn bg-gradient-primary" data-toggle="tooltip" data-placement="top" title="Sincronizar">
-										<i class="fas fa-sync fa-lg mt-1"></i>
-									</button>																		
-								</div>
-								<div class="btn-group btn-group-sm" role="group">
-									<button type="reset" form="prescripcionsincroniza" class="btn bg-gradient-danger" data-toggle="tooltip" data-placement="top" title="Cancelar">
-										<i class="fas fa-times fa-lg mt-1"></i>									
-									</button>
-								</div>																	
-							</div>
-						</div>
-					  </div>
-					  	<div class="col-sm-6">
+				<div class="row">					
+					  	<div class="col-sm-12">
 						<!-- Toolbar Botones -->
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
@@ -105,16 +88,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->         				
         
-         	<div class="col-md-6 mx-auto">
+         	<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_FECHA')" class="col-md-6 mx-auto">
          	
          		<div class="card card-primary animacion">         		
          			<div class="card-header custom-header p-0">
-	        			<h4 class="ml-3 mt-1">Sincronizar Prescripción</h4>   		
+	        			<h4 class="ml-3 mt-1">Por Rango De Fecha</h4>   		
 	        		</div>
 	        		
 	        		<div class="card-body">
 	        			
-	        			<form id="prescripcionsincroniza"  class="form-horizontal" th:action="@{/sincronizaprescripcionform}" th:object="${farMipres}" role="form" method="post">					   
+	        			<form id="prescripcionsincronizafecha"  class="form-horizontal" th:action="@{/sincronizaprescripcionporfecha}" th:object="${farMipres}" role="form" method="post">					   
 					   
 						   <div class="form-row">
 						   		
@@ -136,16 +119,58 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					                    </div>
 					                </span>		                
 			                		<input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off"> 	                            
-		                        </div>	                        
-		                        
+		                        </div>  
+						   </div>     
 						   
-						   </div>                             
+						   <div class="row mb-1">
+							    <div class="col-md-12">					      
+							      <button type="submit" form="prescripcionsincronizafecha" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Sincronizar">Sincronizar</button>					      
+							      <button type="reset" form="prescripcionsincronizafecha" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+							    </div>
+						  	</div> 
+						                           
 			                                    
 		              	</form>
 	        		
 	        		</div><!-- /.card-body -->        		
          		</div><!-- /.card -->        	
-         	</div>           
+         	</div>
+         	
+         	
+         	
+         	<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_PRESCRIPCION')" class="col-md-6 mx-auto">
+         	
+         		<div class="card card-primary animacion">         		
+         			<div class="card-header custom-header p-0">
+	        			<h4 class="ml-3 mt-1">Por Número De Prescripción</h4>   		
+	        		</div>
+	        		
+	        		<div class="card-body">
+	        			
+	        			<form id="prescripcionsincronizanumero"  class="form-horizontal" th:action="@{/sincronizaprescripcionpornumero}" th:object="${farMipres}" role="form" method="post">					   
+					   
+						   <div class="form-row">
+						   		
+						   		<!--fila1--> 
+	                    		<div class="col-md-6 pb-3 required">	                            
+		                            <!--  <label class="control-label" for="paciente">Documento Paciente</label>-->	                            
+		                            <input id="prescripcion" type="text" th:name="numeroPrescripcion"  onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm" placeholder="Número De Prescripción">	                            
+		                        </div>                                       
+						   </div>     
+						   
+						   <div class="row mb-1">
+							    <div class="col-md-12">					      
+							      <button type="submit" form="prescripcionsincronizanumero" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Sincronizar">Sincronizar</button>					      
+							      <button type="reset" form="prescripcionsincronizanumero" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+							    </div>
+						   </div>                         
+			                                    
+		              	</form>
+	        		
+	        		</div><!-- /.card-body -->        		
+         		</div><!-- /.card -->        	
+         	</div>      
+         	           
             
                     
         </div><!-- /.row -->
@@ -213,6 +238,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   $('#fechaFinal').val(dateText);
                 }
               });
+</script>
+
+<script>
+	//metodo para quitar espacios en los input
+	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
+	$('input').keyup(function(){
+	    /* Obtengo el valor contenido dentro del input */
+	    var value = $(this).val();
+	 
+	    /* Elimino todos los espacios en blanco que tenga la cadena delante y detrás */
+	    var value_without_space = $.trim(value);
+	 
+	    /* Muestro una alerta al usuario */
+	    ////alert('El texto que ha ingresado contiene espacios y serán eliminados');
+	 
+	    /* Cambio el valor contenido por el valor sin espacios */
+	    $(this).val(value_without_space);
+	});
 </script>
 </body>
 </html>
