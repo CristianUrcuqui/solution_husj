@@ -69,7 +69,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			.defaultSuccessUrl("/index")
 			.permitAll()
 		.and()
-			.rememberMe().key("uniqueAndSecret").rememberMeParameter("remember-me").tokenValiditySeconds(3600)//el cookie durara dos horas y se llamara remember-me
+			.rememberMe().key("uniqueAndSecret").rememberMeParameter("remember-me").tokenValiditySeconds(7200)//el cookie durara dos horas y se llamara remember-me
 		.and()
 			.logout()
 			.permitAll()
