@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -231,6 +232,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	}
 
 	@NotEmpty
+	@Lob
 	@Column(name = "justificacion11", nullable = false)
 	public String getJustificacion11() {
 		return justificacion11;
@@ -254,6 +256,7 @@ public class AtenEncuDatoBasico implements Serializable {
 	}	
 	
 	@NotEmpty
+	@Lob
 	@Column(name = "justificacion12", nullable = false)
 	public String getJustificacion12() {
 		return justificacion12;
