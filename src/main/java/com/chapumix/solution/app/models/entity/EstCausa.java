@@ -61,7 +61,7 @@ public class EstCausa implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "causa_antecedente", nullable = false)
+	@JoinColumn(name = "causa_antecedente")
 	public ComCie10 getCausaAntedecente() {
 		return causaAntedecente;
 	}

@@ -277,7 +277,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                     <div class="col-md-12 predictor">
 		                     		                     
 		                     <div class="col-md-6 required">
-		                     	 <label class="control-label" for="retraso">Predictor</label>
+		                     	 <label class="control-label" for="predictor">Predictor</label>
 		                     </div>
 		                     
 		                     <div class="form-group col-md-12">			                 	
@@ -302,6 +302,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			                 </div>
 			                 </div>              
 		                     
+		                     <!-- CAMPO OCULTO PARA HABILITAR POR MEDIO DE RADIO -->
 		                     <div class="col-md-6 pb-3 apache">
 	                        	<label class="control-label" for="apache">Apache</label>	                            
 	                        	<select id="apache"  th:field="*{comApache}" class="form-control form-control-sm">
@@ -310,6 +311,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                        </select>
 	                        </div>	                        
 	                        
+	                        <!-- CAMPO OCULTO PARA HABILITAR POR MEDIO DE RADIO -->
 	                        <div class="col-md-6 pb-3 prism">
 	                        	<label class="control-label" for="prism">Prism</label>	                            
 	                        	<select id="prism"  th:field="*{comPrism}" class="form-control form-control-sm">
@@ -595,19 +597,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		         
 		});
 		
+		//me permite al seleccionar el predictor habilitar el valor para cada seleccion.
 		$(".predictor").change(function(){
 			escala = $("input[name='escala']:checked").val();
             //console.log(escala);
-			if(escala === "0"){
-            	console.log("0");
+			if(escala === "0"){            	
             	$('.apache').show('fast');
         		$('.prism').hide('fast');
             }
-            if(escala === "1"){
-            	console.log("1");
+            if(escala === "1"){            	
             	$('.prism').show('fast');
-            	$('.apache').hide('fast');
-        		
+            	$('.apache').hide('fast');        		
+            }
+            if(escala === "2"){            	
+            	$('.prism').hide('fast');
+            	$('.apache').hide('fast');        		
             }
         });
 		
