@@ -1,5 +1,8 @@
 package com.chapumix.solution.app.controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
@@ -10,9 +13,12 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.poi.ss.usermodel.Cell;
@@ -52,6 +58,7 @@ import com.chapumix.solution.app.models.entity.ComPrism;
 import com.chapumix.solution.app.models.entity.ComRegimen;
 import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoIngreso;
+import com.chapumix.solution.app.models.entity.ComUsuario;
 import com.chapumix.solution.app.models.entity.EstAsistente;
 import com.chapumix.solution.app.models.entity.EstCausa;
 import com.chapumix.solution.app.models.entity.EstMortalidad;
@@ -66,10 +73,18 @@ import com.chapumix.solution.app.models.service.IComRegimenService;
 import com.chapumix.solution.app.models.service.IComRetrasoService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComTipoIngresoService;
+import com.chapumix.solution.app.models.service.IComUsuarioService;
 import com.chapumix.solution.app.models.service.IEstMortalidadService;
 import com.chapumix.solution.app.models.service.IGenAreSerService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.chapumix.solution.app.utils.ExcelUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 
 @Controller
@@ -114,12 +129,23 @@ public class EstMortalidadController {
 	
 	@Autowired
 	private IComPrismService iComPrismService;
+	
+	@Autowired
+	private IComUsuarioService iComUsuarioService;
 		
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Value("${app.titulomortalidad}")
 	private String titulomortalidad;
+	
+	@Value("${app.titulomortalidadconsolidado}")
+	private String tituloconsolidado;
+	
+	@Value("${app.titulomortalidadreporte}")
+	private String tituloreporte;
+	
+	
 	
 	@Value("${app.enlaceprincipalestadistica}")
 	private String enlaceprincipalestadistica;
@@ -262,21 +288,20 @@ public class EstMortalidadController {
 	}
 
 
-	// Este metodo me permite visualizar o cargar el formulario para el reporte de mortalidades
-	@GetMapping("/reportemortalidad")
-	public String crearReporteMortalidad(Map<String, Object> model) {		
-		model.put("titulo", utf8(this.titulomortalidad));
+	// Este metodo me permite visualizar o cargar el formulario para el consolidado de mortalidades
+	@GetMapping("/consolidadomortalidad")
+	public String crearconsolidadomortalidad(Map<String, Object> model) {		
+		model.put("titulo", utf8(this.tituloconsolidado));
 		model.put("estadistica", enlaceprincipalestadistica);
 		model.put("enlace7", enlace7);
-		return "reportemortalidad";	
+		return "consolidadomortalidad";	
 		
 	}
 	
 	
-	// Este metodo me permite generar el consolidad de encuestas
-
-	@RequestMapping("/generarreportemortalidad")
-	public String generarReporteMortalidad(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, RedirectAttributes flash, HttpServletResponse response) throws ParseException {
+	// Este metodo me permite generar el consolidad de mortalidades
+	@RequestMapping("/generarconsolidadomortalidad")
+	public String generarconsolidadomortalidad(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, RedirectAttributes flash, HttpServletResponse response) throws ParseException {
 		
 		String errorFechas = "";
 		
@@ -286,7 +311,7 @@ public class EstMortalidadController {
 			model.addAttribute("error", errorFechas);
 			model.addAttribute("estadistica", enlaceprincipalestadistica);
 			model.addAttribute("enlace7", enlace7);
-			return "reportemortalidad";
+			return "consolidadomortalidad";
 		}
 
 		// valida si la fecha inicial y la fecha final no estan vacios
@@ -295,7 +320,7 @@ public class EstMortalidadController {
 			model.addAttribute("error", errorFechas);
 			model.addAttribute("estadistica", enlaceprincipalestadistica);
 			model.addAttribute("enlace7", enlace7);
-			return "reportemortalidad";
+			return "consolidadomortalidad";
 		}
 		
 		// consulta por la fecha inicial y la fecha final
@@ -316,7 +341,46 @@ public class EstMortalidadController {
 		return  null;
 		
 	}
-
+	
+	// Este metodo me permite visualizar o cargar el formulario para el reporte de mortalidades
+	@GetMapping("/reportemortalidad")
+	public String crearreportemortalidad(Map<String, Object> model) {		
+		model.put("titulo", utf8(this.tituloreporte));
+		model.put("estadistica", enlaceprincipalestadistica);
+		model.put("enlace7", enlace7);
+		return "reportemortalidad";	
+			
+	}
+	
+	
+	// Este metodo me permite generar el consolidad de mortalidades
+	@RequestMapping("/generarreportemortalidad")
+	public String generarreportemortalidad(Model model, @RequestParam(value = "documento", required = false) String documento, RedirectAttributes flash, HttpServletResponse response) throws ParseException, JRException, IOException {
+			
+		// valida si la fecha inicial y la fecha final no estan vacios
+		if (documento.isEmpty()) {			
+			model.addAttribute("error", "El documento es requerido.");
+			model.addAttribute("estadistica", enlaceprincipalestadistica);
+			model.addAttribute("enlace7", enlace7);
+			return "reportemortalidad";
+		}		
+		else {
+			List<EstMortalidad> mortalidad = iEstMortalidadService.pacienteMortalidadPDF(documento);
+			
+			if(!mortalidad.isEmpty()) {
+				//creamos el reporte en PDF
+				crearPDF(mortalidad, response);
+				model.addAttribute("estadistica", enlaceprincipalestadistica);
+				model.addAttribute("enlace7", enlace7);
+			}else {
+				model.addAttribute("error", "No hay datos del paciente.");
+				model.addAttribute("estadistica", enlaceprincipalestadistica);
+				model.addAttribute("enlace7", enlace7);
+				return "reportemortalidad";
+			}			
+		}			
+		return  null;			
+	}	
 
 
 	// Este metodo me permite cargar por AJAX el dato del paciente
@@ -508,7 +572,7 @@ public class EstMortalidadController {
 		//sheet.addMergedRegion(new CellRangeAddress(fila_inicial, fila_final, columna_inicial, columna_final))		
 				
 		//Se crea variable para el nombre del archivo de EXCEL
-		String fileName = "reporte_mortalidad.xlsx";
+		String fileName = "consolidado_mortalidad.xlsx";
 				
 				
 		// 1. Se crea el libro XLSX
@@ -536,7 +600,7 @@ public class EstMortalidadController {
 		//Crear primera fila con índice a partir de 0 (fila de encabezado)
 		Row row0 = sheet.createRow(rowNum++);
 		row0.setHeight((short) 500);// Establecer altura de fila
-		String title = "REPORTE MORTALIDAD";
+		String title = "CONSOLIDADO MORTALIDAD";
 		Cell c00 = row0.createCell(0);
 		c00.setCellValue(title);
 		c00.setCellStyle(titleStyle);
@@ -634,8 +698,12 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String codigo = listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta().getCodigo();
-                        tempValue = codigo;
+                		if(listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta() != null) {
+                			String codigo = listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta().getCodigo();
+                			tempValue = codigo;
+                		}else {
+                			tempValue = "";
+                		}                        
                 	}                	                   
                 }
                 else if(j == 9) {
@@ -643,8 +711,12 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta().getNombre();
-                        tempValue = nombre;
+                		if(listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta() != null) {
+                			String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getCausaDirecta().getNombre();
+                			tempValue = nombre;
+                		}else {
+                			tempValue = "";
+                		}              		
                 	}              	
                 }
                 else if(j == 10) {
@@ -652,8 +724,10 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String codigo = listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente().getCodigo();
-                        tempValue = codigo;
+                		if(listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente() != null) {
+                			String codigo = listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente().getCodigo();
+                			tempValue = codigo;
+                		}          		
                 	}                	
                 }
                 else if(j == 11) {
@@ -661,8 +735,12 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente().getNombre();
-                        tempValue = nombre;
+                		if(listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente() != null) {
+                			String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getCausaAntedecente().getNombre();
+                			tempValue = nombre;
+                		}else {
+                			tempValue = "";
+                		}          		
                 	}           	
                 }
                 else if(j == 12) {
@@ -670,8 +748,12 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaA();
-                        tempValue = nombre;
+                		if(!listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaA().isEmpty()) {
+                			String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaA();
+                			tempValue = nombre;
+                		}else {
+                			tempValue = "";
+                		}
                 	}               	
                 }
                 else if(j == 13) {
@@ -679,17 +761,25 @@ public class EstMortalidadController {
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
                 	}else {
-                		String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaB();
-                        tempValue = nombre;
+                		if(!listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaB().isEmpty()) {
+                			String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtraCausaB();
+                			tempValue = nombre;
+                		}else {
+                			tempValue = "";
+                		}
                 	}            	
                 }
                 else if(j == 14) {
                 	// Nombre Diagnostico Causa Antecedentes D
                 	if(listadoMortalidad.get(i).getEstCausas().isEmpty()) {
                 		tempValue = "";
-                	}else {
-                		String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtros();
-                        tempValue = nombre;
+                	}else {                		
+                		if(!listadoMortalidad.get(i).getEstCausas().get(0).getOtros().isEmpty()) {
+                			String nombre = listadoMortalidad.get(i).getEstCausas().get(0).getOtros();
+                			tempValue = nombre;
+                		}else {
+                			tempValue = "";
+                		}
                 	}           	
                 }
                 else if(j == 15) {
@@ -847,12 +937,12 @@ public class EstMortalidadController {
                 }
                 else if(j == 31) {
                 	// Apache
-                	String apache = validarApache(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComApache());            	
+                	String apache = listadoMortalidad.get(i).getComApache().getNombre();            	
                     tempValue = apache;
                 }
                 else if(j == 32) {
                 	// Prism
-                	String prism = validarPrism(listadoMortalidad.get(i).getEscala(), listadoMortalidad.get(i).getComPrism());            	
+                	String prism = listadoMortalidad.get(i).getComPrism().getNombre();            	
                     tempValue = prism;
                 }
                 
@@ -860,10 +950,7 @@ public class EstMortalidadController {
                 tempCell.setCellValue(tempValue);
             	
             }
-        }
-        //}
-        
-        
+        }       
         
 		//este me permite exportar y abrir dialogo para guardar el archivo
         try {
@@ -880,26 +967,55 @@ public class EstMortalidadController {
         }  
 		
 	}
-
-
-	//me sirve para obtener el valor del apache
-	private String validarApache(String escala, ComApache comApache) {
-		if(escala.equals("0")) {
-			return comApache.getNombre();
-		}else {
-			return "";
-		}
-	}
 	
-	//me sirve para obtener el valor del prism
-	private String validarPrism(String escala, ComPrism comPrism) {
-		if(escala.equals("1")) {
-			return comPrism.getNombre();
-		}else {
-			return "";
-		}
+	//Se usa para crear el reporte en PDF
+	private void crearPDF(List<EstMortalidad> mortalidad, HttpServletResponse response) throws JRException, IOException {
+		
+		//parametros adicionales para el PDF
+		Map<String, Object> parameters = new HashMap<>();
+		
+		// Obteniendo el archivo .jrxml de la carpeta de recursos.
+		InputStream jrxmlInput = this.getClass().getResourceAsStream("/reports/reportemortalidad.jrxml");
+				
+		// Compilo el informe Jasper de .jrxml a .jasper
+		JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlInput);
+				
+		// Obteniendo a las prescipciones de la fuente de datos.
+		JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(mortalidad);
+		
+		//obtengo la edad completa
+		String edad = calcularEdad(mortalidad.get(0).getGenPacien().getGpafecnac());
+		
+		//obtengo rutas de imagenes para convertir
+		BufferedImage logo = ImageIO.read(getClass().getResource("/static/dist/img/logohusj.png"));
+		BufferedImage check = ImageIO.read(getClass().getResource("/static/dist/img/check.png"));
+				
+		//obtengo nombre de quien diligencio el analisis		
+		ComUsuario usuario =  iComUsuarioService.findByUsuario(mortalidad.get(0).getLoginUsrAlta());	
+		
+		// Agregar los parámetros adicionales al pdf.
+		parameters.put("logo", logo);
+		parameters.put("check", check);		
+		parameters.put("edad", edad);
+		parameters.put("estAsistentes", mortalidad.get(0).getEstAsistentes());
+		parameters.put("estRetrasos", mortalidad.get(0).getEstRetrasos());
+		parameters.put("estCausas", mortalidad.get(0).getEstCausas());
+		parameters.put("nombreDiligencio", usuario.getNombreCompleto());
+		
+		// Rellenar el informe con los datos de la prescripcion y la información de parámetros adicionales.
+		JasperPrint jasperPrint  = JasperFillManager.fillReport(jasperReport, parameters, source);
+				
+				
+		//este me permite exportar y abrir dialogo para guardar el archivo
+		String fileName = mortalidad.get(0).getGenPacien().getPacNumDoc()+".pdf";
+		response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+		response.setContentType("application/pdf");
+		ServletOutputStream servletOutputStream = response.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint,servletOutputStream);
+		servletOutputStream.flush();
+		servletOutputStream.close();
+		
 	}
-
 
 	//me sirve para convertir el booleano en un string SI o NO
 	private String validarBooleano(boolean codigo) {

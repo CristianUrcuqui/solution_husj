@@ -17,6 +17,8 @@ public interface IEstMortalidadService {
 	
 	public EstMortalidad pacienteMortalidad(String numDoc);
 	
+	public List<EstMortalidad> pacienteMortalidadPDF(String numDoc);
+	
 	public void delete(Long id);	
 
 }

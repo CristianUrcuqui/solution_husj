@@ -174,6 +174,7 @@ public class EstMortalidad implements Serializable {
 		this.planMejora = planMejora;
 	}	
 
+	@Lob
 	@Column(name = "accion")
 	public String getAccion() {
 		return accion;
@@ -183,6 +184,7 @@ public class EstMortalidad implements Serializable {
 		this.accion = accion;
 	}
 
+	@Lob
 	@Column(name = "tiempo")
 	public String getTiempo() {
 		return tiempo;
@@ -192,6 +194,7 @@ public class EstMortalidad implements Serializable {
 		this.tiempo = tiempo;
 	}
 
+	@Lob
 	@Column(name = "responsable")
 	public String getResponsable() {
 		return responsable;

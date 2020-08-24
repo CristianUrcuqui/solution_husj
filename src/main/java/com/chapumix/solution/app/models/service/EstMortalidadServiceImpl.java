@@ -39,6 +39,12 @@ public class EstMortalidadServiceImpl implements IEstMortalidadService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public EstMortalidad pacienteMortalidad(String numDoc) {		
 		return estMortalidadDao.pacienteMortalidad(numDoc);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<EstMortalidad> pacienteMortalidadPDF(String numDoc) {
+		return estMortalidadDao.pacienteMortalidadPDF(numDoc);
 	}	
 		
 	
