@@ -44,6 +44,7 @@ public class FarMipres implements Serializable {
 	private Date fechaEntrega;
 	private String loteEntregado;
 	private String codEps;
+	private String nitEps;
 	private String idTraza;
 	private String idEntregaMipress;
 	private String idReporteEntregaMipress;
@@ -238,6 +239,14 @@ public class FarMipres implements Serializable {
 		this.codEps = codEps;
 	}
 
+	@Column(name = "nit_eps", length = 10)
+	public String getNitEps() {
+		return nitEps;
+	}
+
+	public void setNitEps(String nitEps) {
+		this.nitEps = nitEps;
+	}
 
 	@Column(name = "id_traza")
 	public String getIdTraza() {

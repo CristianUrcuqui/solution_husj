@@ -1,5 +1,6 @@
 package com.chapumix.solution.app.models.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -32,6 +33,8 @@ public interface IFarMipresService {
 	public List<FarMipres> findByPrescripcion(String prescripcion);
 	
 	public List<FarMipres> findByIdMipres(Long id);
+	
+	public List<FarMipres> findByStartDateBetween(Date fechaInicial, Date fechaFinal);
 	
 	public void delete(Long id);
 

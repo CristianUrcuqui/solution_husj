@@ -71,25 +71,6 @@ public class ExcelUtils {
 	}
 
 	public static CellStyle createContentCellStyle(Workbook workbook) {
-		/*CellStyle cellStyle = workbook.createCellStyle();
-		//Set wrap
-        cellStyle.setWrapText(true);
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        /*cellStyle.setBorderBottom(BorderStyle.THIN);
-        cellStyle.setBottomBorderColor(IndexedColors.BLACK.index);
-        cellStyle.setBorderLeft(BorderStyle.THIN);
-        cellStyle.setLeftBorderColor(IndexedColors.BLACK.index);
-        cellStyle.setBorderRight(BorderStyle.THIN);
-        cellStyle.setRightBorderColor(IndexedColors.BLACK.index);
-        cellStyle.setBorderTop(BorderStyle.THIN);
-        cellStyle.setTopBorderColor(IndexedColors.BLACK.index);*/
-		
-		
-		
-		
-		
 		CellStyle cellStyle = workbook.createCellStyle();
         //horizontally
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -110,15 +91,35 @@ public class ExcelUtils {
         Font font = workbook.createFont();
         font.setColor((short)8);
         font.setFontHeightInPoints((short)12);	
-		
-		
 
         return cellStyle;
 	}
 	
 	
-	
-	
+	public static CellStyle createContentCellStyleMiPres(Workbook workbook) {
+		CellStyle cellStyle = workbook.createCellStyle();
+        //horizontally
+        cellStyle.setAlignment(HorizontalAlignment.JUSTIFY);
+        //Vertical centering
+        cellStyle.setVerticalAlignment(VerticalAlignment.JUSTIFY);
+        //Set wrap
+        cellStyle.setWrapText(true);
+        //border-top
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        //bottom
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        //border-left
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        //border-right
+        cellStyle.setBorderRight(BorderStyle.THIN);
+
+        //Set font
+        Font font = workbook.createFont();
+        font.setColor((short)8);
+        font.setFontHeightInPoints((short)12);	
+
+        return cellStyle;
+	}
 	
 
 }

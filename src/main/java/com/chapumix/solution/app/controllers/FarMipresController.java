@@ -2,6 +2,7 @@ package com.chapumix.solution.app.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.Principal;
@@ -30,6 +31,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +47,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -60,6 +67,7 @@ import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoDocumentoMipres;
 import com.chapumix.solution.app.models.entity.ComTipoTecnologia;
 import com.chapumix.solution.app.models.entity.ComTokenMipres;
+import com.chapumix.solution.app.models.entity.EstMortalidad;
 import com.chapumix.solution.app.models.entity.FarMipres;
 import com.chapumix.solution.app.models.entity.GenPacien;
 import com.chapumix.solution.app.models.service.IComGeneroService;
@@ -69,6 +77,7 @@ import com.chapumix.solution.app.models.service.IComTipoTecnologiaService;
 import com.chapumix.solution.app.models.service.IComTokenMipresService;
 import com.chapumix.solution.app.models.service.IFarMipresService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
+import com.chapumix.solution.app.utils.ExcelUtils;
 import com.chapumix.solution.app.utils.PageRender;
 
 import net.sf.jasperreports.engine.JRException;
@@ -157,6 +166,9 @@ public class FarMipresController {
 	
 	@Value("${app.titulosincroniza}")
 	private String titulosincroniza;
+	
+	@Value("${app.reporterips}")
+	private String reportemipres;	
 	
 	
 	@Value("${app.enlace10}")
@@ -522,7 +534,7 @@ public class FarMipresController {
 	
 	// Este metodo me permite guardar el reporte de facturacion
 	@RequestMapping(value = "/reportefacturacion", method = RequestMethod.POST)
-	public String guardarReporteFacturacion(@Valid FarMipres farMipres, @RequestParam(value = "nit", required = false) String nit, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+	public String guardarReporteFacturacion(@Valid FarMipres farMipres, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
 			model.addAttribute("farMipres", farMipres);			
@@ -531,7 +543,7 @@ public class FarMipresController {
 			return "reporteentregaform";
 		}
 			
-		if(nit.isEmpty()) {			
+		if(farMipres.getNitEps().isEmpty()) {			
 			model.addAttribute("error", "El nit es requerido");
 			return "reportefacturacion";
 		}		
@@ -556,7 +568,7 @@ public class FarMipresController {
 			return "reportefacturacion";
 		}
 			
-		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, nit, cdispensacion);
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, cdispensacion);
 			
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
 						
@@ -608,17 +620,79 @@ public class FarMipresController {
 	@RequestMapping(value = "/sincronizaprescripcionpornumero")
 	public String guardarSincronizacionPorNumeroDePrescripcion(@RequestParam(value = "numeroPrescripcion", required = false) String numeroPrescripcion, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
 		if(!numeroPrescripcion.isEmpty() ) {
-			sincronizoPrescripcion(numeroPrescripcion, principal);
+			String mensaje = sincronizoPrescripcion(numeroPrescripcion, principal, flash);
+			if(mensaje == "success") {
+				flash.addFlashAttribute("success", "Sincronizacion correcta");
+			}else if(mensaje == "error") {
+				flash.addFlashAttribute("error", "Prescripción no encontrada");
+			}else {
+				flash.addFlashAttribute("error", "Prescripción ya existe");
+			}
+			
 		}else {
 			flash.addFlashAttribute("error", "El número de prescipción es requerida");
 			return "redirect:sincronizaprescripcionform";
 		}				
 		model.put("titulo", utf8(this.titulosincroniza));				
-		model.put("enlace10", enlace10);		
-		flash.addFlashAttribute("success", "Sincronizacion correcta");		
+		model.put("enlace10", enlace10);			
 		status.setComplete();
 		return "redirect:sincronizaprescripcionform";
-	}	
+	}
+	
+	
+	// Este metodo me permite visualizar o cargar el formulario para generar el excel para rips
+	@GetMapping("/ripsmipres")
+	public String crearconsolidadomortalidad(Map<String, Object> model) {		
+		model.put("titulo", utf8(this.reportemipres));		
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("enlace10", enlace10);
+		return "ripsmipres";	
+			
+	}
+	
+	
+	// Este metodo me permite generar el consolidad de mortalidades
+	@RequestMapping("/generarreporterips")
+	public String generarconsolidadomortalidad(Model model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, RedirectAttributes flash, HttpServletResponse response) throws ParseException {
+			
+		String errorFechas = "";
+			
+		// valida si la fecha inicial y la fecha final no estan vacios
+		if (fechaInicial.equals("") && fechaFinal.equals("")) {
+			errorFechas = "Debes establecer una fecha inicial y fecha final";
+			model.addAttribute("error", errorFechas);
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "ripsmipres";
+		}
+
+		// valida si la fecha inicial y la fecha final no estan vacios
+		if (fechaInicial.equals("") || fechaFinal.equals("")) {
+			errorFechas = "Debes establecer una fecha inicial y fecha final";
+			model.addAttribute("error", errorFechas);
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "ripsmipres";
+		}
+			
+		// consulta por la fecha inicial y la fecha final
+		if (!fechaInicial.equals("") && !fechaFinal.equals("")) {
+			Date fechaI = convertirFecha(fechaInicial);
+			Date fechaF = convertirFecha(fechaFinal);
+				
+			List<FarMipres> listadoMipres = iFarMipresService.findByStartDateBetween(fechaI, fechaF);
+				
+			//creamos el reporte en EXCEL
+			crearExcel(listadoMipres, response);							
+										
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);						
+		}		
+			
+		return  null;
+			
+	}
+	
 
 
 	/* ----------------------------------------------------------
@@ -797,7 +871,7 @@ public class FarMipresController {
 	}
 	
 	//Se usa para hacer put en el web service de mipres REPORTE FACTURACION
-	private Map<String, String> guardarWebServiceMipresReporteFacturacion(FarMipres farMipres, String nit, String cdispensacion) throws IOException {
+	private Map<String, String> guardarWebServiceMipresReporteFacturacion(FarMipres farMipres, String cdispensacion) throws IOException {
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -824,7 +898,7 @@ public class FarMipresController {
 		parametros.put("NoIDPaciente", farMipres.getGenPacien().getPacNumDoc());		
 		parametros.put("NoEntrega", farMipres.getEntregaTotal());
 		parametros.put("NoFactura", farMipres.getNumeroFactura());
-		parametros.put("NoIDEPS", nit);
+		parametros.put("NoIDEPS", farMipres.getNitEps());
 		parametros.put("CodEPS", farMipres.getCodEps());
 		parametros.put("CodSerTecAEntregado", farMipres.getCodigoServicio());
 		parametros.put("CantUnMinDis", cdispensacion);
@@ -1100,7 +1174,11 @@ public class FarMipresController {
 	}
 	
 	//Se usa para hacer get en el web service de mipres y sincronizar por numero de prescripcion
-	private void sincronizoPrescripcion(String numeroPrescripcion, Principal principal) throws ClientProtocolException, IOException, ParseException {
+	private String sincronizoPrescripcion(String numeroPrescripcion, Principal principal, RedirectAttributes flash) throws ClientProtocolException, IOException, ParseException {
+		
+		String success = "success"; 
+		String error = "error";
+		String existe = "existe";
 		
 		//Me sirve para guardar los tipos de tecnologias
 		Map<String, Object> map = new HashMap<>();		
@@ -1123,7 +1201,7 @@ public class FarMipresController {
 		response = httpclient.execute(httpGet);		
 		
 		//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
-        String content = EntityUtils.toString(response.getEntity());	        
+        String content = EntityUtils.toString(response.getEntity());        
         JSONArray arregloJSON = new JSONArray(content);	        
         //recorro el arreglo para tranformarlo en un objeto JSON
         for (int i = 0; i < arregloJSON.length(); i++) {
@@ -1239,25 +1317,36 @@ public class FarMipresController {
                     farMipres.setEntregaTotal(1);
                     farMipres.setCausaNoEntrega(0);
                     farMipres.setLoginUsrAlta(principal.getName());
-                    farMipres.setCodEps(codEps);                
-                    
-                	iFarMipresService.save(farMipres);            	
-                }   
+                    farMipres.setCodEps(codEps);                    
+                	iFarMipresService.save(farMipres);
+                	return success;                		
+                }
+                else {
+                	return existe;
+                }
             //este else es cuando son varias tecnologias
         	}else {
         		if(map.size() == 6 || map.size() == 8) {
         			int hasta = 2;
         			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        			return success;	
         		}
         		if(map.size() == 9 || map.size() == 12) {
         			int hasta = 3;
         			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        			return success;	
         		}
         	}
         
-        	}	
+        	}
+        	//si prescripcion no cumple con el codigo ambito atencion
+        	else {        		
+        		return error;
+        	}
     	 	
         }//fin for		
+        //si prescripcion esta vacia o nula
+        return error;
 	}
 
 	// Se usa para dar formato a fechas de dinamica
@@ -1676,5 +1765,182 @@ public class FarMipresController {
 			
 		});
 	}
+	
+	//Se usa para crear el archivo en EXCEL
+	private void crearExcel(List<FarMipres> listadoMipres, HttpServletResponse response) {
+		//EJEMPLO DE RANGOS EN FILAS Y COLUMNAS
+		//sheet.addMergedRegion(new CellRangeAddress(fila_inicial, fila_final, columna_inicial, columna_final))		
+					
+		//Se crea variable para el nombre del archivo de EXCEL
+		String fileName = "reporte_rips.xlsx";
+					
+					
+		// 1. Se crea el libro XLSX
+		// Umbral, el número máximo de objetos en la memoria, más allá del cual se genera y almacena un archivo temporal en el disco duro
+		SXSSFWorkbook workbook = new SXSSFWorkbook(); //new HSSFWorkbook() para generar archivos `.xls`
+					
+		//OPCIONAL
+		//CreationHelper nos ayuda a crear instancias o utilerias para formatos especiales como DataFormat, Hyperlink, RichTextString, etc., en un formato (HSSF, XSSF) de forma independiente
+		CreationHelper createHelper = workbook.getCreationHelper();
+				
+		//2.Se crea una hoja dentro del libro asignando un nombre
+		Sheet sheet = workbook.createSheet("Reporte_Rips");				
+					
+		//3. Establecer el estilo y el estilo de fuente		
+		CellStyle headerStyle = ExcelUtils.createHeadCellStyle(workbook);
+		CellStyle contentStyle = ExcelUtils.createContentCellStyleMiPres(workbook);
+			        
+			        
+		//4. Crear primera fila encabezados
+		//Número de línea
+		int rowNum = 0;
 		
+		//Primer elemento       
+	    Row row1 = sheet.createRow(rowNum++);
+	    //sheet.setColumnWidth(3, 25 * 256);
+	    row1.setHeight((short)500); //me permite poner alto a la celda
+	    String[] row_first = {"PACIENTE","TIPO DOCUMENTO","NUMERO DOCUMENTO","NUMERO FACTURA","NIT","CODIGO EPS","COD TECNOLOGIA","CANTIDAD ENTREGADA","VR UNITARIO","VR TOTAL","NUMERO PRESCRIPCION","ID ENTREGA","ID TRAZA","ID REPORTE ENTREGA","ID FACTURACION","ID REPORTE FACTURACION"};
+	    for (int i = 0; i < row_first.length; i++) {
+	    Cell tempCell = row1.createCell(i);
+	    	tempCell.setCellValue(row_first[i]);
+	        tempCell.setCellStyle(headerStyle);	        
+	    }
+	        
+	    //5. Agrego el contenido desde un arraylist al EXCEL
+	    
+	    //Segundo elemento
+	    //for(EstMortalidad mortalidad: listadoMortalidad) {
+	        
+	    for(int i=0; i<listadoMipres.size(); i++) {       
+	        	
+	       	Row tempRow = sheet.createRow(rowNum++);
+	        //tempRow.setHeight((short) 1250);
+	        // Recorrido para relleno de celdas
+	        for (int j = 0; j < 16; j++) {
+	            	
+	            Cell tempCell = tempRow.createCell(j);
+	            tempCell.setCellStyle(contentStyle);	            
+	            String tempValue = "";
+	            if (j == 0) {
+	            	// Paciente
+	            	String nombreCompleto = nombreCompleto(listadoMipres.get(i).getGenPacien().getPacPriNom(), listadoMipres.get(i).getGenPacien().getPacSegNom(), listadoMipres.get(i).getGenPacien().getPacPriApe(), listadoMipres.get(i).getGenPacien().getPacSegApe());
+	            	tempValue = nombreCompleto;                    
+	            }
+	            else if(j == 1) {
+	            	// Tipo Documento Paciente
+	                tempValue = listadoMipres.get(i).getGenPacien().getComTipoDocumento().getTipo();
+	            }
+	            else if(j == 2) {
+	               	// Numero Documento Paciente
+	               	tempValue = listadoMipres.get(i).getGenPacien().getPacNumDoc();
+	            }
+	            else if(j == 3) {
+	               	// Numero Factura
+	                tempValue = listadoMipres.get(i).getNumeroFactura();
+	            }
+	            else if(j == 4) {
+	               	// Nit Eps
+	                tempValue = listadoMipres.get(i).getNitEps();
+	            }
+	            else if(j == 5) {
+	               	// Codigo Eps
+	                tempValue = listadoMipres.get(i).getCodEps();
+	            }
+	            else if(j == 6) {
+	               	// Codigo Tecnologia
+	                tempValue = listadoMipres.get(i).getCodigoServicio();
+	            }
+	            else if(j == 7) {
+	               	// Cantidad Entregada
+	                tempValue = listadoMipres.get(i).getCantidadEntregada();
+	            }
+	            else if(j == 8) {
+	               	// Valor Unitario
+	                tempValue = listadoMipres.get(i).getValorUnitario();
+	            }
+	            else if(j == 9) {
+	               	// Valor Total
+	                tempValue = listadoMipres.get(i).getValorTotal();
+	            }
+	            else if(j == 10) {
+	               	// Numero Prescripcion
+	                tempValue = listadoMipres.get(i).getNumeroPrescripcion();
+	            }
+	            else if(j == 11) {
+	               	// ID Entrega
+	                tempValue = listadoMipres.get(i).getIdEntregaMipress();
+	            }
+	            else if(j == 12) {
+	               	// ID Traza
+	                tempValue = listadoMipres.get(i).getIdTraza();
+	            }
+	            else if(j == 13) {
+	               	// ID Reporte Entrega
+	                tempValue = listadoMipres.get(i).getIdReporteEntregaMipress();
+	            }
+	            else if(j == 14) {
+	               	// ID Facturacion
+	                tempValue = listadoMipres.get(i).getIdFacturacionMipress();
+	            }
+	            else if(j == 15) {
+	            	// ID Reporte Facturacion
+	                tempValue = listadoMipres.get(i).getIdReporteFacturacionMipress();
+	            }
+	            
+	            // Creamos la celda con el contenido
+	            tempCell.setCellValue(tempValue);
+	            sheet.setColumnWidth(0, 12000); //me permite poner ancho a la celda donde 0 es la celda y 10000 el tamaño
+	            sheet.setColumnWidth(1, 3500); //me permite poner ancho a la celda donde 1 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(2, 3500); //me permite poner ancho a la celda donde 2 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(3, 3000); //me permite poner ancho a la celda donde 3 es la celda y 3000 el tamaño
+	            sheet.setColumnWidth(4, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(6, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(7, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(8, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(9, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(10, 8000); //me permite poner ancho a la celda donde 4 es la celda y 4000 el tamaño
+	            sheet.setColumnWidth(11, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(12, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(13, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(14, 4000); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
+	            sheet.setColumnWidth(15, 4000); //me permite poner ancho a la celda donde 4 es la celda y 4000 el tamaño
+	            	
+	          }
+	      }      
+	        
+		//este me permite exportar y abrir dialogo para guardar el archivo
+	    try {
+	    	fileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
+	        response.setHeader("Content-disposition", "attachment;filename=\"" + fileName + "\"");            
+	        OutputStream stream = response.getOutputStream();
+	        if(null != workbook && null != stream){
+	        	workbook.write(stream);
+	            workbook.close();
+	            stream.close();
+	        	}
+	        }catch (Exception e){
+	        	e.printStackTrace();
+	        }		
+	}
+
+	//Se usa para generar el nombre completo del paciente quitando espacios para que en la celda de excel quede mejor visualmente
+	private String nombreCompleto(String pacPriNom, String pacSegNom, String pacPriApe, String pacSegApe) {
+		
+		//esta clase me permite el uso de concatenacion
+		StringBuilder nombreCompleto = new StringBuilder(100);		
+		
+		if(!StringUtils.isBlank(pacPriNom)) {			
+			nombreCompleto.append(pacPriNom.replaceAll("\\s+","")); //a los textos les quitamos los espacios que vienen de la base
+		}
+		if(!StringUtils.isBlank(pacSegNom)) {
+			nombreCompleto.append(" "+pacSegNom.replaceAll("\\s+","")); //a los textos les quitamos los espacios que vienen de la base
+		}
+		if(!StringUtils.isBlank(pacPriApe)) {
+			nombreCompleto.append(" "+pacPriApe.replaceAll("\\s+","")); //a los textos les quitamos los espacios que vienen de la base
+		}
+		if(!StringUtils.isBlank(pacSegApe)) {
+			nombreCompleto.append(" "+pacSegApe.replaceAll("\\s+","")); //a los textos les quitamos los espacios que vienen de la base
+		}		
+		return nombreCompleto.toString();
+	}	
 }

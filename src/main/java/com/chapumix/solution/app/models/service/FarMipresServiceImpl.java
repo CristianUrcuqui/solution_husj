@@ -1,5 +1,6 @@
 package com.chapumix.solution.app.models.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,12 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public List<FarMipres> findByPrescripcion(String prescripcion) {
 		return farMipresDao.findByPrescripcion(prescripcion);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<FarMipres> findByStartDateBetween(Date fechaInicial, Date fechaFinal) {
+		return farMipresDao.findByStartDateBetween(fechaInicial, fechaFinal);
 	}	
 	
 	@Override
@@ -89,7 +96,6 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	public void save(FarMipres farMipres) {
 		farMipresDao.save(farMipres);
 	}
-
 
 	@Override
 	@Transactional

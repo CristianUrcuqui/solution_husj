@@ -112,6 +112,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            <div class="col-md-8">                           		
                            		<input id="tecnologia" type="text" th:field="*{comTipoTecnologia.descripcion}" class="form-control form-control-sm" readonly>
                            </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="nombretecnologia">Nombre Medicamento</label>
+                           <div class="col-md-8">                           		
+                           		<input id="nombretecnologia" type="text" th:field="*{nombreMedicamento}" class="form-control form-control-sm" readonly>
+                           </div>
                        </div>                       
                        
                        <div class="form-group row">
@@ -152,7 +159,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="nit">Nit EPS</label>
                            <div class="col-md-8">                           		
-                           		<input id="nit" type="text" th:name="nit" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="nit" type="text" th:field="*{nitEps}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>  	  	
                        
