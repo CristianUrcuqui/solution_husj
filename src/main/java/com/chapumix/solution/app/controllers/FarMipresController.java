@@ -1012,7 +1012,7 @@ public class FarMipresController {
 		parametros.put("ConTec", farMipres.getConsecutivoTecnologia());
 		parametros.put("TipoIDPaciente", farMipres.getComTipoDocumentoMipres().getTipo());
 		parametros.put("NoIDPaciente", farMipres.getGenPacien().getPacNumDoc());		
-		parametros.put("NoEntrega", farMipres.getEntregaTotal());
+		parametros.put("NoEntrega", farMipres.getNumeroEntrega());
 		parametros.put("NoFactura", farMipres.getNumeroFactura());
 		parametros.put("NoIDEPS", farMipres.getNitEps());
 		parametros.put("CodEPS", farMipres.getCodEps());
