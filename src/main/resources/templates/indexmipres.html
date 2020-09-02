@@ -137,6 +137,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							  </figcaption>
 							</figure>					    
 					    </div>
+					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ANULAR')" class="col-md-3">					    	
+							<figure class="snip1166 navy">
+							  <img src="dist/img/anular.jpg" alt="anular"/>
+							  <figcaption>
+							    <h3>Anular</h3>
+							    <div>
+							      <p></p>
+							    </div><a th:href="@{/anulaprescripcionform}"></a>
+							  </figcaption>
+							</figure>					    
+					    </div>
 					    		    
 					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_PRINCIPAL')" class="col-md-3">		
 							<figure class="snip1166 navy">

@@ -36,7 +36,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,6 +52,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,7 +67,6 @@ import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoDocumentoMipres;
 import com.chapumix.solution.app.models.entity.ComTipoTecnologia;
 import com.chapumix.solution.app.models.entity.ComTokenMipres;
-import com.chapumix.solution.app.models.entity.EstMortalidad;
 import com.chapumix.solution.app.models.entity.FarMipres;
 import com.chapumix.solution.app.models.entity.GenPacien;
 import com.chapumix.solution.app.models.service.IComGeneroService;
@@ -96,11 +95,17 @@ public class FarMipresController {
 	
 	public static final String MetodoPutEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/EntregaAmbito/"; //url mipres metodo para put entrega
 	
+	public static final String MetodoPutAnulaEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/AnularEntrega/"; //url mipres metodo para put anulacion entrega
+	
 	public static final String MetodoPutReporteEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntrega/"; //url mipres metodo para put reporte entrega
+	
+	public static final String MetodoPutAnulaReporteEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/AnularReporteEntrega/"; //url mipres metodo para put anulacion reporte entrega
 	
 	public static final String MetodoGetReporteEntrega = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXPrescripcion/"; //url mipres metodo para get reporte entrega
 	
 	public static final String MetodoPutReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/Facturacion/"; //url mipres metodo para put reporte facturacion
+	
+	public static final String MetodoPutAnulacionReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/FacturacionAnular/"; //url mipres metodo para put anulacion reporte facturacion
 	
 	public static final String MetodoGetReporteFacturacion = "https://wsmipres.sispro.gov.co/WSFACMIPRESNOPBS/api/FacturacionXPrescripcion/"; //url mipres metodo para get reporte facturacion
 	
@@ -168,8 +173,10 @@ public class FarMipresController {
 	private String titulosincroniza;
 	
 	@Value("${app.reporterips}")
-	private String reportemipres;	
+	private String reportemipres;
 	
+	@Value("${app.anularprescripcion}")
+	private String anularmipres;	
 	
 	@Value("${app.enlace10}")
 	private String enlace10;
@@ -691,6 +698,115 @@ public class FarMipresController {
 			
 		return  null;
 			
+	}
+	
+	// Este metodo me permite visualizar o cargar el formulario para anular el reporte de facturacion, el reporte de entrega y la entrega
+	@GetMapping("/anulaprescripcionform")
+	public String anularSincronizacion(Map<String, Object> model, RedirectAttributes flash) {		
+		
+		FarMipres farMipres =  new FarMipres();		
+		boolean listado = false;
+		
+		model.put("titulo", utf8(this.anularmipres));
+		model.put("farMipres", farMipres);		
+		model.put("enlace10", enlace10);		
+		model.put("listado", listado);		
+		return "anulaprescripcionform";
+	}
+	
+	// Este metodo me permite consultar cual proceso se puede anular para la prescripcion por ID
+	@RequestMapping("/procesaranulacion")	
+	public String procesarAnulacion(Model model, @RequestParam(value = "idprescripcion", required = false) String idprescripcion, RedirectAttributes flash, HttpServletResponse response) throws ParseException, JRException, IOException {
+		
+		boolean listado = false;
+			
+		// valida el numero de prescripcion no esta vacia
+		if (idprescripcion.isEmpty()) {		
+			model.addAttribute("titulo", utf8(this.anularmipres));
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			model.addAttribute("error", "El número de prescripción es requerida");
+			return "anulaprescripcionform";
+		}		
+			
+		List<FarMipres> prescripcionObtenida = iFarMipresService.findByIdMipres(Long.parseLong(idprescripcion));		
+		
+		listado = true;
+		model.addAttribute("titulo", utf8(this.anularmipres));
+		model.addAttribute("farmacia", enlaceprincipalfarmacia);
+		model.addAttribute("enlace10", enlace10);
+		model.addAttribute("prescipcion", prescripcionObtenida);
+		model.addAttribute("listado", listado);
+		return  "anulaprescripcionform";			
+	}
+	
+	// Este metodo me permite anular la entrega
+	@RequestMapping(value = "/anularentrega/{id}/{condicion}")
+	public String anularEntrega(@PathVariable(value = "id") Long id, @PathVariable(value = "condicion") String condicion, SessionStatus status, RedirectAttributes flash, Principal principal) throws Exception {
+		
+		if (id > 0) {
+			// iCalCalendarioService.delete(id);
+			FarMipres farMipres = iFarMipresService.findById(id);
+			// anularEntrega(entrega);
+
+			Map<String, String> webServiceInfo = anulacionPrescripcion(farMipres, condicion);
+
+			if (StringUtils.equals(webServiceInfo.get("success"), "200") && webServiceInfo.get("condicion").equals("entrega")) {				
+				
+				farMipres.setIdTraza(null);
+				farMipres.setIdEntregaMipress(null);
+				farMipres.setProcesadoEntrega(false);
+				farMipres.setCodigoServicio("SIN INFORMACION");
+				farMipres.setLoginUsrAct(principal.getName());
+				farMipres.setFechaAltaAct(new Date());
+				
+				iFarMipresService.save(farMipres);
+				status.setComplete();
+				flash.addFlashAttribute("success", "La entrega fue anulada correctamente");
+				return "redirect:/anulaprescripcionform";
+			}
+
+			if (StringUtils.equals(webServiceInfo.get("success"), "200") && webServiceInfo.get("condicion").equals("reporteentrega")) {				
+				
+				
+				farMipres.setIdReporteEntregaMipress(null);	
+				farMipres.setNumeroFactura(null);
+				farMipres.setValorEntregado(null);
+				farMipres.setProcesadoReporteEntrega(false);
+				farMipres.setLoginUsrAct(principal.getName());
+				farMipres.setFechaAltaAct(new Date());
+				
+				iFarMipresService.save(farMipres);
+				status.setComplete();
+				flash.addFlashAttribute("success", "El reporte de entrega fue anulada correctamente");
+				return "redirect:/anulaprescripcionform";
+			}
+			
+			if (StringUtils.equals(webServiceInfo.get("success"), "200") && webServiceInfo.get("condicion").equals("reportefacturacion")) {				
+				
+				farMipres.setIdReporteFacturacionMipress(null);
+				farMipres.setIdFacturacionMipress(null);
+				farMipres.setCopago(null);
+				farMipres.setCuotaModeradora(null);
+				farMipres.setValorTotal(null);
+				farMipres.setValorUnitario(null);
+				farMipres.setProcesadoFacturacion(false);
+				farMipres.setLoginUsrAct(principal.getName());
+				farMipres.setFechaAltaAct(new Date());
+				
+				iFarMipresService.save(farMipres);
+				status.setComplete();
+				flash.addFlashAttribute("success", "El reporte de facturación fue anulada correctamente");
+				return "redirect:/anulaprescripcionform";
+			}
+			
+			else {
+				flash.addFlashAttribute("error", webServiceInfo.get("error"));
+				return "redirect:/anulaprescripcionform";
+			}
+
+		}
+		return "redirect:/anulaprescripcionform";
 	}
 	
 
@@ -1348,6 +1464,79 @@ public class FarMipresController {
         //si prescripcion esta vacia o nula
         return error;
 	}
+	
+	//Se usa para hacer put anulacion en el web service de mipres ENTREGA
+	private Map<String, String> anulacionPrescripcion(FarMipres farMipres, String condicion) throws Exception {
+			
+		Map<String, String> map = new HashMap<>();
+		
+		String urlEncadenada = null;
+			
+		//obtengo los datos del token secundario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L); 
+			
+		//genero la url para consultar
+		//urlEncadenada = MetodoPutEntrega+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario();
+		
+		switch (condicion) {
+		case "entrega":
+			urlEncadenada = MetodoPutAnulaEntrega+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+farMipres.getIdEntregaMipress();			
+			break;
+			
+		case "reporteentrega":
+			urlEncadenada = MetodoPutAnulaReporteEntrega+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+farMipres.getIdReporteEntregaMipress();			
+			break;
+			
+		case "reportefacturacion":
+			urlEncadenada = MetodoPutAnulacionReporteFacturacion+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+farMipres.getIdReporteFacturacionMipress();			
+			break;	
+		}				
+		
+	    //Especificamos la URL y configuro el objeto CloseableHttpClient
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+			
+		//Se crea una solicitud PUT (si es post HttpPost y si es get HttpGet) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpPut httpPut = new HttpPut(urlEncadenada);
+	    httpPut.setHeader("Accept", "application/json");
+	    httpPut.setHeader("Content-type", "application/json");  
+
+		// Envio la solicitud usando HttpPut -> Método de ejecución PUT
+		HttpResponse response = httpclient.execute(httpPut);
+
+		// creo un objeto HttpEntity para obtener el resultado en String de la peticion
+		HttpEntity entity = response.getEntity();
+		String content = EntityUtils.toString(entity);
+
+		// System.out.println(content);
+
+		// convierto la respuesta de la peticion String a Json para mensajes personalizados
+		JSONObject jsonContent = new JSONObject();
+		if (response.getStatusLine().getStatusCode() == 200) {
+			jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));// busca "[" y "]" y los reemplaza por espacios en blanco
+		} else {
+			jsonContent = new JSONObject(content);
+		}
+	        
+	    //System.out.println(jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+	    //System.out.println(jsonContent.get("Message")); 
+	         
+		// verificamos que la respuesta o estado sea 200
+		if (response.getStatusLine().getStatusCode() == 200) {
+			map.put("success", Integer.toString(response.getStatusLine().getStatusCode()));
+			map.put("condicion", condicion);
+			return map;
+
+		} else if (response.getStatusLine().getStatusCode() == 422) {
+			map.put("error", jsonContent.get("Message").toString() + ",  "
+					+ jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+			return map;
+		} else {
+			map.put("error", jsonContent.get("Message").toString());
+			return map;
+		}
+	}
+	
+	
 
 	// Se usa para dar formato a fechas de dinamica
 	private String formatoFecha(Date fecha) {
