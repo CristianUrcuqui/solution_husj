@@ -393,29 +393,34 @@ public class EstMortalidadController {
 		List<GenPacienMortalidadTMPDTO> finalValores = new ArrayList<>();		
 		
 		if(dinamica != null) {
-		dinamica.forEach(d -> {
-			
-			//obtengo la edad completa
-			String edad = calcularEdad(d.getGpafecnac());			
-			//obtengo el genero			
-			ComGenero genero = iComGeneroService.findById(new Long(d.getGpasexpac()));
-			//obtengo el regimen			
-			ComRegimen regimen = iComRegimenService.findById(new Long(d.getGdeConFac()));
-			//obtengo el tipo de ingreso			
-			ComTipoIngreso  tipoIngreso = iComTipoIngresoService.findByCodigo(d.getAinUrgCon());
-			//obtengo el diagnostico principal			
-			ComCie10  diagnostico = iComCie10Service.findByCodigo(d.getDiaCodigo());
-			//convierto la fecha de ingreso
-			String fechaIngreso = formatoFecha(d.getAinFecIng());
-			//convierto la fecha de defuncion
-			String fechaDefuncion = formatoFecha(d.getHcefecdef());
-			
-			finalValores.add(new GenPacienMortalidadTMPDTO(d.getPacNumDoc(), d.getPacPriNom().trim()+" "+d.getPacSegNom().trim(), d.getPacPriApe().trim()+" "+d.getPacSegApe().trim(), d.getAinConsec().toString().trim(), edad, genero.getNombre(), d.getMunNomMun().trim(), regimen.getNombre(), tipoIngreso.getNombre(), diagnostico.getCodigo()+" - "+diagnostico.getNombre(), d.getEntNombre(), fechaIngreso, fechaDefuncion));
-			
-			
-			});		
+			dinamica.forEach(d -> {
+				
+				//obtengo la edad completa
+				String edad = calcularEdad(d.getGpafecnac());			
+				//obtengo el genero			
+				ComGenero genero = iComGeneroService.findById(new Long(d.getGpasexpac()));
+				//obtengo el regimen			
+				ComRegimen regimen = iComRegimenService.findById(new Long(d.getGdeConFac()));
+				//obtengo el tipo de ingreso			
+				ComTipoIngreso  tipoIngreso = iComTipoIngresoService.findByCodigo(d.getAinUrgCon());
+				if(tipoIngreso == null) {
+					tipoIngreso = new ComTipoIngreso();
+					tipoIngreso.setNombre("");
+				}
+				//obtengo el diagnostico principal			
+				ComCie10  diagnostico = iComCie10Service.findByCodigo(d.getDiaCodigo());
+				//convierto la fecha de ingreso
+				String fechaIngreso = formatoFecha(d.getAinFecIng());
+				//convierto la fecha de defuncion
+				String fechaDefuncion = formatoFecha(d.getHcefecdef());
+				
+				finalValores.add(new GenPacienMortalidadTMPDTO(d.getPacNumDoc(), d.getPacPriNom().trim()+" "+d.getPacSegNom().trim(), d.getPacPriApe().trim()+" "+d.getPacSegApe().trim(), d.getAinConsec().toString().trim(), edad, genero.getNombre(), d.getMunNomMun().trim(), regimen.getNombre(), tipoIngreso.getNombre(), diagnostico.getCodigo()+" - "+diagnostico.getNombre(), d.getEntNombre(), fechaIngreso, fechaDefuncion));
+				
+				
+				});		
 		}		
-			return finalValores;			
+		
+		return finalValores;
 			
 	}
 	
