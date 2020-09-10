@@ -250,7 +250,7 @@ public class EstMortalidadController {
 			//sincronizo y le asigno el id de la mortalidad al objeto EstRetraso
 			sincronizarDetalleRetraso(estMortalidad.getEstRetrasos(), estMortalidad);
 		
-			//sincronizo y le asigno el id de la mortalidad al objeto EstCauca
+			//sincronizo y le asigno el id de la mortalidad al objeto EstCausa
 			sincronizarDetalleCausa(estMortalidad.getEstCausas(), estMortalidad);		
 			
 			//guardo el usuario en base al logueo

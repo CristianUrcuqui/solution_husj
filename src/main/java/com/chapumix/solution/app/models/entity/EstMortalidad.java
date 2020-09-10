@@ -284,7 +284,7 @@ public class EstMortalidad implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "id_tipo_ingreso", nullable = false)
+	@JoinColumn(name = "id_tipo_ingreso")
 	public ComTipoIngreso getComTipoIngreso() {
 		return comTipoIngreso;
 	}
