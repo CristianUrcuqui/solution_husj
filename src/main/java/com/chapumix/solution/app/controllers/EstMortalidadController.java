@@ -25,8 +25,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -328,16 +328,17 @@ public class EstMortalidadController {
 			
 			List<EstMortalidad> listadoMortalidad = iEstMortalidadService.findByStartDateBetween(fechaI, fechaF);
 			
-			//creamos el reporte en EXCEL
-			crearExcel(listadoMortalidad, response);
-						
-									
-			model.addAttribute("estadistica", enlaceprincipalestadistica);
-			model.addAttribute("enlace7", enlace7);						
-		}		
-		
-		return  null;
-		
+			if(!listadoMortalidad.isEmpty()) {
+				//creamos el reporte en EXCEL
+				crearExcel(listadoMortalidad, response);										
+				model.addAttribute("estadistica", enlaceprincipalestadistica);
+				model.addAttribute("enlace7", enlace7);	
+			}else {
+				model.addAttribute("error", "No hay información disponible para este rango de fechas");
+				return "consolidadomortalidad";
+			}								
+		}			
+		return  null;		
 	}
 	
 	// Este metodo me permite visualizar o cargar el formulario para el reporte de mortalidades
@@ -587,7 +588,10 @@ public class EstMortalidadController {
 		CreationHelper createHelper = workbook.getCreationHelper();
 			
 		//2.Se crea una hoja dentro del libro asignando un nombre
-		Sheet sheet = workbook.createSheet("Reporte_Mortalidad");				
+		SXSSFSheet sheet = workbook.createSheet("Reporte_Mortalidad");
+		
+		//se usa para complementar el metodo autoSizeColumn, para ajustar el texto en la columna
+		sheet.trackAllColumnsForAutoSizing();
 				
 		//3. Establecer el estilo y el estilo de fuente
 		CellStyle titleStyle = ExcelUtils.createTitleCellStyle(workbook);
@@ -641,7 +645,6 @@ public class EstMortalidadController {
             tempCell.setCellStyle(headerStyle);
             //esta linea me permite ajustar el ancho
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) * 20 / 10);            
-            
         }
         
         
@@ -652,7 +655,10 @@ public class EstMortalidadController {
         for(int i=0; i<listadoMortalidad.size(); i++) {       
         	
         	Row tempRow = sheet.createRow(rowNum++);
-            tempRow.setHeight((short) 800);
+            
+        	//me permite poner alto a la celda
+        	tempRow.setHeight((short) 1200);
+            
             // Recorrido para relleno de celdas
             for (int j = 0; j < 33; j++) {
             	
@@ -940,18 +946,33 @@ public class EstMortalidadController {
                 }
                 else if(j == 31) {
                 	// Apache
-                	String apache = listadoMortalidad.get(i).getComApache().getNombre();            	
-                    tempValue = apache;
+                	if(listadoMortalidad.get(i).getComApache() != null) {
+                		tempValue = listadoMortalidad.get(i).getComApache().getNombre();
+                	}                	     	
+                    tempValue = "NO APLICA";
                 }
                 else if(j == 32) {
                 	// Prism
-                	String prism = listadoMortalidad.get(i).getComPrism().getNombre();            	
-                    tempValue = prism;
+                	if(listadoMortalidad.get(i).getComPrism() != null) {
+                		tempValue = listadoMortalidad.get(i).getComPrism().getNombre(); 
+                	}                		           	
+                    tempValue = "NO APLICA";
                 }
                 
                 // Creamos la celda con el contenido
                 tempCell.setCellValue(tempValue);
-            	
+                
+                //ajustamos ancho personalizado a alguna celda en particula
+	            /*sheet.setColumnWidth(0, 10000); //me permite poner ancho a la celda donde 0 es la celda y 10000 el tamaño	            
+	            sheet.setColumnWidth(7, 8000); //me permite poner ancho a la celda donde 7 es la celda y 8000 el tamaño
+	            sheet.setColumnWidth(9, 8000); //me permite poner ancho a la celda donde 9 es la celda y 8000 el tamaño
+	            sheet.setColumnWidth(11, 8000); //me permite poner ancho a la celda donde 11 es la celda y 8000 el tamaño
+	            sheet.setColumnWidth(12, 8000); //me permite poner ancho a la celda donde 12 es la celda y 8000 el tamaño
+	            sheet.setColumnWidth(13, 8000); //me permite poner ancho a la celda donde 13 es la celda y 8000 el tamaño
+	            sheet.setColumnWidth(14, 8000); //me permite poner ancho a la celda donde 14 es la celda y 8000 el tamaño*/
+	            //sheet.setColumnWidth(15, 8000); //me permite poner ancho a la celda donde 15 es la celda y 8000 el tamaño
+	            sheet.autoSizeColumn(j);           
+	            
             }
         }       
         

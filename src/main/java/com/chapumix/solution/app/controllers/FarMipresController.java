@@ -35,7 +35,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -688,16 +688,19 @@ public class FarMipresController {
 			Date fechaF = convertirFecha(fechaFinal);
 				
 			List<FarMipres> listadoMipres = iFarMipresService.findByStartDateBetween(fechaI, fechaF);
-				
-			//creamos el reporte en EXCEL
-			crearExcel(listadoMipres, response);							
-										
-			model.addAttribute("farmacia", enlaceprincipalfarmacia);
-			model.addAttribute("enlace10", enlace10);						
-		}		
 			
-		return  null;
-			
+			if(!listadoMipres.isEmpty()) {
+				//creamos el reporte en EXCEL
+				crearExcel(listadoMipres, response);							
+											
+				model.addAttribute("farmacia", enlaceprincipalfarmacia);
+				model.addAttribute("enlace10", enlace10);	
+			}else {
+				model.addAttribute("error", "No hay información disponible para este rango de fechas");
+				return "ripsmipres";
+			}									
+		}					
+		return null;			
 	}
 	
 	// Este metodo me permite visualizar o cargar el formulario para anular el reporte de facturacion, el reporte de entrega y la entrega
@@ -1973,8 +1976,11 @@ public class FarMipresController {
 		CreationHelper createHelper = workbook.getCreationHelper();
 				
 		//2.Se crea una hoja dentro del libro asignando un nombre
-		Sheet sheet = workbook.createSheet("Reporte_Rips");				
-					
+		SXSSFSheet sheet = workbook.createSheet("Reporte_Rips");	
+		
+		//se usa para complementar el metodo autoSizeColumn, para ajustar el texto en la columna
+		sheet.trackAllColumnsForAutoSizing();
+						
 		//3. Establecer el estilo y el estilo de fuente		
 		CellStyle headerStyle = ExcelUtils.createHeadCellStyle(workbook);
 		CellStyle contentStyle = ExcelUtils.createContentCellStyleMiPres(workbook);
@@ -2078,22 +2084,7 @@ public class FarMipresController {
 	            
 	            // Creamos la celda con el contenido
 	            tempCell.setCellValue(tempValue);
-	            sheet.setColumnWidth(0, 12000); //me permite poner ancho a la celda donde 0 es la celda y 10000 el tamaño
-	            sheet.setColumnWidth(1, 3500); //me permite poner ancho a la celda donde 1 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(2, 3500); //me permite poner ancho a la celda donde 2 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(3, 3000); //me permite poner ancho a la celda donde 3 es la celda y 3000 el tamaño
-	            sheet.setColumnWidth(4, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(6, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(7, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(8, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(9, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(10, 8000); //me permite poner ancho a la celda donde 4 es la celda y 4000 el tamaño
-	            sheet.setColumnWidth(11, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(12, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(13, 3500); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(14, 4000); //me permite poner ancho a la celda donde 4 es la celda y 3500 el tamaño
-	            sheet.setColumnWidth(15, 4000); //me permite poner ancho a la celda donde 4 es la celda y 4000 el tamaño
-	            	
+	            sheet.autoSizeColumn(j);          	
 	          }
 	      }      
 	        
