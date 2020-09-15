@@ -19,7 +19,8 @@ public interface IEstMortalidadDao extends CrudRepository<EstMortalidad, Long>{
 	List<EstMortalidad> pacienteMortalidadPDF(String numDoc);
 	
 	//query personalizado para consultar los procedimientos realizados por fechas
-	@Query("SELECT m FROM EstMortalidad m WHERE m.fechaRegistro BETWEEN ?1 AND ?2")
+	//@Query("SELECT m FROM EstMortalidad m WHERE m.fechaRegistro BETWEEN ?1 AND ?2")
+	@Query("SELECT m FROM EstMortalidad m WHERE m.fechaDefuncion BETWEEN ?1 AND ?2")
 	List<EstMortalidad> findByStartDateBetween(Date fechaInicial, Date fechaFinal);
 	
 }

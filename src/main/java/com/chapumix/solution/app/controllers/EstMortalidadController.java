@@ -483,7 +483,7 @@ public class EstMortalidadController {
 	
 	//Se usa para convertir una cadena String a fecha Date con formato
 	private Date convertirFechaReporte(String fecha) throws ParseException {
-		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy").parse(fecha); 		
+		Date fechaTranformada = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").parse(fecha); 		
 		return fechaTranformada;
 	}
 	
