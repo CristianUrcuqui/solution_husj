@@ -77,7 +77,7 @@ public class FarMipresComp {
 	
 	
 	//metodo que se ejecuta de forma automatica todos los dias a las 11:58PM   	
-	@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")
+	@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")	
 	public void cronSincronizaPrescripciones() throws Exception {    	
     	
 		//convierto String a Date 
@@ -114,7 +114,9 @@ public class FarMipresComp {
         	//jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));
         	JSONObject objetoJSON = arregloJSON.getJSONObject(i);
         	Integer codigoAmbitoAtencion = objetoJSON.getJSONObject("prescripcion").getInt("CodAmbAte");
-        	if(codigoAmbitoAtencion == 22 || codigoAmbitoAtencion == 30) {            	
+        	Integer estPres = objetoJSON.getJSONObject("prescripcion").getInt("EstPres");
+        	
+        	if((codigoAmbitoAtencion == 22 || codigoAmbitoAtencion == 30) && estPres == 4)   {            	
         	
         	String prescripcion = objetoJSON.getJSONObject("prescripcion").getString("NoPrescripcion");            	
         	String tipoDocumento = objetoJSON.getJSONObject("prescripcion").getString("TipoIDPaciente");

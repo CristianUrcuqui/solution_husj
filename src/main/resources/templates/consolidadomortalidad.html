@@ -90,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<div class="card-body">
 					<form id="generarconsolidadomortalidad" class="form-inline mb-3" th:action="@{/generarconsolidadomortalidad}" role="form" method="get">
 						<div class="input-group">
-							<label class="control-label text-center align-middle">Consulta:</label>
+							<label class="control-label text-center align-middle">Consulta Por Fecha Defunción:</label>
 			                <span class="input-group-prepend ml-1">
 			                    <div class="input-group-text badge-primary rounded-left border-right-0">
 			                    	<i class="far fa-calendar-alt"></i>
@@ -152,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               // Modificar el año
               changeYear: true,
               // Formato de la fecha
-              dateFormat: "dd-mm-yy",
+              dateFormat: "dd-mm-yy 00:00:00",
               // Primer dia de la semana - lunes
               firstDay: 1,
               // D�as largo traducido
@@ -179,7 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               // Modificar el año
               changeYear: true,
               // Formato de la fecha
-              dateFormat: "dd-mm-yy",              
+              dateFormat: "dd-mm-yy 23:59:59",              
               // Primer dia de la semana - lunes
               firstDay: 1,
               // D�as largo traducido
