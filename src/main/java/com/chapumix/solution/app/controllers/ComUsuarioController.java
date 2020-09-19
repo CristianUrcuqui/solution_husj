@@ -180,9 +180,14 @@ public class ComUsuarioController {
 					ResponseEntity<GenUsuarioDTO> respuestam = restTemplate.exchange(URLUsuario + '/' + doc, HttpMethod.GET, null, new ParameterizedTypeReference<GenUsuarioDTO>() {});
 					GenUsuarioDTO usuario = respuestam.getBody();
 					
-					ComUsuario guardar = usuarioAgregar(usuario);					
-					iComUsuarioService.save(guardar);
-					flash.addFlashAttribute("success", "Usuario(s) sincronizado correctamente");					
+					if(usuario != null) {
+						ComUsuario guardar = usuarioAgregar(usuario);					
+						iComUsuarioService.save(guardar);
+						flash.addFlashAttribute("success", "Usuario(s) sincronizado correctamente");
+					}else {
+						flash.addFlashAttribute("error", "El usuario no fue encontrado en dinamica");
+					}
+										
 				}				
 				
 			});
@@ -195,14 +200,11 @@ public class ComUsuarioController {
 			model.addAttribute("enlace3", enlace3);
 			return "redirect:sincronizausuarioform";
 		}
-		//String mensajeFlash = (comRole.getId() != null) ? "El rol fue editado correctamente" : "El rol fue creado correctamente";
-
-		//iComRoleService.save(comRole);
+		
 		model.addAttribute("titulo", utf8(this.titulousuarios));
 		model.addAttribute("ajustes", enlaceprincipalajustes);
 		model.addAttribute("enlace3", enlace3);
-		status.setComplete();
-		flash.addFlashAttribute("success", "Usuario sincronizado correctamente");
+		status.setComplete();		
 		return "redirect:sincronizausuarioform";
 	}
 	
@@ -237,9 +239,14 @@ public class ComUsuarioController {
 					ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + doc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
 					List<GenPacienDTO> dinamica = respuestaa.getBody();
 					
-					GenPacien guardarPaciente = pacienteAgregar(dinamica);					
-					iGenPacienService.save(guardarPaciente);					
-					flash.addFlashAttribute("success", "Paciente(s) sincronizado correctamente");					
+					if(!dinamica.isEmpty()) {
+						GenPacien guardarPaciente = pacienteAgregar(dinamica);					
+						iGenPacienService.save(guardarPaciente);					
+						flash.addFlashAttribute("success", "Paciente(s) sincronizado correctamente");
+					}else {
+						flash.addFlashAttribute("error", "El paciente no fue encontrado en dinamica");						
+					}
+										
 				}				
 			});			
 		}
@@ -254,7 +261,7 @@ public class ComUsuarioController {
 		model.addAttribute("ajustes", enlaceprincipalajustes);
 		model.addAttribute("enlace3", enlace3);
 		status.setComplete();
-		flash.addFlashAttribute("success", "Paciente sincronizado correctamente");
+		//flash.addFlashAttribute("success", "Paciente sincronizado correctamente");
 		return "redirect:sincronizapacienteform";		
 	}	
 

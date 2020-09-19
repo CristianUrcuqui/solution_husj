@@ -723,7 +723,7 @@ public class FarMipresController {
 		
 		boolean listado = false;
 			
-		// valida el numero de prescripcion no esta vacia
+		// valida el ID de la prescripcion que no este vacia
 		if (idprescripcion.isEmpty()) {		
 			model.addAttribute("titulo", utf8(this.anularmipres));
 			model.addAttribute("farmacia", enlaceprincipalfarmacia);
@@ -731,15 +731,19 @@ public class FarMipresController {
 			model.addAttribute("error", "El número de prescripción es requerida");
 			return "anulaprescripcionform";
 		}		
-			
-		List<FarMipres> prescripcionObtenida = iFarMipresService.findByIdMipres(Long.parseLong(idprescripcion));		
 		
-		listado = true;
-		model.addAttribute("titulo", utf8(this.anularmipres));
-		model.addAttribute("farmacia", enlaceprincipalfarmacia);
-		model.addAttribute("enlace10", enlace10);
-		model.addAttribute("prescipcion", prescripcionObtenida);
-		model.addAttribute("listado", listado);
+		try {
+			Long ID = Long.parseLong(idprescripcion);
+			List<FarMipres> prescripcionObtenida = iFarMipresService.findByIdMipres(ID);
+			listado = true;
+			model.addAttribute("titulo", utf8(this.anularmipres));
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			model.addAttribute("prescipcion", prescripcionObtenida);
+			model.addAttribute("listado", listado);
+		} catch (NumberFormatException ex) {
+			model.addAttribute("error", "ID no valido");
+		}		
 		return  "anulaprescripcionform";			
 	}
 	
@@ -747,10 +751,8 @@ public class FarMipresController {
 	@RequestMapping(value = "/anularentrega/{id}/{condicion}")
 	public String anularEntrega(@PathVariable(value = "id") Long id, @PathVariable(value = "condicion") String condicion, SessionStatus status, RedirectAttributes flash, Principal principal) throws Exception {
 		
-		if (id > 0) {
-			// iCalCalendarioService.delete(id);
-			FarMipres farMipres = iFarMipresService.findById(id);
-			// anularEntrega(entrega);
+		if (id > 0) {			
+			FarMipres farMipres = iFarMipresService.findById(id);			
 
 			Map<String, String> webServiceInfo = anulacionPrescripcion(farMipres, condicion);
 
