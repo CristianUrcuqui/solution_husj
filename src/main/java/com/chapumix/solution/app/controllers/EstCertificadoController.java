@@ -243,6 +243,7 @@ public class EstCertificadoController {
 		EstCertificado estCertificado = new EstCertificado();			
 		
 		model.put("titulo", utf8(this.titulocertificado));
+		model.put("estadistica", enlaceprincipalestadistica);
 		model.put("tipos", iEstTipoCertificadoService.findAll());
 		model.put("servicio", iGenAreSerService.findByOrderNombre());
 		model.put("estCertificado", estCertificado);

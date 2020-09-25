@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.13.0.final using JasperReports Library version 6.13.0-46ada4d1be8f3c5985fd0b6146f3ed44caed6f05  -->
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificadomipres" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24804815-4b42-4497-8f60-30b502be340c">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="logo" class="java.io.InputStream"/>
@@ -32,6 +32,7 @@
 	<field name="cuotaModeradora" class="java.lang.String"/>
 	<field name="copago" class="java.lang.String"/>
 	<field name="valorTotal" class="java.lang.String"/>
+	<field name="idTraza" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -402,7 +403,7 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="192" y="30" width="190" height="11" uuid="3e845709-0c78-4ed2-92ce-5911771158d1">
+				<reportElement x="383" y="30" width="187" height="11" uuid="3e845709-0c78-4ed2-92ce-5911771158d1">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -420,9 +421,8 @@
 				<text><![CDATA[Código Técnologia Entregado]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="192" y="39" width="190" height="11" uuid="d312e8e6-25be-4ae7-a43e-b589fd144d00">
+				<reportElement x="383" y="39" width="187" height="11" uuid="d312e8e6-25be-4ae7-a43e-b589fd144d00">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -443,7 +443,7 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="383" y="30" width="188" height="11" uuid="4753b965-9d52-425b-8b3c-82f62e6daa1e">
+				<reportElement x="1" y="53" width="191" height="11" uuid="4753b965-9d52-425b-8b3c-82f62e6daa1e">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -461,7 +461,7 @@
 				<text><![CDATA[Entrega Total]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="383" y="39" width="188" height="11" uuid="ec2cadc1-44c4-46e4-b240-8049f1ea578a">
+				<reportElement x="1" y="62" width="191" height="11" uuid="ec2cadc1-44c4-46e4-b240-8049f1ea578a">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -484,7 +484,7 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="1" y="53" width="190" height="11" uuid="1a655ea3-e84d-427c-a6f8-53797a9cad51">
+				<reportElement x="192" y="53" width="190" height="11" uuid="1a655ea3-e84d-427c-a6f8-53797a9cad51">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -502,7 +502,7 @@
 				<text><![CDATA[Cantidad Total Entregada:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1" y="62" width="190" height="11" uuid="7be3d859-7cc8-4d89-8688-77fb60cb5ab6">
+				<reportElement x="192" y="62" width="190" height="11" uuid="7be3d859-7cc8-4d89-8688-77fb60cb5ab6">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -520,7 +520,7 @@
 				<textFieldExpression><![CDATA[$F{cantidadEntregada}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="192" y="53" width="190" height="11" uuid="40aa1ef1-a35e-4c87-bddb-44605d967b52">
+				<reportElement x="383" y="53" width="187" height="11" uuid="40aa1ef1-a35e-4c87-bddb-44605d967b52">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -538,7 +538,7 @@
 				<text><![CDATA[Nro Lote:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="192" y="62" width="190" height="11" uuid="1615c3d5-bb55-4f4c-86cc-932bef25f7d8">
+				<reportElement x="383" y="62" width="187" height="11" uuid="1615c3d5-bb55-4f4c-86cc-932bef25f7d8">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -556,7 +556,7 @@
 				<textFieldExpression><![CDATA[$F{loteEntregado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="383" y="53" width="188" height="11" uuid="780fba9a-4063-4311-8fae-670dcfe4895b">
+				<reportElement x="1" y="76" width="191" height="11" uuid="780fba9a-4063-4311-8fae-670dcfe4895b">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -574,7 +574,7 @@
 				<text><![CDATA[Causa No Entrega:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="383" y="62" width="188" height="11" uuid="81648df6-e749-4354-959a-cc1f4cb7db1c">
+				<reportElement x="1" y="85" width="191" height="11" uuid="81648df6-e749-4354-959a-cc1f4cb7db1c">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -597,7 +597,7 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="1" y="76" width="190" height="11" uuid="910b8a4d-9a03-4d12-95a2-64c9c214417c">
+				<reportElement x="192" y="76" width="190" height="11" uuid="910b8a4d-9a03-4d12-95a2-64c9c214417c">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -615,7 +615,7 @@
 				<text><![CDATA[Fecha Entrega:]]></text>
 			</staticText>
 			<textField pattern="dd-MM-yyyy" isBlankWhenNull="true">
-				<reportElement x="1" y="85" width="190" height="11" uuid="c7ede439-6d20-4ae4-add7-d8b2cfa6f306">
+				<reportElement x="192" y="85" width="190" height="11" uuid="c7ede439-6d20-4ae4-add7-d8b2cfa6f306">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -1180,6 +1180,42 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fecRepEntrega}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="192" y="30" width="190" height="11" uuid="d6cedb35-b68b-4881-b620-9b7dc7e46a35">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[ID Traza:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="192" y="39" width="190" height="11" uuid="8fa9c051-d138-4308-9808-9facc7ea57cd">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="false"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idTraza}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

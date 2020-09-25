@@ -98,6 +98,7 @@ public class CalCalendarioController {
 	public String crearEmpleado(Map<String, Object> model) {
 		CalCalendario calCalendario = new CalCalendario();		
 		model.put("titulo", utf8(this.tituloempleados));
+		model.put("calidad", enlaceprincipalcalidad);
 		model.put("calCalendario", calCalendario);		
 		model.put("enlace5", enlace5);
 		return "empleadoform";

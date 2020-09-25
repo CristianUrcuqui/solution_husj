@@ -10,6 +10,7 @@ public class GenUsuarioDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer oid;
+	private Integer genRol;
 	private String usuNombre;
 	private String usuClave;
 	private String usuDescri;
@@ -26,7 +27,15 @@ public class GenUsuarioDTO implements Serializable {
 		this.usuEstado = usuEstado;
 	}
 
-
+	public GenUsuarioDTO(Integer oid, Integer genRol, String usuNombre, String usuClave, String usuDescri,
+			String usuEstado) {		
+		this.oid = oid;
+		this.genRol = genRol;
+		this.usuNombre = usuNombre;
+		this.usuClave = usuClave;
+		this.usuDescri = usuDescri;
+		this.usuEstado = usuEstado;
+	}
 
 	public Integer getOid() {
 		return oid;
@@ -34,6 +43,15 @@ public class GenUsuarioDTO implements Serializable {
 
 	public void setOid(Integer oid) {
 		this.oid = oid;
+	}
+	
+
+	public Integer getGenRol() {
+		return genRol;
+	}
+
+	public void setGenRol(Integer genRol) {
+		this.genRol = genRol;
 	}
 
 	public String getUsuNombre() {

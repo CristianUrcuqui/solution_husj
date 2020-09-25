@@ -601,6 +601,7 @@ public class FarMipresController {
 	public String crearSincronizacion(Map<String, Object> model, RedirectAttributes flash) {		
 		FarMipres farMipres =  new FarMipres();
 		model.put("titulo", utf8(this.titulosincroniza));
+		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("farMipres", farMipres);		
 		model.put("enlace10", enlace10);		
 		return "sincronizaprescripcionform";
@@ -712,7 +713,8 @@ public class FarMipresController {
 		
 		model.put("titulo", utf8(this.anularmipres));
 		model.put("farMipres", farMipres);		
-		model.put("enlace10", enlace10);		
+		model.put("enlace10", enlace10);
+		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("listado", listado);		
 		return "anulaprescripcionform";
 	}

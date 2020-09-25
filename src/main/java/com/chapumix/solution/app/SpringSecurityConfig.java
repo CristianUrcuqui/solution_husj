@@ -62,7 +62,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/indexsiau/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS") 
 		.antMatchers("/indexencuestasat/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 
 		.antMatchers("/encuestaformt/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 
-		.antMatchers("/consolidadoencuesta/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO") 		
+		.antMatchers("/consolidadoencuesta/**").hasAnyRole("ADMIN", "SIAU_ENCUESTAS_ENCUESTA","SIAU_ENCUESTAS_CONSOLIDADO")
+		//servicio sistemas
+		.antMatchers("/indexsistemas/**").hasAnyRole("ADMIN", "SISTEMAS_UTILIDADES")
+		.antMatchers("/indexanulacioningreso/**").hasAnyRole("ADMIN", "SISTEMAS_UTILIDADES_ANULACION_INGRESO")
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()

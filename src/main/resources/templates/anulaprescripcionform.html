@@ -85,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<form id="buscarmipres" class="form-inline mb-3" th:action="@{/procesaranulacion}" role="form" method="get">
 						<div class="input-group">
 							<label class="control-label text-center align-middle">ID Prescripción:</label>			                              
-			                <input id="idprescripcion" type="text" name="idprescripcion" class="form-control form-control-sm ml-1">        
+			                <input id="idprescripcion" type="text" name="idprescripcion" class="form-control form-control-sm ml-1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">        
 			            </div>    
 			            
 			             <div class="input-group">						
@@ -243,8 +243,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </tbody>
                 </table>
               </div>
-            </div>
-            <!-- /.card -->      
+            </div><!-- /.card -->      
                     
         </div><!-- /.row -->
       </div><!-- /.container -->
@@ -259,59 +258,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-
-<script>
-            $( "#fechaInicial" ).datepicker({
-              // Mostrar animacion
-              showAnim: "drop",
-              // Modificar el mes
-              changeMonth: true,
-              // Modificar el año
-              changeYear: true,
-              // Formato de la fecha
-              dateFormat: "dd-mm-yy",
-              // Primer dia de la semana - lunes
-              firstDay: 1,
-              // D�as largo traducido
-              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
-              // Dias cortos traducido
-              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
-              // Nombres largos de los meses traducido
-              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-              // Nombres cortos de los meses traducido 
-              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
-              // Al selecconar fecha, se escribe en el campo de texto
-              onSelect: function(dateText) { 
-                $('#fechaInicial').val(dateText);
-              }
-            });
-            
-            
-            $( "#fechaFinal" ).datepicker({
-                // Mostrar animacion
-                showAnim: "drop",
-                // Modificar el mes
-                changeMonth: true,
-                // Modificar el año
-                changeYear: true,
-                // Formato de la fecha
-                dateFormat: "dd-mm-yy",              
-                // Primer dia de la semana - lunes
-                firstDay: 1,
-                // D�as largo traducido
-                dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
-                // Dias cortos traducido
-                dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
-                // Nombres largos de los meses traducido
-                monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-                // Nombres cortos de los meses traducido 
-                monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
-                // Al selecconar fecha, se escribe en el campo de texto
-                onSelect: function(dateText) { 
-                  $('#fechaFinal').val(dateText);
-                }
-              });
-</script>
 
 <script>
 	//metodo para quitar espacios en los input
