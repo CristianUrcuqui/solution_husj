@@ -66,6 +66,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		//servicio sistemas
 		.antMatchers("/indexsistemas/**").hasAnyRole("ADMIN", "SISTEMAS_UTILIDADES")
 		.antMatchers("/indexanulacioningreso/**").hasAnyRole("ADMIN", "SISTEMAS_UTILIDADES_ANULACION_INGRESO")
+		.antMatchers("/indexactualizarplan/**").hasAnyRole("ADMIN", "SISTEMAS_UTILIDADES_ACTUALIZAR_PLAN_BENEFICIO") 
 		.anyRequest().authenticated()
 		.and()
 			.formLogin()

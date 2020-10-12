@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -54,7 +52,6 @@ public class HcnSolPatController {
 	private int oidpaciente;
 	private int procedimiento;	
 	private Date fechasolicitud;	
-	private Logger logger = LoggerFactory.getLogger(HcnSolPatDTO.class);	
 	public static final String URLPatologias = "http://localhost:9000/api/patologias";	
 	public static final String URLDescripcion = "http://localhost:9000/api/patologias/detalles/";
 	public static final String URLDescripcionNull = "http://localhost:9000/api/patologias/detalles/null/";

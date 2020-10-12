@@ -7,6 +7,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.chapumix.solution.app.utils.PacienteDinamica;
+
 @Configuration
 public class MvcConfig implements WebMvcConfigurer{
 	
@@ -23,6 +25,11 @@ public class MvcConfig implements WebMvcConfigurer{
 	@Bean
 	public RestTemplate restTemplate() {
 	    return new RestTemplate();
+	}
+	
+	@Bean
+	public PacienteDinamica pacienteDinamica() {
+	    return new PacienteDinamica();
 	}
 	
 

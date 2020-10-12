@@ -48,13 +48,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienMortalidadTMPDTO;
 import com.chapumix.solution.app.models.entity.ComCie10;
 import com.chapumix.solution.app.models.entity.ComGenero;
 import com.chapumix.solution.app.models.entity.ComRegimen;
-import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoIngreso;
 import com.chapumix.solution.app.models.entity.ComUsuario;
 import com.chapumix.solution.app.models.entity.EstAsistente;
@@ -69,13 +67,14 @@ import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComPrismService;
 import com.chapumix.solution.app.models.service.IComRegimenService;
 import com.chapumix.solution.app.models.service.IComRetrasoService;
-import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComTipoIngresoService;
 import com.chapumix.solution.app.models.service.IComUsuarioService;
 import com.chapumix.solution.app.models.service.IEstMortalidadService;
 import com.chapumix.solution.app.models.service.IGenAreSerService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.chapumix.solution.app.utils.ExcelUtils;
+import com.chapumix.solution.app.utils.PacienteDinamica;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -111,10 +110,7 @@ public class EstMortalidadController {
 	private IGenAreSerService iGenAreSerService;
 	
 	@Autowired
-	private IGenPacienService iGenPacienService;
-	
-	@Autowired
-	private IComTipoDocumentoService iComTipoDocumentoService;
+	private IGenPacienService iGenPacienService;	
 	
 	@Autowired
 	private IComEstadoHoraService iComEstadoHoraService;
@@ -130,6 +126,9 @@ public class EstMortalidadController {
 	
 	@Autowired
 	private IComUsuarioService iComUsuarioService;
+	
+	@Autowired
+	private PacienteDinamica pacienteDinamica;
 		
 	@Autowired
 	private RestTemplate restTemplate;
@@ -229,8 +228,8 @@ public class EstMortalidadController {
 		GenPacien validarPaciente = iGenPacienService.findByNumberDoc(estMortalidad.getGenPacien().getPacNumDoc());
 		
 		if(validarPaciente == null) {
-			// sincronizo paciente de dinamica a solution en caso de que no exista
-			sincronizarPaciente(validarPaciente, estMortalidad.getGenPacien().getPacNumDoc());
+			// sincronizo paciente de dinamica a solution en caso de que no exista			
+			pacienteDinamica.SincronizarPaciente(validarPaciente, estMortalidad.getGenPacien().getPacNumDoc());
 		}				
 		
 		//busco el analisis para verificar que solo se encuentre tan solo un registro
@@ -494,34 +493,7 @@ public class EstMortalidadController {
 		//String part2 = parts[1]; 
 		return part1.trim();
 	}
-
 	
-	// Se usa para sincronizar el paciente de dinamica a solution en caso de que no exista
-	private void sincronizarPaciente(GenPacien validarPaciente, String pacNumDoc) {		
-		
-			// proceso API para buscar el paciente
-			ResponseEntity<List<GenPacienDTO>> respuesta = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null, new ParameterizedTypeReference<List<GenPacienDTO>>() {});
-			List<GenPacienDTO> dinamica = respuesta.getBody();
-
-			// buscamos el sexo del paciente
-			ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
-
-			// buscamos el tipo de documento del paciente
-			ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());
-
-			GenPacien agregarPaciente = new GenPacien();
-			agregarPaciente.setOid(dinamica.get(0).getOid());
-			agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
-			agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
-			agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
-			agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
-			agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
-			agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
-			agregarPaciente.setComGenero(sexoPaciente);
-			agregarPaciente.setComTipoDocumento(tipoDocumento);
-			iGenPacienService.save(agregarPaciente);
-			
-	}
 	
 	// Se usa para sincronizar y asignar el id de la mortalidad al objeto EstAsistentes
 	private void sincronizarDetalleAsistente(List<EstAsistente> estAsistentes, EstMortalidad estMortalidad) {

@@ -26,7 +26,7 @@ public class GenAreSerServiceImpl implements IGenAreSerService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public List<GenAreSer> findByOrderNombre() {
 		return genAreSerDao.findByOrderNombre();
-	}
+	}	
 
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
@@ -52,6 +52,6 @@ public class GenAreSerServiceImpl implements IGenAreSerService{
 	@Transactional
 	public void delete(Long id) {
 		genAreSerDao.deleteById(id);	
-	}	
+	}
 
 }

@@ -14,7 +14,7 @@ public interface IGenAreSerService {
 	
 	public GenAreSer findByOid(Integer oid);
 	
-	public List<GenAreSer> findByOrderNombre();
+	public List<GenAreSer> findByOrderNombre();	
 	
 	public void delete(Long id);
 

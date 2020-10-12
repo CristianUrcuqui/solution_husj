@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Sistemas</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Actualizar Plan Beneficio</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -40,55 +40,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-      
+    
+    
+   			<!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<!-- Toolbar Botones Derecho-->
+					  <div class="col-sm-12">			
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-primary" th:href="@{/indexsistemas}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>						  				
+					</div>
+				</div>
+			</div>
+        
+
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-          <div class="col-md-12 mt-3">
+        
+           <div class="col-md-12 mt-3">
             <div class="card card-primary card-outline animacion">
               <div class="card-header">
                 <h3 class="card-title">
-                  <i class="fas fa-mobile-alt"></i>
-                  Apps
+                  <i class="fas fa-boxes"></i>
+                  Modulos
                 </h3>
               </div>
               <div class="card-body pad table-responsive">                 
                 	<div class="row">
                 	
-                		<!-- APPS --> 					    
-					    <div class="col-md-3">					    	
+                		<!-- MODULOS --> 					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SISTEMAS_UTILIDADES_ACTUALIZAR_PLAN_BENEFICIO')" class="col-md-3">					    	
 							<figure class="snip1166 navy">
-							  <img src="dist/img/anular.jpg" alt="anular"/>
+							  <img src="dist/img/procesar_ingreso.jpg" alt="procesar"/>
 							  <figcaption>
-							    <h3>Ingresos</h3>
+							    <h3>Procesar</h3>
 							    <div>
-							      <p>Anulación - Nota Aclaratoria</p>
-							    </div><a th:href="@{/indexanulacioningreso}"></a>
+							      <p></p>
+							    </div><a th:href="@{/actualizarplan}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>
-					    
-					    <div class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/actualizar.jpg" alt="actualizar"/>
-							  <figcaption>
-							    <h3>Plan</h3>
-							    <div>
-							      <p>De Beneficios - Actualizar Servicio En Cero</p>
-							    </div><a th:href="@{/indexactualizarplan}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>					    
+					    </div>					   		    
 					   
 					    
 				    </div><!-- /.row -->          
               </div>         
             </div><!-- /.card -->
-          </div>	
-			
-			                
+          </div>  
+          
+          		                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -103,12 +114,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div th:replace="layout/layout ::scripts"></div>
-<script>
-	window.onload = function(){
-		let contenedor = document.getElementById('contenedor_carga');
-		contenedor.style.visibility = 'hidden';
-		contenedor.style.opacity = '0';
-	}
-</script>
 </body>
 </html>

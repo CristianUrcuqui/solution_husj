@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -36,6 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.chapumix.solution.app.entity.dto.AdnIngresoDTO;
 import com.chapumix.solution.app.entity.dto.GenUsuarioDTO;
+import com.chapumix.solution.app.entity.dto.SlnSerProDTO;
 
 
 @Controller
@@ -47,6 +48,10 @@ public class SisIngresoController {
 	public static final String URLGetIngreso = "http://localhost:9000/api/ingresoporpaciente"; //url para obtener el ingreso desde dinamica
 	
 	public static final String URLPutIngreso = "http://localhost:9000/api/actualizaringreso"; //url para actualizar el ingreso en dinamica
+	
+	public static final String URLGetPlan = "http://localhost:9000/api/planbeneficiocero"; //url para obtener los planes de beneficio en cero
+	
+	public static final String URLPutPlan = "http://localhost:9000/api/actualizarplanbeneficiocero"; //url para actualizar el plan de beneficio en dinamica
 	
 	public static final String URLGetUsuarioOID = "http://localhost:9000/api/usuarios/username"; //url para obtener el usuario de dinamica
 	
@@ -63,8 +68,15 @@ public class SisIngresoController {
 	@Value("${app.tituloanulacioningreso}")
 	private String tituloanulacioningreso;
 	
+	@Value("${app.tituloactualizacionplan}")
+	private String tituloactualizacionplan;
+	
 	@Value("${app.anularingreso}")
 	private String anularingreso;
+	
+	@Value("${app.actualizarplan}")
+	private String actualizarplan;
+	
 	
 	@Value("${app.enlace11}")
 	private String enlace11;
@@ -84,13 +96,22 @@ public class SisIngresoController {
 	}
 	
 	
-	//INDEX SISTEMAS
+	//INDEX ANULAR INGRESO
 	@GetMapping("/indexanulacioningreso")
-	public String indexAnulacion(Model model) {
+	public String indexAnulacionIngreso(Model model) {
 		model.addAttribute("titulo", utf8(this.tituloanulacioningreso));
 		model.addAttribute("sistemas", enlaceprincipalsistemas);
 		model.addAttribute("enlace11", enlace11);
 		return "indexanulacioningreso";
+	}
+	
+	//INDEX ACTUALIZAR PLAN BENEFICIOS
+	@GetMapping("/indexactualizarplan")
+	public String indexActualizarPlan(Model model) {
+		model.addAttribute("titulo", utf8(this.tituloactualizacionplan));
+		model.addAttribute("sistemas", enlaceprincipalsistemas);
+		model.addAttribute("enlace11", enlace11);
+		return "indexactualizarplan";
 	}
 	
 	
@@ -125,7 +146,7 @@ public class SisIngresoController {
 			
 		
 			
-		// proceso API para buscar el paciente 
+		// proceso API para buscar el ingreso 
 		ResponseEntity<List<AdnIngresoDTO>> respuesta = restTemplate.exchange(URLGetIngreso + '/' + ingreso, HttpMethod.GET, null,new ParameterizedTypeReference<List<AdnIngresoDTO>>() {});
 		List<AdnIngresoDTO> ingresoDinamica = respuesta.getBody();
 		
@@ -176,8 +197,88 @@ public class SisIngresoController {
 			return  "anulaingreso";
 		}	
 		
-	}		
+	}
+	
+	
+	// Este metodo me permite visualizar o cargar el formulario para actualizar el plan de beneficio
+	@GetMapping("/actualizarplan")
+	public String actualizarPlan(Map<String, Object> model, RedirectAttributes flash) {
+			
+		boolean listado = false;
+			
+		model.put("titulo", utf8(this.actualizarplan));
+		model.put("sistemas", enlaceprincipalsistemas);
+		model.put("listado", listado);
+		model.put("enlace11", enlace11);		
+		return "actualizarplan";
+	}
+	
+	// Este metodo me permite consultar el plan de beneficio desde dinamica para ser actualizado
+	@RequestMapping("/procesaractualizarplan")	
+	public String procesarPlan(Model model, @RequestParam(value = "ingreso", required = false) String ingreso, RedirectAttributes flash, HttpServletResponse response) {
+				
+		boolean listado = false;
+					
+		// valida que el ingreso digitado en el formulario no este vacio
+		if (ingreso.isEmpty()) {		
+			model.addAttribute("titulo", utf8(this.actualizarplan));
+			model.addAttribute("sistemas", enlaceprincipalsistemas);
+			model.addAttribute("enlace11", enlace11);
+			model.addAttribute("error", "El número de ingreso es requerido");
+			return "actualizarplan";
+		}		
+				
+			
+				
+		// proceso API para buscar el plan de beneficio en cero 
+		ResponseEntity<List<SlnSerProDTO>> respuesta = restTemplate.exchange(URLGetPlan + '/' + ingreso, HttpMethod.GET, null,new ParameterizedTypeReference<List<SlnSerProDTO>>() {});
+		List<SlnSerProDTO> planBeneficioDinamica = respuesta.getBody();
+			
+		//valido si el ingreso existe en dinamica
+		if(!planBeneficioDinamica.isEmpty()) {
+			listado = true;
+			model.addAttribute("titulo", utf8(this.actualizarplan));
+			model.addAttribute("sistemas", enlaceprincipalsistemas);
+			model.addAttribute("enlace11", enlace11);
+			model.addAttribute("listado", listado);
+			model.addAttribute("ingreso", planBeneficioDinamica.get(0).getAinConsec());
+			model.addAttribute("planBeneficioDinamica", planBeneficioDinamica);
+		}else {
+			model.addAttribute("titulo", utf8(this.actualizarplan));
+			model.addAttribute("sistemas", enlaceprincipalsistemas);
+			model.addAttribute("enlace11", enlace11);
+			model.addAttribute("listado", listado);
+			model.addAttribute("error", "Ingreso no encontrado");
+		}
+			
+		return  "actualizarplan";			
+	}
+	
+	
+	// Este metodo me permite actualizar el plan de beneficio en dinamica
+	@RequestMapping(value = "/actualizarplan/{ingreso}")
+	public String actualizarPlanBeneficio(Model model, @PathVariable(value = "ingreso") Integer ingreso, RedirectAttributes flash, Principal principal) throws Throwable {
 		
+		Map<String, String> webServiceInfo =  guardarAPIRestPlanBeneficio(ingreso);
+		
+		if (StringUtils.equals(webServiceInfo.get("success"), "200")) {
+			model.addAttribute("titulo", utf8(this.actualizarplan));
+			model.addAttribute("sistemas", enlaceprincipalsistemas);
+			model.addAttribute("enlace11", enlace11);			
+			flash.addFlashAttribute("success", "Plan de beneficio actualizado correctamente");				
+			return  "redirect:/actualizarplan";
+			
+			
+		}else {
+			model.addAttribute("titulo", utf8(this.actualizarplan));
+			model.addAttribute("sistemas", enlaceprincipalsistemas);
+			model.addAttribute("enlace11", enlace11);			
+			flash.addFlashAttribute("error", "Ha ocurrido un error en el proceso");	
+			return  "redirect:/actualizarplan";			
+		}	
+			
+	}
+	
 
 
 	/* ----------------------------------------------------------
@@ -204,10 +305,8 @@ public class SisIngresoController {
 		Map<String, String> map = new HashMap<>();		
 		
 		//genero la url para consultar
-		String urlEncadenada = URLPutIngreso+'/'+oid;
-				
-		//convierto la fecha de entrega en string y formato YYYY-MM-DD
-		//String fechaEntrega = formatoFecha(farMipres.getFechaEntrega());		
+		String urlEncadenada = URLPutIngreso+'/'+oid;				
+		
 		
 		// proceso API para buscar el usuario
 		ResponseEntity<GenUsuarioDTO> respuesta = restTemplate.exchange(URLGetUsuarioOID + '/' + principal.getName(), HttpMethod.GET, null,new ParameterizedTypeReference<GenUsuarioDTO>() {});
@@ -253,10 +352,51 @@ public class SisIngresoController {
 	}
 	
 	
+	// Se usa para actualizar el plan de beneficio en dinamica
+	private Map<String, String> guardarAPIRestPlanBeneficio(Integer ingreso) throws Throwable {
+		Map<String, String> map = new HashMap<>();		
+		
+		//genero la url para consultar
+		String urlEncadenada = URLPutPlan+'/'+ingreso;
+		
+						
+		//Especificamos la URL y configuro el objeto CloseableHttpClient
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+				
+		//Se crea una solicitud PUT (si es post HttpPost y si es get HttpGet) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpPut httpPut = new HttpPut(urlEncadenada);
+		httpPut.setHeader("Accept", "application/json");
+		httpPut.setHeader("Content-type", "application/json");
+		
+		//creo el json que sera pasado al objeto StringEntity
+        JSONObject parametros = new JSONObject();
+        parametros.put("ingreso", ingreso);
+               
+		
+        //Proporciono la solicitud json en el objeto StringEntity y asígnela al objeto puesto.
+        StringEntity stringEntity = new StringEntity(parametros.toString());
+        stringEntity.setContentEncoding("UTF-8");        
+        httpPut.setEntity(stringEntity);
+        
+        //Envio la solicitud usando HttpPut -> Método de ejecución PUT
+        HttpResponse response = httpclient.execute(httpPut);  
+        
+            
+        // verificamos que la respuesta o estado sea 200
+     	if (response.getStatusLine().getStatusCode() == 200) {
+     		map.put("success", Integer.toString(response.getStatusLine().getStatusCode()));     			
+     		return map;
+   		}else {
+   			map.put("error", "Ha ocurrido un error en el proceso");
+   			return map;
+   		}		
+		
+	}
+	
+	
 	// Se usa para dar formato a fechas de dinamica
 	private String formatoFecha(Date date) throws ParseException {
-		// convierto la fecha que entra en formato Date
-		Locale locale = Locale.getDefault();        
+		// convierto la fecha que entra en formato Date		       
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 		String fechaConversion = sdf.format(date);		
 		return fechaConversion;		

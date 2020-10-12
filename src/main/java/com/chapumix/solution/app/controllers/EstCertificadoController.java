@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-
 import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,22 +37,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.chapumix.solution.app.entity.dto.EstSerialDTO;
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
-import com.chapumix.solution.app.models.entity.ComGenero;
-import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComUsuario;
 import com.chapumix.solution.app.models.entity.EstCertificado;
 import com.chapumix.solution.app.models.entity.EstSerial;
 import com.chapumix.solution.app.models.entity.EstTipoCertificado;
 import com.chapumix.solution.app.models.entity.GenAreSer;
 import com.chapumix.solution.app.models.entity.GenPacien;
-import com.chapumix.solution.app.models.service.IComGeneroService;
-import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComUsuarioService;
 import com.chapumix.solution.app.models.service.IEstCertificadoService;
 import com.chapumix.solution.app.models.service.IEstSerialService;
 import com.chapumix.solution.app.models.service.IEstTipoCertificadoService;
 import com.chapumix.solution.app.models.service.IGenAreSerService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
+import com.chapumix.solution.app.utils.PacienteDinamica;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -79,16 +74,13 @@ public class EstCertificadoController {
 	private IGenAreSerService iGenAreSerService;
 	
 	@Autowired
-	private IGenPacienService iGenPacienService;
+	private IGenPacienService iGenPacienService;	
 	
 	@Autowired
-	private IComGeneroService iComGeneroService;
+	private IComUsuarioService iComUsuarioService;		
 	
 	@Autowired
-	private IComUsuarioService iComUsuarioService;
-	
-	@Autowired
-	private IComTipoDocumentoService iComTipoDocumentoService;
+	private PacienteDinamica pacienteDinamica;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -298,8 +290,7 @@ public class EstCertificadoController {
 		
 		
 		// sincronizo paciente de dinamica a solution en caso de que no exista
-		sincronizarPaciente(validarPaciente, estCertificado.getGenPacien().getPacNumDoc());		
-		
+		pacienteDinamica.SincronizarPaciente(validarPaciente, estCertificado.getGenPacien().getPacNumDoc());		
 		
 		//busco el paciente para agregarlo al certificado
 		GenPacien paciente = iGenPacienService.findByNumberDoc(estCertificado.getGenPacien().getPacNumDoc());
@@ -380,11 +371,7 @@ public class EstCertificadoController {
 		ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + term, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
 		List<GenPacienDTO> dinamica = respuestaa.getBody();		
 		return dinamica;
-	}
-	
-	
-	
-	
+	}	
 	
 	
 	
@@ -405,35 +392,7 @@ public class EstCertificadoController {
 	}
 		
 	
-	// Se usa para sincronizar el paciente de dinamica a solution en caso de que no exista
-	private void sincronizarPaciente(GenPacien validarPaciente, @NotEmpty String pacNumDoc) {
-		if(validarPaciente == null) {
-			
-			// proceso API para buscar el paciente
-			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
-			List<GenPacienDTO> dinamica = respuestaa.getBody();
-			
-			//buscamos el sexo del paciente			
-			ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
-			
-			//buscamos el tipo de documento del paciente			
-			ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());
-			
-			GenPacien agregarPaciente = new GenPacien();
-			agregarPaciente.setOid(dinamica.get(0).getOid());
-			agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
-			agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
-			agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
-			agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
-			agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
-			agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
-			agregarPaciente.setComGenero(sexoPaciente);
-			agregarPaciente.setComTipoDocumento(tipoDocumento);
-			iGenPacienService.save(agregarPaciente);
-			
-		}
-		
-	}
+	
 
 		
 

@@ -77,6 +77,7 @@ import com.chapumix.solution.app.models.service.IComTokenMipresService;
 import com.chapumix.solution.app.models.service.IFarMipresService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.chapumix.solution.app.utils.ExcelUtils;
+import com.chapumix.solution.app.utils.PacienteDinamica;
 import com.chapumix.solution.app.utils.PageRender;
 
 import net.sf.jasperreports.engine.JRException;
@@ -137,6 +138,9 @@ public class FarMipresController {
 	
 	@Autowired
 	private IComTipoDocumentoService iComTipoDocumentoService;
+	
+	@Autowired
+	private PacienteDinamica pacienteDinamica;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -419,8 +423,8 @@ public class FarMipresController {
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
 			
 			//sincronizo paciente de dinamica a solution
-			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());
-			GenPacien obtengoPaciente =  SicronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());	
+			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());		
+			GenPacien obtengoPaciente = pacienteDinamica.SincronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());
 			
 			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente"+"IdEntrega: "+webServiceInfo.get("IdEntrega") : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
 			farMipres.setIdTraza(webServiceInfo.get("Id"));
@@ -1572,24 +1576,8 @@ public class FarMipresController {
 		//Date fechaTranformada = DateUtils.parseDate(fecha, new String[] { "yyyy-MM-dd HH:mm", "dd-MM-yyyy hh:mm" });
 		//System.out.println(fechaTranformada);
 		return fechaTranformada;
-	}
+	}	
 	
-	
-	//Se usa para sincronizar los pacientes de dinamica a solution
-	private GenPacien SicronizarPaciente(GenPacien genPacien, String pacNumDoc) {
-		if(genPacien == null) {
-			// proceso API para buscar el paciente
-			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
-			List<GenPacienDTO> dinamica = respuestaa.getBody();
-			
-			GenPacien guardarPaciente = pacienteAgregar(dinamica);					
-			iGenPacienService.save(guardarPaciente);
-			GenPacien obtengoPaciente = iGenPacienService.findByNumberDoc(pacNumDoc);		
-			return obtengoPaciente;
-		}
-		
-		return genPacien;		
-	}
 	
 	//Se usa para sincronizar los pacientes de dinamica a solution
 	private GenPacien SicronizarPacientePorDocumento(String tipoDocumento, String numDocumento, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido) {
@@ -1875,92 +1863,6 @@ public class FarMipresController {
 			
 	}
 
-	//se usa para obtener los id e identrega del web service de mipres
-	private void sincronizoEntrega(String prescripcion){
-		List<FarMipres> farMipres = iFarMipresService.findByPrescripcion(prescripcion);
-		
-		farMipres.forEach(f -> {
-			
-			//obtengo los datos del token primario guardados en solution
-			ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L);
-			
-			//genero la url para consultar
-			String urlEncadenada = MetodoGetPrescripcion+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario()+'/'+prescripcion;
-			
-			//Especificamos la URL y configuro el objeto HttpClient			
-			HttpClient httpclient = HttpClientBuilder.create().build();			
-			HttpResponse response = null;
-			
-			//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
-			HttpGet httpGet = new HttpGet(urlEncadenada);			
-			httpGet.setHeader("Accept", "application/json");
-			httpGet.setHeader("Content-type", "application/json");			
-			
-			try {
-				response = httpclient.execute(httpGet);
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}			
-			
-			//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
-	        String content;
-			try {
-				content = EntityUtils.toString(response.getEntity());
-				JSONArray arregloJSON = new JSONArray(content);
-				
-				for (int i = 0; i < arregloJSON.length(); i++) {
-					
-					JSONObject objetoJSON = arregloJSON.getJSONObject(i);
-	            	String idTraza = objetoJSON.getString("ID");
-	            	String idEntrega = objetoJSON.getString("IDEntrega");
-	            	String tecnologia = objetoJSON.getString("TipoTec");
-	            	Integer consecutivoTecnologia = objetoJSON.getInt("TipoTec");	            	
-	            	String tipoDocumento = objetoJSON.getString("TipoIDPaciente");
-	            	String numDocumento = objetoJSON.getString("NoIDPaciente");
-	            	Integer numeroEntrega = objetoJSON.getInt("NoEntrega");
-	            	String codigoServicio = objetoJSON.getString("CodSerTecEntregado");    
-	            	String cantidadEntregada = objetoJSON.getString("CantTotEntregada");
-	            	Integer entregaTotal = objetoJSON.getInt("EntTotal");
-	            	String FechaEntrega = objetoJSON.getString("FecEntrega");
-	            	
-	            	f.setIdTraza(idTraza);
-	            	f.setIdEntregaMipress(idEntrega);	            	
-	            	//busco el tipo de tecnologia para guardar
-	            	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tecnologia);
-	            	f.setComTipoTecnologia(comTipoTecnologia);	            	
-	            	f.setConsecutivoTecnologia(consecutivoTecnologia);
-	            	//busco el tipo de documento para guardar
-	            	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
-	            	f.setComTipoDocumentoMipres(comTipoDocumentoMipres);
-	            	//busco el paciente para guardar
-	            	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
-	            	f.setGenPacien(genPacien);
-	            	f.setNumeroEntrega(numeroEntrega);
-	            	f.setCodigoServicio(codigoServicio);
-	            	f.setCantidadEntregada(cantidadEntregada);
-	            	f.setEntregaTotal(entregaTotal);
-	            	//recortar String fecha
-	            	String fechaAjustada = FechaEntrega.replace(" 00:00", "");
-	            	f.setFechaEntrega(convertirFechaParametro(fechaAjustada));
-	            	f.setFechaRegistro(new Date());
-	            	f.setProcesadoEntrega(true);
-	            	f.setProcesadoReporteEntrega(false);
-	            	f.setProcesadoFacturacion(false);
-	            	iFarMipresService.save(f);
-	            	
-				}
-				
-				
-			} catch (org.apache.http.ParseException e) {				
-				e.printStackTrace();
-			} catch (IOException e) {				
-				e.printStackTrace();
-			} catch (ParseException e) {				
-				e.printStackTrace();
-			}		
-			
-		});
-	}
 	
 	//Se usa para crear el archivo en EXCEL
 	private void crearExcel(List<FarMipres> listadoMipres, HttpServletResponse response) {

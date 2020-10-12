@@ -30,16 +30,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
 import com.chapumix.solution.app.entity.dto.GenUsuarioDTO;
-import com.chapumix.solution.app.models.entity.ComGenero;
 import com.chapumix.solution.app.models.entity.ComRole;
-import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComUsuario;
 import com.chapumix.solution.app.models.entity.GenPacien;
-import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComRoleService;
-import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
 import com.chapumix.solution.app.models.service.IComUsuarioService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
+import com.chapumix.solution.app.utils.PacienteDinamica;
 
 @Controller
 @SessionAttributes({"comUsuario", "genPacien"})
@@ -57,13 +54,10 @@ public class ComUsuarioController {
 	private IComRoleService iComRoleService;
 	
 	@Autowired
-	private IGenPacienService iGenPacienService;
+	private IGenPacienService iGenPacienService;	
 	
 	@Autowired
-	private IComGeneroService iComGeneroService;
-	
-	@Autowired
-	private IComTipoDocumentoService iComTipoDocumentoService;
+	private PacienteDinamica pacienteDinamica;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -240,7 +234,7 @@ public class ComUsuarioController {
 					List<GenPacienDTO> dinamica = respuestaa.getBody();
 					
 					if(!dinamica.isEmpty()) {
-						GenPacien guardarPaciente = pacienteAgregar(dinamica);					
+						GenPacien guardarPaciente = pacienteDinamica.pacienteAgregar(dinamica);				
 						iGenPacienService.save(guardarPaciente);					
 						flash.addFlashAttribute("success", "Paciente(s) sincronizado correctamente");
 					}else {
@@ -301,28 +295,7 @@ public class ComUsuarioController {
 		nuevo.setEstado(true);
 		nuevo.setRoles(listRoles);	
 		return nuevo;
-	}
-	
-	//Se usa para obtener el paciente a guardar
-	private GenPacien pacienteAgregar(List<GenPacienDTO> dinamica) {
-		GenPacien agregarPaciente = new GenPacien();
-		//buscamos el sexo del paciente			
-		ComGenero sexoPaciente = iComGeneroService.findById(dinamica.get(0).getGpasexpac().longValue());
-		
-		//buscamos el tipo de documento del paciente			
-		ComTipoDocumento tipoDocumento = iComTipoDocumentoService.findById(dinamica.get(0).getPacTipDoc().longValue());		
-		
-		agregarPaciente.setOid(dinamica.get(0).getOid());
-		agregarPaciente.setPacNumDoc(dinamica.get(0).getPacNumDoc());
-		agregarPaciente.setPacPriNom(dinamica.get(0).getPacPriNom());
-		agregarPaciente.setPacSegNom(dinamica.get(0).getPacSegNom());
-		agregarPaciente.setPacPriApe(dinamica.get(0).getPacPriApe());
-		agregarPaciente.setPacSegApe(dinamica.get(0).getPacSegApe());
-		agregarPaciente.setGpafecnac(dinamica.get(0).getGpafecnac());
-		agregarPaciente.setComGenero(sexoPaciente);
-		agregarPaciente.setComTipoDocumento(tipoDocumento);
-		return agregarPaciente;
-	}
+	}	
 
 	// metodo para obtener el primer nombre del funcionario
 	private String recortar(String cadena) {

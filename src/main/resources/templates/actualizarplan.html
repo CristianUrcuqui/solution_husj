@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Anular</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Actualizar</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn bg-gradient-primary" th:href="@{/indexanulacioningreso}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-primary" th:href="@{/indexactualizarplan}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -82,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</div>
 				
 				<div class="card-body">
-					<form id="buscarmipres" class="form-inline mb-3" th:action="@{/procesaranulacioningreso}" role="form" method="get">
+					<form id="buscarmipres" class="form-inline mb-3" th:action="@{/procesaractualizarplan}" role="form" method="get">
 						<div class="input-group">
 							<label class="control-label text-center align-middle">Número Ingreso:</label>			                              
 			                <input id="ingreso" type="text" name="ingreso" class="form-control form-control-sm ml-1" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">        
@@ -108,7 +108,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->         				
         
-        	<div th:if="${listado} == true" class="card col-md-8 mx-auto">
+        	<div th:if="${listado} == true" class="card col-md-10 mx-auto">
         		<div class="card-header no-border">                         
               	</div>
               	
@@ -118,68 +118,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <tr>
                   	<th>Id</th>
                     <th>Ingreso</th>                    
-                    <th>Número Documento</th>
-                    <th>Paciente</th>                    
-                    <th class="text-center align-middle"></th>
-					
+                    <th>Nombre</th>
+                    <th>Orden</th>
+                    <th>Procedimiento</th>				
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="ingr: ${ingresoDinamica}">                
+                  <tr th:each="ingr: ${planBeneficioDinamica}">                
                     <td th:text="${ingr.oid}" class="align-middle"></td>
                     <td th:text="${ingr.ainConsec}" class="align-middle"></td>
-                    <td th:text="${ingr.pacNumDoc}" class="align-middle"></td>             
-                    <td th:text="${ingr.pacPriNom +' '+ ingr.pacSegNom +' '+ ingr.pacPriApe +' '+ ingr.pacSegApe}" class="align-middle"></td>                    			         	
-					<td class="text-center align-middle">	
-					<!-- BOTONES DE REPORTE FACTURACION -->
-						<div class="d-inline">
-							<a class="btn bg-gradient-danger btn-sm"  href="#" data-toggle="modal" data-target="#modal-anular-ingreso" th:attr="data-target='#modal-anular-ingreso'+${ingr.oid}" data-placement="top" title="Anular Ingreso" role="button">
-								<i class="fas fa-window-close fa-sm"></i>
-							</a>												         		
-						</div>				    																						         	
-					</td>
-					
-					
+                    <td th:text="${ingr.gpaNomCom}" class="align-middle"></td>             
+                    <td th:text="${ingr.slnOrdser1}" class="align-middle"></td>
+                    <td th:text="${ingr.serDesSer}" class="align-middle"></td> 							                                        
+                  </tr>
+                  
+                  </tbody>
+                </table>
+                		
+                	<!-- BOTON PARA ACTUALIZAR EL PLAN -->
+                	<div class="d-inline float-right mb-2">
+						<a class="btn bg-gradient-primary btn-sm"  href="#" data-toggle="modal" data-target="#modal-actualizar-plan" th:attr="data-target='#modal-actualizar-plan'+${ingreso}" data-placement="top" title="Actualizar" role="button">
+							<i class="far fa-check-circle fa-sm"> Actualizar</i>
+						</a>												         		
+					</div>
+						
 					<!-- MODAL CONTENIDO -->
-					<!-- MODAL CONFIRMAR ANULACION -->
-					<div class="modal fade" th:id="modal-anular-ingreso+${ingr.oid}">
-						<div class="modal-dialog modal-dialog-centered modal-sm">
+					<!-- MODAL ENTREGA -->
+					<div class="modal fade" th:id="modal-actualizar-plan+${ingreso}">
+						<div class="modal-dialog modal-dialog-centered  modal-sm">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h4 class="modal-title">Anular Ingreso</h4>
+									<h4 class="modal-title">Actualizar Plan De Beneficios</h4>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									    	<span aria-hidden="true">&times;</span>
 								        </button>
 								</div>
 								<div class="modal-body">
-									<form id="anular"  th:action="@{/anularingreso}" role="form" method="post">
-									  <div class="form-group">
-							            <label class="control-label" for="oid">Id</label>                  
-				                        <input id="oid" type="text" name="oid" th:value="${ingr.oid}"  class="form-control form-control-sm" readonly>
-				                        <input id="ingreso" type="hidden" name="ingreso" th:value="${ingr.ainConsec}"  class="form-control form-control-sm">					                       
-							          </div>	          
-							          <div class="form-group required">
-							            <label class="control-label" for="motivo">Motivo Anulación</label>
-							            <textarea id="motivo" name="motivo" class="form-control form-control-sm" onkeyup="this.value = this.value.toUpperCase();"></textarea>
-							          </div>
-							        </form>
+									<p>Estas seguro que quieres actualizar el plan de beneficios?</p>
 								</div>
 								<div class="modal-footer justify-content-between">
 									<button type="button" class="btn bg-gradient-secondary" data-dismiss="modal">Cancelar</button>
-									<button type="submit" form="anular" class="btn bg-gradient-primary">Enviar</button>						
+										<a th:href="@{/actualizarplan/{ingreso}(ingreso=${ingreso})}">
+											<span class="btn bg-gradient-danger" value="delete">Aceptar</span>
+										</a>
 								</div>
 							</div>
 							<!-- /.modal-content -->
 						</div>
 						<!-- /.modal-dialog -->
 					</div><!-- /.modal -->
-					
-					
-									                                        
-                  </tr>
-                  
-                  </tbody>
-                </table>
+						
               </div>
               	
         	
