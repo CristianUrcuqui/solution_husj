@@ -131,7 +131,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="numerofactura">Número Factura</label>
                            <div class="col-md-8">                           		
-                           		<input id="numerofactura" type="text" th:field="*{numeroFactura}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="numerofactura" type="text" th:field="*{numeroFactura}" onkeyup="this.value = this.value.toUpperCase();" class="form-control form-control-sm">
                            </div>
                        </div>                
                        
