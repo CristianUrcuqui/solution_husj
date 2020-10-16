@@ -16,6 +16,8 @@ public interface IGenAreSerService {
 	
 	public List<GenAreSer> findByOrderNombre();	
 	
+	public List<GenAreSer> findByOrderNombreIntenacion();
+	
 	public void delete(Long id);
 
 }

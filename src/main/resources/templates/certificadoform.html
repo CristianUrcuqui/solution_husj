@@ -136,13 +136,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            </div>
                        	</div>
                        	
-                       	
-                       	<div class="form-group row serial">
-                           <label class="control-label col-md-4" for="serial">Serial</label>
-                           <div class="col-md-8">                           		
-                           		<input id="serial" type="text" th:field="*{estSerial.serial}" class="form-control form-control-sm customtxt" readonly>
-                           </div>
-                       	</div>
+                       	<!-- CAMPO OCULTO NUMERO DE SERIAL -->
+                       	<input id="serial" type="hidden" th:field="*{estSerial.serial}" class="form-control form-control-sm customtxt" readonly>               	
                        	
                        	<div class="form-group row required paciente">
                            <label class="control-label col-md-4" for="paciente">Documento Paciente</label>
@@ -166,7 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         	<div class="col-md-8 mx-auto animacion">        		
 				<div class="alert alert-warning alert-dismissible">                  
 	               <h5><i class="icon fas fa-exclamation-triangle"></i> Advertencia!</h5>
-	               <strong>Por favor, guardar este certificado &nbsp<i class="icon fas fa-save"></i>para evitar problemas en el RUAF.</strong>           	  
+	               <strong>Por favor, guardar este certificado usando el botón &nbsp<i class="icon fas fa-save"></i>y así poder obtener el serial, además recuerda hacer el registro en el RUAF.</strong>           	  
 	            </div>      	
         	</div>			
 		</div>

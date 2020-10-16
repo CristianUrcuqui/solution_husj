@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -50,6 +53,7 @@ import com.chapumix.solution.app.models.service.IEstTipoCertificadoService;
 import com.chapumix.solution.app.models.service.IGenAreSerService;
 import com.chapumix.solution.app.models.service.IGenPacienService;
 import com.chapumix.solution.app.utils.PacienteDinamica;
+import com.chapumix.solution.app.utils.PageRender;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -217,13 +221,30 @@ public class EstCertificadoController {
 	
 	// Este metodo me permite listar todos los certificados realizados
 	@GetMapping("/certificadoestadistica")
-	public String listar(Model model) {		
+	public String listar(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {		
 				
-		List<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroDesc();
-		model.addAttribute("titulo", utf8(this.titulocertificado));		
-		model.addAttribute("estadistica", enlaceprincipalestadistica);
-		model.addAttribute("listcertificado", certificados);		
-		model.addAttribute("enlace7", enlace7);
+		if(buscando == null || buscando == "") {
+			Pageable pageRequest = PageRequest.of(page, 100);			
+			Page<EstCertificado> certificados = iEstCertificadoService.findAllByFechaRegistroDesc(pageRequest);
+			PageRender<EstCertificado> pageRender = new PageRender<>("/certificadoestadistica", certificados);
+			model.addAttribute("titulo", utf8(this.titulocertificado));		
+			model.addAttribute("estadistica", enlaceprincipalestadistica);
+			model.addAttribute("listcertificado", certificados);
+			model.addAttribute("page", pageRender);
+			model.addAttribute("totalItems", certificados.getTotalElements());
+			model.addAttribute("enlace7", enlace7);
+		}else {
+			Pageable pageRequest = PageRequest.of(page, 100);			
+			Page<EstCertificado> certificados = iEstCertificadoService.findAllCustomSearchRealizados(pageRequest, buscando);
+			PageRender<EstCertificado> pageRender = new PageRender<>("/certificadoestadistica", certificados);
+			model.addAttribute("titulo", utf8(this.titulocertificado));		
+			model.addAttribute("estadistica", enlaceprincipalestadistica);
+			model.addAttribute("listcertificado", certificados);
+			model.addAttribute("page", pageRender);
+			model.addAttribute("totalItems", certificados.getTotalElements());
+			model.addAttribute("enlace7", enlace7);			
+		}
+		
 		return "certificadoestadistica";
 	}
 	

@@ -3,11 +3,14 @@ package com.chapumix.solution.app.models.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chapumix.solution.app.models.dao.IEstCertificadoDao;
 import com.chapumix.solution.app.models.entity.EstCertificado;
+import com.chapumix.solution.app.models.entity.FarMipres;
 
 @Service
 public class EstCertificadoServiceImpl implements IEstCertificadoService{
@@ -22,16 +25,17 @@ public class EstCertificadoServiceImpl implements IEstCertificadoService{
 		return (List<EstCertificado>) estCertificadoDao.findAll();
 	}
 	
-	/*@Override
-	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public List<EstCertificado> findByName(String docPaciente) {
-		return estCertificadoDao.findByName(docPaciente);
-	}*/	
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public List<EstCertificado> findAllByFechaRegistroDesc() {
-		return estCertificadoDao.findAllByFechaRegistroDesc();
+	public Page<EstCertificado> findAllByFechaRegistroDesc(Pageable pageable) {
+		return estCertificadoDao.findAllByFechaRegistroDesc(pageable);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<EstCertificado> findAllCustomSearchRealizados(Pageable pageable, String busqueda) {
+		return estCertificadoDao.findAllCustomSearchRealizados(pageable, busqueda);
 	}	
 	
 	
@@ -66,5 +70,6 @@ public class EstCertificadoServiceImpl implements IEstCertificadoService{
 	@Transactional
 	public void delete(Long id) {
 		estCertificadoDao.deleteById(id);	
-	}	
+	}
+	
 }

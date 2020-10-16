@@ -80,8 +80,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			.permitAll()
 			.deleteCookies("JSESSIONID")
 		.and()
-		.exceptionHandling().accessDeniedPage("/error_403");
-		
+		.exceptionHandling().accessDeniedPage("/error_403");		
 		
 	}
 
