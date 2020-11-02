@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
+import com.chapumix.solution.app.models.entity.ComAmbito;
 import com.chapumix.solution.app.models.entity.ComGenero;
 import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoDocumentoMipres;
@@ -32,6 +33,7 @@ import com.chapumix.solution.app.models.entity.ComTipoTecnologia;
 import com.chapumix.solution.app.models.entity.ComTokenMipres;
 import com.chapumix.solution.app.models.entity.FarMipres;
 import com.chapumix.solution.app.models.entity.GenPacien;
+import com.chapumix.solution.app.models.service.IComAmbitoService;
 import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoMipresService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
@@ -73,11 +75,15 @@ public class FarMipresComp {
 	private IComTipoDocumentoService iComTipoDocumentoService;
 	
 	@Autowired
+	private IComAmbitoService iComAmbitoService;
+	
+	@Autowired
 	private RestTemplate restTemplate;
 	
 	
 	//metodo que se ejecuta de forma automatica todos los dias a las 11:58PM   	
-	@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")	
+	//@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")
+	@Scheduled(cron = "00 02 10 * * *", zone="America/Bogota")
 	public void cronSincronizaPrescripciones() throws Exception {    	
     	
 		//convierto String a Date 
@@ -202,7 +208,11 @@ public class FarMipresComp {
                 	}
                 	
                 	//buscamos la tecnologia para guardar                	  
-                	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString());  
+                	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString()); 
+                	
+                	//buscamos el ambito para guardar                	  
+                	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
+                	
                 	
                 	//validamos si el medicamento es vacio
                 	if(map.containsKey("nombreMedicamento0")) {
@@ -220,6 +230,7 @@ public class FarMipresComp {
                     farMipres.setFechaEntrega(fechaEntregaCustomDate);
                     farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
                     farMipres.setComTipoTecnologia(comTipoTecnologia);
+                    farMipres.setComAmbito(comAmbito);
                     farMipres.setCodigoServicio("SIN INFORMACION");
                     farMipres.setNumeroEntrega(1);
                     farMipres.setEntregaTotal(1);
@@ -233,11 +244,11 @@ public class FarMipresComp {
         	}else {
         		if(map.size() == 6 || map.size() == 8) {
         			int hasta = 2;
-        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, "76328021", codEps);
+        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, "76328021", codEps, codigoAmbitoAtencion);
         		}
         		if(map.size() == 9 || map.size() == 12) {
         			int hasta = 3;
-        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, "76328021", codEps);
+        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, "76328021", codEps, codigoAmbitoAtencion);
         		}
         	}
         }	
@@ -261,7 +272,7 @@ public class FarMipresComp {
 	
 	//Se usa para gurdar la prescripcion en la la base de solution
 	private void procesarGuardar(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
-			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps) {
+			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps, Integer codigoAmbitoAtencion) {
 		for(int z=0; z<hasta; z++) {
 			
 			String cantidadEntregada = map.get("cantidadEntregada"+z).toString();                    	
@@ -287,7 +298,10 @@ public class FarMipresComp {
         	}                    	
         	
         	//buscamos la tecnologia para guardar                	  
-        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia);  
+        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia);
+        	
+        	//buscamos el ambito para guardar                	  
+        	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
         	
         	//validamos si el medicamento es vacio
         	if(map.containsKey("nombreMedicamento"+z)) {
@@ -305,6 +319,7 @@ public class FarMipresComp {
             farMipres.setFechaEntrega(fechaEntregaCustomDate);
             farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia"+z).toString()));                        
             farMipres.setComTipoTecnologia(comTipoTecnologia);
+            farMipres.setComAmbito(comAmbito);
             farMipres.setCodigoServicio("SIN INFORMACION");
             farMipres.setNumeroEntrega(1);
             farMipres.setEntregaTotal(0);

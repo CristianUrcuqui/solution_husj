@@ -34,7 +34,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Pendientes</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Procesados Hospitalario</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,18 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</div>
 		
 		<!-- Linea Separadora -->
-    	<hr>         
-		
-    	
-    	<!-- Div para colocar los botones de exportacion y busqueda-->
-	
-		<div class="col-md-8">
-			<div class="btn-group">
-		        <div id="botonxls" class="ml-2 mb-1">
-		        </div>         
-		   </div>
-		</div>	   	
-    	
+    	<hr>    	
 
     <!-- Main content -->
     <div class="content">
@@ -93,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		         <div class="card-body">
 		         
 		         	<div class="form-inline mb-2">
-		         		<form id="buscar" th:action="@{/pendientesmipres}">
+		         		<form id="buscar" th:action="@{/procesadosmipreshosp}">
 			         		<label class="control-label">
 			         			Buscar  
 			         			<input id="buscar" type="text" name="buscando" class="form-control form-control-sm ml-1 bordes-input">		         			
@@ -112,14 +101,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<th>FECHA ENTREGA</th>					         	
 					         	<th>TIPO DOCUMENTO</th>
 					         	<th>NUMERO DOCUMENTO</th>
-					         	<th>PACIENTE</th>
-					         	<th>TECNOLOGIA</th>
-					         	<th>CONSECUTIVO TECNOLOGIA</th>
-					         	<th>CANTIDAD</th>
-					         	<th>DESCRIPCION TECNOLOGIA</th>       	
-					         	<th class="text-center align-middle">E</th>
-					         	<th class="text-center align-middle">RE</th>
-					    		<th class="text-center align-middle">RF</th>
+					         	<th>PACIENTE</th>      	       	
+					         	<th></th>
+					         	
 					         	      						         	
 				         	</tr>
 			         	</thead>
@@ -130,67 +114,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					         	<td th:text="${#dates.format(lentrega.fechaEntrega, 'dd-MM-yyy')}" class="align-middle"></td>					         	
 					         	<td th:text="${lentrega.comTipoDocumentoMipres.descripcion}" class="align-middle"></td>
 					         	<td th:text="${lentrega.genPacien.pacNumDoc}" class="align-middle"></td>
-					         	<td th:text="${lentrega.genPacien.pacPriNom +' '+ lentrega.genPacien.pacSegNom +' '+ lentrega.genPacien.pacPriApe +' '+ lentrega.genPacien.pacSegApe}" class="align-middle"></td>
-					         	<td th:text="${lentrega.comTipoTecnologia.descripcion}" class="align-middle"></td>
-					         	<td th:text="${lentrega.consecutivoTecnologia}" class="align-middle"></td>
-					         	<td th:text="${lentrega.cantidadEntregada}" class="align-middle"></td>					         						         						         	
-					         	<td th:text="${lentrega.nombreMedicamento}" class="align-middle"></td>
-					         	<td class="text-center align-middle">					         	
-					         		<!-- BOTONES DE ENTREGA -->
-					         		<div th:if="${lentrega.procesadoEntrega eq false}" class="d-inline">
-						         		<a class="btn bg-gradient-danger btn-sm"  th:href="@{/entregaform(id=${lentrega.id})}" data-toggle="tooltip" data-placement="top" title="Entrega" role="button">
-											<i class="fas fa-exclamation-circle fa-sm"></i>
+					         	<td th:text="${lentrega.genPacien.pacPriNom +' '+ lentrega.genPacien.pacSegNom +' '+ lentrega.genPacien.pacPriApe +' '+ lentrega.genPacien.pacSegApe}" class="align-middle"></td>       	
+					         	<td class="text-center align-middle">	         		
+					         		<div class="d-inline">
+						         		<a class="btn bg-gradient-info btn-sm"  th:href="@{/consolidadomipresformhosp(id=${lentrega.id})}" data-toggle="tooltip" data-placement="top" title="Consolidado" role="button">
+											<i class="fas fa-file-alt fa-sm"></i>
 										</a>												         		
 									</div>
-									
-									<div th:if="${lentrega.procesadoEntrega eq true}" class="d-inline fontawesowe">
-						         		<a class="btn bg-gradient-success btn-sm disabled" data-toggle="tooltip" data-placement="top" title="Entrega" role="button">
-											<i class="fas fa-thumbs-up fa-sm"></i>
+									<div class="d-inline">
+						         		<a class="btn bg-gradient-danger btn-sm"  th:href="@{/certificadomipreshosp(id=${lentrega.id})}" data-toggle="tooltip" data-placement="top" title="Certificado" role="button">
+											<i class="far fa-file-pdf fa-sm"></i>
 										</a>												         		
-									</div>
-								</td>
-								<td class="text-center align-middle">	
-									<!-- BOTONES DE REPORTE ENTREGA -->
-									<div th:if="${lentrega.procesadoEntrega eq true and lentrega.procesadoReporteEntrega eq false}" class="d-inline">
-						         		<a class="btn bg-gradient-danger btn-sm"  th:href="@{/reporteentregaform(id=${lentrega.id})}" data-toggle="tooltip" data-placement="top" title="Reporte Entrega" role="button">
-											<i class="fas fa-exclamation-circle fa-sm"></i>
-										</a>												         		
-									</div>
-					         	
-					         		<div th:if="${lentrega.procesadoReporteEntrega eq true}" class="d-inline fontawesowe">
-						         		<a class="btn bg-gradient-success btn-sm disabled" data-toggle="tooltip" data-placement="top" title="Reporte Entrega" role="button">
-											<i class="fas fa-thumbs-up fa-sm"></i>
-										</a>												         		
-									</div>																						         	
-					         	</td>
-					         	
-					         	<td class="text-center align-middle">	
-									<!-- BOTONES DE REPORTE FACTURACION -->
-									<div th:if="${lentrega.procesadoReporteEntrega eq true and lentrega.procesadoFacturacion eq false}" class="d-inline">
-						         		<a class="btn bg-gradient-danger btn-sm"  th:href="@{/reportefacturacion(id=${lentrega.id})}" data-toggle="tooltip" data-placement="top" title="Reporte Facturación" role="button">
-											<i class="fas fa-exclamation-circle fa-sm"></i>
-										</a>												         		
-									</div>
-					         	
-					         		<div th:if="${lentrega.procesadoFacturacion eq true}" class="d-inline fontawesowe">
-						         		<a class="btn bg-gradient-success btn-sm disabled" data-toggle="tooltip" data-placement="top" title="Reporte Entrega" role="button">
-											<i class="fas fa-thumbs-up fa-sm"></i>
-										</a>												         		
-									</div>																						         	
-					         	</td>
-					         	
+									</div>						
+								</td>       	
 					         					         		         					         						         						         	
 					     	</tr>
 			         	</tbody>	         	
 			         </table>
 			         
-			         <div class="row">
-			         <div class="col-md-2">
-			         	Total Registros: [[${totalItems}]]
-			         </div>
-			         <div class="col-md-10">
+			         <div class="col-md-12">
 			         	<nav th:replace="layout/paginator-nav :: paginator"></nav>
-			         </div>
 			         </div>
 			         			         		        
 		         </div>    	
@@ -221,33 +164,7 @@ $(document).ready(function() {
     	"info": false,
     	"responsive": true,
     	"order": [],    	
-    	"pagingType": "full_numbers",
-    	dom: 'Blfrtip',    	
-    	 "buttons": {
-             "dom": {
-                "button": {
-                  "tag": "div",
-                  "className": "flexcontent"
-                },
-                buttonLiner: {
-					tag: null
-                }                    
-             },
-             "buttons": [
-
-            	 {
-                     extend:    'excelHtml5',
-                     text:      '<i class="fas fa-file-excel"></i>Exportar',
-                     /*title:'Titulo de tabla en excel',*/
-                     titleAttr: 'Exportar Excel',
-                     className: 'btn btn-app export excel',
-                     exportOptions: {
-                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                     }                     
-                 },
-
-                 ]   
-          },
+    	"pagingType": "full_numbers",    	
           "language": {
               "lengthMenu": "Mostrar _MENU_ registros por página",
               "zeroRecords": "Nada Encontrado - Lo sentimos!",
@@ -267,10 +184,7 @@ $(document).ready(function() {
             
     
     } );
-    table.buttons().container().appendTo( '#botonxls' );
-    
-    $('.pagination').pagShrink();
-    
+    table.buttons().container().appendTo( '#botonxls' );     
 } );	
 </script>
 </body>

@@ -62,6 +62,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.chapumix.solution.app.entity.dto.GenPacienDTO;
+import com.chapumix.solution.app.models.entity.ComAmbito;
 import com.chapumix.solution.app.models.entity.ComGenero;
 import com.chapumix.solution.app.models.entity.ComTipoDocumento;
 import com.chapumix.solution.app.models.entity.ComTipoDocumentoMipres;
@@ -69,6 +70,7 @@ import com.chapumix.solution.app.models.entity.ComTipoTecnologia;
 import com.chapumix.solution.app.models.entity.ComTokenMipres;
 import com.chapumix.solution.app.models.entity.FarMipres;
 import com.chapumix.solution.app.models.entity.GenPacien;
+import com.chapumix.solution.app.models.service.IComAmbitoService;
 import com.chapumix.solution.app.models.service.IComGeneroService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoMipresService;
 import com.chapumix.solution.app.models.service.IComTipoDocumentoService;
@@ -114,7 +116,13 @@ public class FarMipresController {
 	
 	public static final String MetodoGetConsultaFechaNumeroPrescripcion = "https://wsmipres.sispro.gov.co/wsmipresnopbs/api/PrescripcionXNumero/"; //url mipres metodo para get consulta por numero de prescipcion
 	
-	public static final String MetodoGetPrescripcion = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/EntregaXPrescripcion/"; //url mipres metodo para get consulta	
+	public static final String MetodoGetPrescripcion = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/EntregaXPrescripcion/"; //url mipres metodo para get consulta
+	
+	public static final String MetodoGetDireccionamiento = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/DireccionamientoXPrescripcion/"; //url mipres metodo para get direccionamiento ambulatorio
+	
+	public static final String MetodoPutProgramacion = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/Programacion/"; //url mipres metodo para put programacion ambulatorio
+	
+	public static final String MetodoPutEntregaAmbulatorio = "https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/Entrega/"; //url mipres metodo para put entrega ambulatorio
 	
 	public static final String URLPaciente = "http://localhost:9000/api/pacientegeneral"; //se obtuvo de API REST de GenPacienRestController
 	
@@ -140,6 +148,9 @@ public class FarMipresController {
 	private IComTipoDocumentoService iComTipoDocumentoService;
 	
 	@Autowired
+	private IComAmbitoService iComAmbitoService;
+	
+	@Autowired
 	private PacienteDinamica pacienteDinamica;
 	
 	@Autowired
@@ -157,17 +168,26 @@ public class FarMipresController {
 	@Value("${app.tituloentrega}")
 	private String tituloentrega;
 	
+	@Value("${app.tituloprogramacion}")
+	private String tituloprogramacion;	
+	
 	@Value("${app.tituloreporteentrega}")
 	private String tituloreporteentrega;
 	
 	@Value("${app.tituloreportefacturacion}")
 	private String tituloreportefacturacion;	
 	
-	@Value("${app.tituloentregarealizada}")
-	private String tituloentregarealizada;
+	@Value("${app.tituloentregarealizadahosp}")
+	private String tituloentregarealizadahosp;
 	
-	@Value("${app.tituloentregaprocesada}")
-	private String tituloentregaprocesada;
+	@Value("${app.tituloentregaprocesadahosp}")
+	private String tituloentregaprocesadahosp;
+	
+	@Value("${app.tituloentregarealizadaamb}")
+	private String tituloentregarealizadaamb;
+	
+	@Value("${app.tituloentregaprocesadaamb}")
+	private String tituloentregaprocesadaamb;
 	
 	
 	@Value("${app.enlaceprincipalfarmacia}")
@@ -290,70 +310,121 @@ public class FarMipresController {
 	}
 	
 	// Este metodo me permite listar todas las entregas pendientes en el web service del ministerio
-	@GetMapping("/pendientesmipres")
-	public String listarPendientes(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
+	@GetMapping("/pendientesmipreshosp")
+	public String listarPendientesHosp(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
 		
 		if(buscando == null || buscando == "") {
 			Pageable pageRequest = PageRequest.of(page, 100);			
-			Page<FarMipres> farMipres = iFarMipresService.findAllCustomPendientes(pageRequest);
-			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipres", farMipres);
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomPendientesHosp(pageRequest);
+			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipreshosp", farMipres);
 			model.addAttribute("listentrega", farMipres);
 			model.addAttribute("totalItems", farMipres.getTotalElements());			
 			model.addAttribute("page", pageRender);
 		}else {
 			Pageable pageRequest = PageRequest.of(page, 100);			
-			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchPendientes(pageRequest, buscando);
-			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipres", farMipres);
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchPendientesHosp(pageRequest, buscando);
+			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipreshosp", farMipres);
 			model.addAttribute("listentrega", farMipres);
 			model.addAttribute("totalItems", farMipres.getTotalElements());			
 			model.addAttribute("page", pageRender);
 		}		
 								
-		model.addAttribute("titulo", utf8(this.tituloentregarealizada));			
+		model.addAttribute("titulo", utf8(this.tituloentregarealizadahosp));			
 		model.addAttribute("farmacia", enlaceprincipalfarmacia);
 		model.addAttribute("enlace10", enlace10);		
-		return "pendientesmipres";
+		return "pendientesmipreshosp";
+	}
+	
+	
+	// Este metodo me permite listar todas las entregas pendientes en el web service del ministerio
+	@GetMapping("/pendientesmipresamb")
+	public String listarPendientesAmb(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
+			
+		if(buscando == null || buscando == "") {
+			Pageable pageRequest = PageRequest.of(page, 100);			
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomPendientesAmb(pageRequest);
+			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipresamb", farMipres);
+			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("totalItems", farMipres.getTotalElements());			
+			model.addAttribute("page", pageRender);
+		}else {
+			Pageable pageRequest = PageRequest.of(page, 100);			
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchPendientesAmb(pageRequest, buscando);
+			PageRender<FarMipres> pageRender = new PageRender<>("/pendientesmipresamb", farMipres);
+			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("totalItems", farMipres.getTotalElements());			
+			model.addAttribute("page", pageRender);
+		}		
+								
+		model.addAttribute("titulo", utf8(this.tituloentregarealizadaamb));			
+		model.addAttribute("farmacia", enlaceprincipalfarmacia);
+		model.addAttribute("enlace10", enlace10);		
+		return "pendientesmipresamb";
 	}
 	
 	
 	// Este metodo me permite listar todas las entregas procesadas en el web service del ministerio
-	@GetMapping("/procesadosmipres")
-	public String listarProcesados(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
+	@GetMapping("/procesadosmipreshosp")
+	public String listarProcesadosHosp(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
 			
 		if(buscando == null || buscando == "") {
 			Pageable pageRequest = PageRequest.of(page, 150);			
-			Page<FarMipres> farMipres = iFarMipresService.findAllCustomProcesados(pageRequest);
-			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipres", farMipres);
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomProcesadosHosp(pageRequest);
+			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipreshosp", farMipres);
 			model.addAttribute("listentrega", farMipres);
 			model.addAttribute("page", pageRender);
 		}else {
 			Pageable pageRequest = PageRequest.of(page, 150);			
-			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchProcesados(pageRequest, buscando);
-			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipres", farMipres);
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchProcesadosHosp(pageRequest, buscando);
+			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipreshosp", farMipres);
 			model.addAttribute("listentrega", farMipres);
 			model.addAttribute("page", pageRender);
 		}		
 									
-		model.addAttribute("titulo", utf8(this.tituloentregaprocesada));			
+		model.addAttribute("titulo", utf8(this.tituloentregaprocesadahosp));			
 		model.addAttribute("farmacia", enlaceprincipalfarmacia);
 		model.addAttribute("enlace10", enlace10);		
-		return "procesadosmipres";
+		return "procesadosmipreshosp";
 	}
 	
-	// Este metodo me permite cargar el consolidad de la prescripcion
-	@RequestMapping(value = "/consolidadomipresform")
-	public String cargarConsolidado(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+	// Este metodo me permite listar todas las entregas procesadas en el web service del ministerio
+	@GetMapping("/procesadosmipresamb")
+	public String listarProcesadosAmb(Model model, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "buscando", required = false) String buscando) {
+				
+		if(buscando == null || buscando == "") {
+			Pageable pageRequest = PageRequest.of(page, 150);			
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomProcesadosAmb(pageRequest);
+			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipresamb", farMipres);
+			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("page", pageRender);
+		}else {
+			Pageable pageRequest = PageRequest.of(page, 150);			
+			Page<FarMipres> farMipres = iFarMipresService.findAllCustomSearchProcesadosAmb(pageRequest, buscando);
+			PageRender<FarMipres> pageRender = new PageRender<>("/procesadosmipresamb", farMipres);
+			model.addAttribute("listentrega", farMipres);
+			model.addAttribute("page", pageRender);
+		}		
+										
+		model.addAttribute("titulo", utf8(this.tituloentregaprocesadaamb));			
+		model.addAttribute("farmacia", enlaceprincipalfarmacia);
+		model.addAttribute("enlace10", enlace10);		
+		return "procesadosmipresamb";
+	}
+	
+	// Este metodo me permite cargar el consolidad de la prescripcion hospitalario
+	@RequestMapping(value = "/consolidadomipresformhosp")
+	public String cargarConsolidadoHosp(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
 			
 		FarMipres farMipres = null;
 		if(id > 0) {			
 			farMipres = iFarMipresService.findById(id);
 			if(farMipres == null) {
 				flash.addFlashAttribute("error", "El ID del consolidado no existe en la base de datos");
-				return "redirect:/procesadosmipres";
+				return "redirect:/procesadosmipreshosp";
 			}
 		}else {
 			flash.addFlashAttribute("error", "El ID del consolidado no puede ser 0");
-				return "redirect:/procesadosmipres";
+				return "redirect:/procesadosmipreshosp";
 		}			
 		
 		model.put("titulo", utf8(this.tituloentrega));
@@ -362,37 +433,374 @@ public class FarMipresController {
 		model.put("tipodocumento", iComTipoDocumentoMipresService.findAll());
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("enlace10", enlace10);
-		return "consolidadomipresform";
+		return "consolidadomipresformhosp";
 	}
 	
-	// Este metodo me permite generar el certificado
-	@RequestMapping(value = "/certificadomipres")
-	public String certificadoMipres(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal, HttpServletResponse response) throws ParseException, JRException, IOException {
+	// Este metodo me permite cargar el consolidad de la prescripcion ambulatorio
+		@RequestMapping(value = "/consolidadomipresformamb")
+		public String cargarConsolidadoAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+				
+			FarMipres farMipres = null;
+			if(id > 0) {			
+				farMipres = iFarMipresService.findById(id);
+				if(farMipres == null) {
+					flash.addFlashAttribute("error", "El ID del consolidado no existe en la base de datos");
+					return "redirect:/procesadosmipresamb";
+				}
+			}else {
+				flash.addFlashAttribute("error", "El ID del consolidado no puede ser 0");
+					return "redirect:/procesadosmipresamb";
+			}			
+			
+			model.put("titulo", utf8(this.tituloentrega));
+			model.put("farMipres", farMipres);
+			model.put("tecnologia", iComTipoTecnologiaService.findAll());
+			model.put("tipodocumento", iComTipoDocumentoMipresService.findAll());
+			model.put("farmacia", enlaceprincipalfarmacia);
+			model.put("enlace10", enlace10);
+			return "consolidadomipresformamb";
+		}
+	
+	// Este metodo me permite generar el certificado hospitalario
+	@RequestMapping(value = "/certificadomipreshosp")
+	public String certificadoMipresHosp(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal, HttpServletResponse response) throws ParseException, JRException, IOException {
 				
 		List<FarMipres> farMipres = null;
 		if(id > 0) {			
 			farMipres = iFarMipresService.findByIdMipres(id);
-			crearPDF(farMipres, response);			
+			crearPDFHosp(farMipres, response);			
 		}
 		return null;
 	}
 	
+	// Este metodo me permite generar el certificado ambulatorio
+	@RequestMapping(value = "/certificadomipresamb")
+	public String certificadoMipresAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal, HttpServletResponse response) throws ParseException, JRException, IOException {
+					
+		List<FarMipres> farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findByIdMipres(id);
+			crearPDFAmb(farMipres, response);			
+		}
+		return null;
+	}
+	
+	// Este metodo me permite cargar los datos para editar la programacion y guardar
+	@RequestMapping(value = "/programacionambform")
+	public String crearProgramacionAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+				
+		FarMipres farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findById(id);
+			if(farMipres == null) {
+				flash.addFlashAttribute("error", "El ID del reporte no existe en la base de datos");
+				return "redirect:/pendientesmipresamb";
+			}
+		}else {
+			flash.addFlashAttribute("error", "El ID del reporte no puede ser 0");
+			return "redirect:/pendientesmipreshosp";
+		}
+						
+		model.put("titulo", utf8(this.tituloprogramacion));
+		model.put("farMipres", farMipres);
+		model.put("tecnologia", iComTipoTecnologiaService.findAll());
+		model.put("tipodocumento", iComTipoDocumentoMipresService.findAll());
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("enlace10", enlace10);
+		return "programacionambform";
+	}
+	
+	
+	// Este metodo me permite guardar la programacion
+	@RequestMapping(value = "/programacionambform", method = RequestMethod.POST)
+	public String guardarProgramacionAmb(@Valid FarMipres farMipres, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+		if(result.hasErrors()) {
+			model.addAttribute("titulo", utf8(this.tituloentrega));
+			model.addAttribute("farMipres", farMipres);			
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "programacionambform";
+		}		
+			
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresProgramacion(farMipres);
+			
+			
+		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
+				
+			//sincronizo paciente de dinamica a solution
+			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());		
+			GenPacien obtengoPaciente = pacienteDinamica.SincronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());
+				
+			String mensajeFlash = (farMipres.getId() != null) ? "La programación fue editada correctamente"+"IdProgramacion: "+webServiceInfo.get("IdProgramacion") : "La programación fue creada correctamente "+"IdProgramacion: "+webServiceInfo.get("IdProgramacion");
+			farMipres.setIdProgramacionMipress(webServiceInfo.get("IdProgramacion"));
+			farMipres.setProcesadoProgramacion(true);
+			farMipres.setLoginUsrAlta(principal.getName());
+			farMipres.setFechaAltaAct(new Date());
+			if(genPacien == null) {
+				farMipres.setGenPacien(obtengoPaciente);
+			}else {
+				farMipres.setGenPacien(genPacien);
+			}			
+			iFarMipresService.save(farMipres);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);
+			return "redirect:pendientesmipresamb";
+			}else {
+				flash.addFlashAttribute("error", webServiceInfo.get("error"));
+				return "redirect:pendientesmipresamb";
+		}		
+			
+	}
+	
+	
+	// Este metodo me permite cargar los datos para editar la entrega ambulatorio y guardar
+	@RequestMapping(value = "/entregaambform")
+	public String crearEntregaAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+			
+		FarMipres farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findById(id);
+			if(farMipres == null) {
+				flash.addFlashAttribute("error", "El ID del reporte no existe en la base de datos");
+				return "redirect:/pendientesmipresamb";
+			}
+		}else {
+			flash.addFlashAttribute("error", "El ID del reporte no puede ser 0");
+			return "redirect:/pendientesmipresamb";
+		}
+					
+		model.put("titulo", utf8(this.tituloentrega));
+		model.put("farMipres", farMipres);
+		model.put("tecnologia", iComTipoTecnologiaService.findAll());
+		model.put("tipodocumento", iComTipoDocumentoMipresService.findAll());
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("enlace10", enlace10);
+		return "entregaambform";
+	}
+	
+	// Este metodo me permite guardar la entrega ambulatoria
+	@RequestMapping(value = "/entregaambform", method = RequestMethod.POST)
+	public String guardarEntregaAmb(@Valid FarMipres farMipres, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+		if(result.hasErrors()) {
+			model.addAttribute("titulo", utf8(this.tituloentrega));
+			model.addAttribute("farMipres", farMipres);
+			model.addAttribute("tecnologia", iComTipoTecnologiaService.findAll());
+			model.addAttribute("tipodocumento", iComTipoDocumentoMipresService.findAll());
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "entregaambform";
+		}		
+		
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresEntregaAmb(farMipres);
+			
+			
+		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
+				
+			//sincronizo paciente de dinamica a solution
+			GenPacien genPacien = iGenPacienService.findByNumberDoc(farMipres.getGenPacien().getPacNumDoc());		
+			GenPacien obtengoPaciente = pacienteDinamica.SincronizarPaciente(genPacien, farMipres.getGenPacien().getPacNumDoc());
+			
+			String mensajeFlash = (farMipres.getId() != null) ? "La entrega fue editada correctamente"+"IdEntrega: "+webServiceInfo.get("IdEntrega") : "La entrega fue creada correctamente "+"IdEntrega: "+webServiceInfo.get("IdEntrega");
+			farMipres.setIdTraza(webServiceInfo.get("Id"));
+			farMipres.setIdEntregaMipress(webServiceInfo.get("IdEntrega"));
+			farMipres.setProcesadoEntrega(true);
+			farMipres.setLoginUsrAlta(principal.getName());
+			farMipres.setFechaAltaAct(new Date());
+			if(genPacien == null) {
+				farMipres.setGenPacien(obtengoPaciente);
+			}else {
+				farMipres.setGenPacien(genPacien);
+			}			
+			iFarMipresService.save(farMipres);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);
+			return "redirect:pendientesmipresamb";
+		}else {
+			flash.addFlashAttribute("error", webServiceInfo.get("error"));
+			return "redirect:pendientesmipresamb";
+		}		
+		
+	}
+	
+	// Este metodo me permite cargar los datos para editar el reporte de entrega ambulatorio y guardar
+	@RequestMapping(value = "/reporteentregaambform")
+	public String crearReporteEntregaAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+				
+		FarMipres farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findById(id);
+			if(farMipres == null) {
+				flash.addFlashAttribute("error", "El ID del reporte no existe en la base de datos");
+				return "redirect:/pendientesmipresamb";
+			}
+		}else {
+			flash.addFlashAttribute("error", "El ID del reporte no puede ser 0");
+			return "redirect:/pendientesmipresamb";
+		}				
+				
+		model.put("titulo", utf8(this.tituloreporteentrega));
+		model.put("farMipres", farMipres);
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("enlace10", enlace10);
+		return "reporteentregaambform";
+	}
+	
+	
+	// Este metodo me permite guardar el reporte de entrega ambulatorio
+	@RequestMapping(value = "/reporteentregaambform", method = RequestMethod.POST)
+	public String guardarReporteEntregaAmb(@Valid FarMipres farMipres, @RequestParam(value = "estadoentrega", required = false) Integer estadoentrega, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+		if(result.hasErrors()) {
+			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
+			model.addAttribute("farMipres", farMipres);			
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reporteentregaambform";
+		}
+			
+		if(estadoentrega == null) {			
+			model.addAttribute("error", "El estado de entrega es requerido");
+			return "reporteentregaambform";
+		}
+			
+		if(farMipres.getValorEntregado().isEmpty()) {			
+			model.addAttribute("error", "El valor es requerido");
+			return "reporteentregaambform";
+		}
+			
+		if(farMipres.getNumeroFactura().isEmpty()) {			
+			model.addAttribute("error", "La factura es requerida");
+			return "reporteentregaambform";
+		}
+			
+			
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteEntrega(farMipres, estadoentrega);
+		
+		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
+						
+			String mensajeFlash = (farMipres.getId() != null) ? "El reporte de entrega fue creado correctamente "+"IdReporteEntrega: "+webServiceInfo.get("IdReporteEntrega") : "El reporte de entrega fue creado correctamente "+"IdReporteEntrega: "+webServiceInfo.get("IdReporteEntrega");
+			farMipres.setIdReporteEntregaMipress(webServiceInfo.get("IdReporteEntrega"));			
+			farMipres.setProcesadoReporteEntrega(true);
+			farMipres.setLoginUsrAct(principal.getName());
+			farMipres.setFechaAltaAct(new Date());
+			iFarMipresService.save(farMipres);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);
+			return "redirect:reporteentregaambform";
+			}else {
+				flash.addFlashAttribute("error", webServiceInfo.get("error"));
+				return "redirect:reporteentregaambform";
+			}	
+	}
+	
+	
+	// Este metodo me permite cargar los datos para editar el reporte de facturacion ambulatorio
+	@RequestMapping(value = "/reportefacturacionamb")
+	public String crearReporteFacturacionAmb(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+					
+		FarMipres farMipres = null;
+		if(id > 0) {			
+			farMipres = iFarMipresService.findById(id);
+			if(farMipres == null) {
+				flash.addFlashAttribute("error", "El ID del empleado no existe en la base de datos");
+				return "redirect:/pendientesmipresamb";
+			}
+		}else {
+			flash.addFlashAttribute("error", "El ID del empleado no puede ser 0");
+			return "redirect:/pendientesmipresamb";
+		}				
+				
+		farMipres.setCuotaModeradora("0");
+		farMipres.setCopago("0");
+		model.put("titulo", utf8(this.tituloreportefacturacion));
+		model.put("farMipres", farMipres);
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("enlace10", enlace10);
+		return "reportefacturacionamb";
+	}
+	
+	// Este metodo me permite guardar el reporte de facturacion ambulatorio
+	@RequestMapping(value = "/reportefacturacionamb", method = RequestMethod.POST)
+	public String guardarReporteFacturacionAmb(@Valid FarMipres farMipres, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+		if(result.hasErrors()) {
+			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
+			model.addAttribute("farMipres", farMipres);			
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+				
+		if(farMipres.getNitEps().isEmpty()) {			
+			model.addAttribute("error", "El nit es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}		
+		if(cdispensacion.isEmpty()) {			
+			model.addAttribute("error", "La cantidad de procedimientos es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+		if(farMipres.getValorUnitario().isEmpty()) {			
+			model.addAttribute("error", "El valor unitario es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+		if(farMipres.getValorTotal().isEmpty()) {			
+			model.addAttribute("error", "El valor total es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+		if(farMipres.getCuotaModeradora().isEmpty()) {			
+			model.addAttribute("error", "La cuota moderadora es requerida");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+		if(farMipres.getCopago().isEmpty()) {			
+			model.addAttribute("error", "El copago es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionamb";
+		}
+				
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, cdispensacion);
+			
+		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
+							
+			String mensajeFlash = (farMipres.getId() != null) ? "El reporte de facturación fue creado correctamente "+"IdFacturacion: "+webServiceInfo.get("IdFacturacion") : "El reporte de facturación fue creado correctamente "+"IdFacturacion: "+webServiceInfo.get("IdFacturacion");
+			farMipres.setIdReporteFacturacionMipress(webServiceInfo.get("IdFacturacion"));
+			farMipres.setIdFacturacionMipress(webServiceInfo.get("Id"));
+			farMipres.setProcesadoFacturacion(true);
+			farMipres.setLoginUsrAct(principal.getName());
+			farMipres.setFechaAltaAct(new Date());
+			iFarMipresService.save(farMipres);
+			status.setComplete();
+			flash.addFlashAttribute("success", mensajeFlash);
+			return "redirect:pendientesmipresamb";
+		}else {
+			flash.addFlashAttribute("error", webServiceInfo.get("error"));
+			return "redirect:pendientesmipresamb";
+		}	
+	}	
+	
 
-
-	// Este metodo me permite cargar los datos para editar la entrega y guardar
-	@RequestMapping(value = "/entregaform")
-	public String crear(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+	// Este metodo me permite cargar los datos para editar la entrega hospitalario y guardar
+	@RequestMapping(value = "/entregahospform")
+	public String crearEntregaHosp(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
 		
 		FarMipres farMipres = null;
 		if(id > 0) {			
 			farMipres = iFarMipresService.findById(id);
 			if(farMipres == null) {
 				flash.addFlashAttribute("error", "El ID del reporte no existe en la base de datos");
-				return "redirect:/pendientesmipres";
+				return "redirect:/pendientesmipreshosp";
 			}
 		}else {
 			flash.addFlashAttribute("error", "El ID del reporte no puede ser 0");
-			return "redirect:/pendientesmipres";
+			return "redirect:/pendientesmipreshosp";
 		}
 				
 		model.put("titulo", utf8(this.tituloentrega));
@@ -401,12 +809,12 @@ public class FarMipresController {
 		model.put("tipodocumento", iComTipoDocumentoMipresService.findAll());
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("enlace10", enlace10);
-		return "entregaform";
+		return "entregahospform";
 	}	
 	
-	// Este metodo me permite guardar la entrega
-	@RequestMapping(value = "/entregaform", method = RequestMethod.POST)
-	public String guardarEntrega(@Valid FarMipres farMipres, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+	// Este metodo me permite guardar la entrega hospitalario
+	@RequestMapping(value = "/entregahospform", method = RequestMethod.POST)
+	public String guardarEntregaHosp(@Valid FarMipres farMipres, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloentrega));
 			model.addAttribute("farMipres", farMipres);
@@ -414,10 +822,10 @@ public class FarMipresController {
 			model.addAttribute("tipodocumento", iComTipoDocumentoMipresService.findAll());
 			model.addAttribute("farmacia", enlaceprincipalfarmacia);
 			model.addAttribute("enlace10", enlace10);
-			return "entregaform";
+			return "entregahospform";
 		}		
 		
-		Map<String, String> webServiceInfo =  guardarWebServiceMipresEntrega(farMipres);
+		Map<String, String> webServiceInfo =  guardarWebServiceMipresEntregaHosp(farMipres);
 		
 		
 		if(StringUtils.equals(webServiceInfo.get("success"), "200")) {
@@ -431,6 +839,7 @@ public class FarMipresController {
 			farMipres.setIdEntregaMipress(webServiceInfo.get("IdEntrega"));
 			farMipres.setProcesadoEntrega(true);
 			farMipres.setLoginUsrAlta(principal.getName());
+			farMipres.setFechaAltaAct(new Date());
 			if(genPacien == null) {
 				farMipres.setGenPacien(obtengoPaciente);
 			}else {
@@ -439,63 +848,63 @@ public class FarMipresController {
 			iFarMipresService.save(farMipres);
 			status.setComplete();
 			flash.addFlashAttribute("success", mensajeFlash);
-			return "redirect:pendientesmipres";
+			return "redirect:pendientesmipreshosp";
 		}else {
 			flash.addFlashAttribute("error", webServiceInfo.get("error"));
-			return "redirect:pendientesmipres";
+			return "redirect:pendientesmipreshosp";
 		}		
 		
 	}
 	
 	
-	// Este metodo me permite cargar los datos para editar el reporte de entrega y guardar
-	@RequestMapping(value = "/reporteentregaform")
-	public String crearReporteEntrega(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+	// Este metodo me permite cargar los datos para editar el reporte de entrega hospitalario y guardar
+	@RequestMapping(value = "/reporteentregahospform")
+	public String crearReporteEntregaHosp(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
 			
 		FarMipres farMipres = null;
 		if(id > 0) {			
 			farMipres = iFarMipresService.findById(id);
 			if(farMipres == null) {
 				flash.addFlashAttribute("error", "El ID del reporte no existe en la base de datos");
-				return "redirect:/pendientesmipres";
+				return "redirect:/pendientesmipreshosp";
 			}
 		}else {
 			flash.addFlashAttribute("error", "El ID del reporte no puede ser 0");
-			return "redirect:/pendientesmipres";
+			return "redirect:/pendientesmipreshosp";
 		}				
 			
 		model.put("titulo", utf8(this.tituloreporteentrega));
 		model.put("farMipres", farMipres);
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("enlace10", enlace10);
-		return "reporteentregaform";
+		return "reporteentregahospform";
 	}
 	
 	
-	// Este metodo me permite guardar el reporte de entrega
-	@RequestMapping(value = "/reporteentregaform", method = RequestMethod.POST)
+	// Este metodo me permite guardar el reporte de entrega hospitalario
+	@RequestMapping(value = "/reporteentregahospform", method = RequestMethod.POST)
 	public String guardarReporteEntrega(@Valid FarMipres farMipres, @RequestParam(value = "estadoentrega", required = false) Integer estadoentrega, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
 			model.addAttribute("farMipres", farMipres);			
 			model.addAttribute("farmacia", enlaceprincipalfarmacia);
 			model.addAttribute("enlace10", enlace10);
-			return "reporteentregaform";
+			return "reporteentregahospform";
 		}
 		
 		if(estadoentrega == null) {			
 			model.addAttribute("error", "El estado de entrega es requerido");
-			return "reporteentregaform";
+			return "reporteentregahospform";
 		}
 		
 		if(farMipres.getValorEntregado().isEmpty()) {			
 			model.addAttribute("error", "El valor es requerido");
-			return "reporteentregaform";
+			return "reporteentregahospform";
 		}
 		
 		if(farMipres.getNumeroFactura().isEmpty()) {			
 			model.addAttribute("error", "La factura es requerida");
-			return "reporteentregaform";
+			return "reporteentregahospform";
 		}
 		
 		
@@ -511,27 +920,27 @@ public class FarMipresController {
 					iFarMipresService.save(farMipres);
 					status.setComplete();
 					flash.addFlashAttribute("success", mensajeFlash);
-					return "redirect:pendientesmipres";
+					return "redirect:pendientesmipreshosp";
 				}else {
 					flash.addFlashAttribute("error", webServiceInfo.get("error"));
-					return "redirect:pendientesmipres";
+					return "redirect:pendientesmipreshosp";
 				}	
 	}
 	
-	// Este metodo me permite cargar los datos para editar el reporte de facturacion
-	@RequestMapping(value = "/reportefacturacion")
-	public String crearReporteFacturacion(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
+	// Este metodo me permite cargar los datos para editar el reporte de facturacion hospitalario
+	@RequestMapping(value = "/reportefacturacionhosp")
+	public String crearReporteFacturacionHosp(@RequestParam(value = "id", required = false) Long id, Map<String, Object> model, RedirectAttributes flash, Principal principal) throws ParseException {
 				
 		FarMipres farMipres = null;
 		if(id > 0) {			
 			farMipres = iFarMipresService.findById(id);
 			if(farMipres == null) {
 				flash.addFlashAttribute("error", "El ID del empleado no existe en la base de datos");
-				return "redirect:/pendientesmipres";
+				return "redirect:/pendientesmipreshosp";
 			}
 		}else {
 			flash.addFlashAttribute("error", "El ID del empleado no puede ser 0");
-			return "redirect:/pendientesmipres";
+			return "redirect:/pendientesmipreshosp";
 		}				
 			
 		farMipres.setCuotaModeradora("0");
@@ -540,43 +949,55 @@ public class FarMipresController {
 		model.put("farMipres", farMipres);
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("enlace10", enlace10);
-		return "reportefacturacion";
+		return "reportefacturacionhosp";
 	}
 	
-	// Este metodo me permite guardar el reporte de facturacion
-	@RequestMapping(value = "/reportefacturacion", method = RequestMethod.POST)
-	public String guardarReporteFacturacion(@Valid FarMipres farMipres, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
+	// Este metodo me permite guardar el reporte de facturacion hospitalario
+	@RequestMapping(value = "/reportefacturacionhosp", method = RequestMethod.POST)
+	public String guardarReporteFacturacionHosp(@Valid FarMipres farMipres, @RequestParam(value = "cdispensacion", required = false) String cdispensacion, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status, Principal principal) throws Exception {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", utf8(this.tituloreporteentrega));
 			model.addAttribute("farMipres", farMipres);			
 			model.addAttribute("farmacia", enlaceprincipalfarmacia);
 			model.addAttribute("enlace10", enlace10);
-			return "reporteentregaform";
+			return "reportefacturacionhosp";
 		}
 			
 		if(farMipres.getNitEps().isEmpty()) {			
 			model.addAttribute("error", "El nit es requerido");
-			return "reportefacturacion";
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}		
 		if(cdispensacion.isEmpty()) {			
-			model.addAttribute("error", "La cantidad en unidades minimas dispensación es requerido");
-			return "reportefacturacion";
+			model.addAttribute("error", "La cantidad de procedimientos es requerido");
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}
 		if(farMipres.getValorUnitario().isEmpty()) {			
 			model.addAttribute("error", "El valor unitario es requerido");
-			return "reportefacturacion";
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}
 		if(farMipres.getValorTotal().isEmpty()) {			
 			model.addAttribute("error", "El valor total es requerido");
-			return "reportefacturacion";
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}
 		if(farMipres.getCuotaModeradora().isEmpty()) {			
 			model.addAttribute("error", "La cuota moderadora es requerida");
-			return "reportefacturacion";
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}
 		if(farMipres.getCopago().isEmpty()) {			
 			model.addAttribute("error", "El copago es requerido");
-			return "reportefacturacion";
+			model.addAttribute("farmacia", enlaceprincipalfarmacia);
+			model.addAttribute("enlace10", enlace10);
+			return "reportefacturacionhosp";
 		}
 			
 		Map<String, String> webServiceInfo =  guardarWebServiceMipresReporteFacturacion(farMipres, cdispensacion);
@@ -592,47 +1013,47 @@ public class FarMipresController {
 					iFarMipresService.save(farMipres);
 					status.setComplete();
 					flash.addFlashAttribute("success", mensajeFlash);
-					return "redirect:pendientesmipres";
+					return "redirect:pendientesmipreshosp";
 				}else {
 					flash.addFlashAttribute("error", webServiceInfo.get("error"));
-					return "redirect:pendientesmipres";
+					return "redirect:pendientesmipreshosp";
 				}	
 	}
 	
 
-	// Este metodo me permite visualizar o cargar el formulario para sincronizar las prescripciones por fecha
-	@GetMapping("/sincronizaprescripcionform")
-	public String crearSincronizacion(Map<String, Object> model, RedirectAttributes flash) {		
+	// Este metodo me permite visualizar o cargar el formulario para sincronizar las prescripciones hospitalario
+	@GetMapping("/sincronizaprescripcionhospform")
+	public String crearSincronizacionHosp(Map<String, Object> model, RedirectAttributes flash) {		
 		FarMipres farMipres =  new FarMipres();
 		model.put("titulo", utf8(this.titulosincroniza));
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("farMipres", farMipres);		
 		model.put("enlace10", enlace10);		
-		return "sincronizaprescripcionform";
+		return "sincronizaprescripcionhospform";
 	}
 	
 	
-	// Este metodo me permite guardar e sincronizar las prescripciones por fecha que no estan en solution obtenidas del web service mipres
+	// Este metodo me permite guardar e sincronizar las prescripciones hospitalario por fecha que no estan en solution obtenidas del web service mipres
 	@RequestMapping(value = "/sincronizaprescripcionporfecha")
-	public String guardarSincronizacionPorFecha(@RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
+	public String guardarSincronizacionPorFechaHosp(@RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
 		if(!fechaInicial.isEmpty() && !fechaFinal.isEmpty()) {
 			sincronizoPrescripcion(fechaInicial, fechaFinal, principal);
 		}else {
 			flash.addFlashAttribute("error", "Las fechas son requeridas");
-			return "redirect:sincronizaprescripcionform";
+			return "redirect:sincronizaprescripcionhospform";
 		}				
 		model.put("titulo", utf8(this.titulosincroniza));				
 		model.put("enlace10", enlace10);		
 		flash.addFlashAttribute("success", "Sincronizacion correcta");		
 		status.setComplete();
-		return "redirect:sincronizaprescripcionform";
+		return "redirect:sincronizaprescripcionhospform";
 	}
 	
-	// Este metodo me permite guardar e sincronizar la prescripcion por numero, que no estan en solution obtenidas del web service mipres
-	@RequestMapping(value = "/sincronizaprescripcionpornumero")
-	public String guardarSincronizacionPorNumeroDePrescripcion(@RequestParam(value = "numeroPrescripcion", required = false) String numeroPrescripcion, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
+	// Este metodo me permite guardar e sincronizar la prescripcion hospitalario por numero, que no estan en solution obtenidas del web service mipres
+	@RequestMapping(value = "/sincronizaprescripcionhosppornumero")
+	public String guardarSincronizacionPorNumeroDePrescripcionHosp(@RequestParam(value = "numeroPrescripcion", required = false) String numeroPrescripcion, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
 		if(!numeroPrescripcion.isEmpty() ) {
-			String mensaje = sincronizoPrescripcion(numeroPrescripcion, principal, flash);
+			String mensaje = sincronizoPrescripcionHosp(numeroPrescripcion, principal, flash);
 			if(mensaje == "success") {
 				flash.addFlashAttribute("success", "Sincronizacion correcta");
 			}else if(mensaje == "error") {
@@ -643,13 +1064,47 @@ public class FarMipresController {
 			
 		}else {
 			flash.addFlashAttribute("error", "El número de prescipción es requerida");
-			return "redirect:sincronizaprescripcionform";
+			return "redirect:sincronizaprescripcionhospform";
 		}				
 		model.put("titulo", utf8(this.titulosincroniza));				
 		model.put("enlace10", enlace10);			
 		status.setComplete();
-		return "redirect:sincronizaprescripcionform";
+		return "redirect:sincronizaprescripcionhospform";
 	}
+	
+	// Este metodo me permite visualizar o cargar el formulario para sincronizar las prescripciones ambulatoria 
+	@GetMapping("/sincronizaprescripcionambform")
+	public String crearSincronizacion(Map<String, Object> model, RedirectAttributes flash) {		
+		FarMipres farMipres =  new FarMipres();
+		model.put("titulo", utf8(this.titulosincroniza));
+		model.put("farmacia", enlaceprincipalfarmacia);
+		model.put("farMipres", farMipres);		
+		model.put("enlace10", enlace10);		
+		return "sincronizaprescripcionambform";
+	}
+	
+	// Este metodo me permite guardar e sincronizar la prescripcion ambulatorio por numero, que no estan en solution obtenidas del web service mipres
+	@RequestMapping(value = "/sincronizaprescripcionambpornumero")
+	public String guardarSincronizacionPorNumeroDePrescripcionAmb(@RequestParam(value = "numeroPrescripcion", required = false) String numeroPrescripcion, Map<String, Object> model, RedirectAttributes flash, SessionStatus status, Principal principal) throws ParseException, IOException {
+		if(!numeroPrescripcion.isEmpty() ) {
+			String mensaje = sincronizoPrescripcionAmb(numeroPrescripcion, principal, flash);
+			if(mensaje == "success") {
+				flash.addFlashAttribute("success", "Sincronizacion correcta");
+			}else if(mensaje == "error") {
+					flash.addFlashAttribute("error", "Prescripción no encontrada");
+			}else {
+				flash.addFlashAttribute("error", "Prescripción ya existe");
+			}
+				
+		}else {
+			flash.addFlashAttribute("error", "El número de prescipción es requerida");
+			return "redirect:sincronizaprescripcionhospform";
+		}				
+		model.put("titulo", utf8(this.titulosincroniza));				
+		model.put("enlace10", enlace10);			
+		status.setComplete();
+		return "redirect:sincronizaprescripcionambform";
+		}
 	
 	
 	// Este metodo me permite visualizar o cargar el formulario para generar el excel para rips
@@ -709,7 +1164,7 @@ public class FarMipresController {
 	}
 	
 	// Este metodo me permite visualizar o cargar el formulario para anular el reporte de facturacion, el reporte de entrega y la entrega
-	@GetMapping("/anulaprescripcionform")
+	@GetMapping("/anulaprescripcionhospform")
 	public String anularSincronizacion(Map<String, Object> model, RedirectAttributes flash) {		
 		
 		FarMipres farMipres =  new FarMipres();		
@@ -720,7 +1175,7 @@ public class FarMipresController {
 		model.put("enlace10", enlace10);
 		model.put("farmacia", enlaceprincipalfarmacia);
 		model.put("listado", listado);		
-		return "anulaprescripcionform";
+		return "anulaprescripcionhospform";
 	}
 	
 	// Este metodo me permite consultar cual proceso se puede anular para la prescripcion por ID
@@ -856,8 +1311,87 @@ public class FarMipresController {
 	    }
 	}
 	
-	//Se usa para hacer put en el web service de mipres ENTREGA
-	private Map<String, String> guardarWebServiceMipresEntrega(FarMipres farMipres) throws Exception {
+	
+	//Se usa para hacer put en el web service de mipres PROGRAMACION
+	private Map<String, String> guardarWebServiceMipresProgramacion(FarMipres farMipres) throws Exception {
+			
+		Map<String, String> map = new HashMap<>();
+			
+		//obtengo los datos del token secundario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L); 
+			
+		//genero la url para consultar
+		String urlEncadenada = MetodoPutProgramacion+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario();
+				
+		//convierto la fecha de entrega en string y formato YYYY-MM-DD
+		String fechaMaxEntrega = formatoFecha(farMipres.getFechaMaxEntrega());		
+			
+	    //Especificamos la URL y configuro el objeto CloseableHttpClient
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+			
+		//Se crea una solicitud PUT (si es post HttpPost y si es get HttpGet) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpPut httpPut = new HttpPut(urlEncadenada);
+	    httpPut.setHeader("Accept", "application/json");
+	    httpPut.setHeader("Content-type", "application/json");
+	        
+	    //creo el json que sera pasado al objeto StringEntity
+	    JSONObject parametros = new JSONObject();
+	    parametros.put("ID", farMipres.getIdDireccionamientoTrazaMipress());
+	    parametros.put("FecMaxEnt", fechaMaxEntrega);
+	    parametros.put("TipoIDSedeProv", "NI"); //TIPO DE IDENTIFICACION PROVEEDOR 
+	    parametros.put("NoIDSedeProv", "891580002"); //NUMERO DE IDENTIFICACION PROVEEDOR
+	    parametros.put("CodSedeProv", "190010003101"); //CODIGO HABILITACION
+	    parametros.put("CodSerTecAEntregar", farMipres.getCodigoServicio());
+	    parametros.put("CantTotAEntregar", farMipres.getCantidadEntregada());	    
+	   
+			
+	    //Proporciono la solicitud json en el objeto StringEntity y asígnela al objeto puesto.
+	    StringEntity stringEntity = new StringEntity(parametros.toString());
+	    stringEntity.setContentEncoding("UTF-8");        
+	    httpPut.setEntity(stringEntity);     
+	 
+	    //Envio la solicitud usando HttpPut -> Método de ejecución PUT
+	    HttpResponse response = httpclient.execute(httpPut);    
+	        
+	        
+	    //creo un objeto HttpEntity para obtener el resultado en String de la peticion
+	    HttpEntity entity = response.getEntity();
+	    String content = EntityUtils.toString(entity);
+	        
+	    //System.out.println(content);        
+	        
+	    //convierto la respuesta de la peticion String a Json para mensajes personalizados
+	    JSONObject jsonContent = new JSONObject();
+	    if(response.getStatusLine().getStatusCode() == 200) {
+	       	jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));//busca "[" y "]" y los reemplaza por espacios en blanco  
+	    }else {
+	       	jsonContent = new JSONObject(content); 
+	    }
+	        
+	    //System.out.println(jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+	    //System.out.println(jsonContent.get("Message")); 
+	         
+	    //verificamos que la respuesta o estado sea 200
+	    if (response.getStatusLine().getStatusCode() == 200) {        	
+	    	map.put("success", Integer.toString(response.getStatusLine().getStatusCode()));
+	        map.put("Id", jsonContent.get("Id").toString());
+	        map.put("IdProgramacion", jsonContent.get("IdProgramacion").toString());
+	        return map;
+	        	
+	    }else if (response.getStatusLine().getStatusCode() == 422) {        	
+	    	map.put("error", jsonContent.get("Message").toString() +",  "+ jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+	        return map;
+	    }else {
+	    	map.put("error", jsonContent.get("Message").toString());
+	        return map;
+	    }
+	}
+	
+	
+	
+	
+	//Se usa para hacer put en el web service de mipres ENTREGA HOSPITALARIO
+	private Map<String, String> guardarWebServiceMipresEntregaHosp(FarMipres farMipres) throws Exception {
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -934,6 +1468,85 @@ public class FarMipresController {
         	return map;
         }
     }
+	
+	
+	//Se usa para hacer put en el web service de mipres ENTREGA AMBULATORIO
+	private Map<String, String> guardarWebServiceMipresEntregaAmb(FarMipres farMipres) throws Exception {
+			
+		Map<String, String> map = new HashMap<>();
+			
+		//obtengo los datos del token secundario guardados en solution
+		ComTokenMipres comTokenMipres = iComTokenMipresService.findById(1L); 
+			
+		//genero la url para consultar
+		String urlEncadenada = MetodoPutEntregaAmbulatorio+comTokenMipres.getNit()+'/'+comTokenMipres.getTokenSecundario();
+					
+		//convierto la fecha de entrega en string y formato YYYY-MM-DD
+		String fechaEntrega = formatoFecha(farMipres.getFechaEntrega());		
+			
+		//Especificamos la URL y configuro el objeto CloseableHttpClient
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+			
+		//Se crea una solicitud PUT (si es post HttpPost y si es get HttpGet) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpPut httpPut = new HttpPut(urlEncadenada);
+	    httpPut.setHeader("Accept", "application/json");
+	    httpPut.setHeader("Content-type", "application/json");
+	        
+	    //creo el json que sera pasado al objeto StringEntity
+	    JSONObject parametros = new JSONObject();
+	    parametros.put("ID", farMipres.getIdDireccionamientoTrazaMipress());
+	    parametros.put("CodSerTecEntregado", farMipres.getCodigoServicio()); 
+	    parametros.put("CantTotEntregada", farMipres.getCantidadEntregada());
+	    parametros.put("EntTotal", farMipres.getEntregaTotal());
+	    parametros.put("CausaNoEntrega", farMipres.getCausaNoEntrega());
+	    parametros.put("FecEntrega", fechaEntrega);
+	    parametros.put("NoLote", farMipres.getLoteEntregado());
+	    parametros.put("TipoIDRecibe", farMipres.getComTipoDocumentoMipres().getTipo());
+	    parametros.put("NoIDRecibe", farMipres.getGenPacien().getPacNumDoc());    
+	          
+			
+	    //Proporciono la solicitud json en el objeto StringEntity y asígnela al objeto puesto.
+	    StringEntity stringEntity = new StringEntity(parametros.toString());
+	    stringEntity.setContentEncoding("UTF-8");        
+	    httpPut.setEntity(stringEntity);     
+	 
+	    //Envio la solicitud usando HttpPut -> Método de ejecución PUT
+	    HttpResponse response = httpclient.execute(httpPut);    
+	        
+	        
+	    //creo un objeto HttpEntity para obtener el resultado en String de la peticion
+	    HttpEntity entity = response.getEntity();
+	    String content = EntityUtils.toString(entity);
+	        
+	    //System.out.println(content);        
+	        
+	    //convierto la respuesta de la peticion String a Json para mensajes personalizados
+	    JSONObject jsonContent = new JSONObject();
+	    if(response.getStatusLine().getStatusCode() == 200) {
+	       	jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));//busca "[" y "]" y los reemplaza por espacios en blanco  
+	    }else {
+	       	jsonContent = new JSONObject(content); 
+	    }
+	        
+	    //System.out.println(jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+	    //System.out.println(jsonContent.get("Message")); 
+	         
+	    //verificamos que la respuesta o estado sea 200
+	    if (response.getStatusLine().getStatusCode() == 200) {        	
+	    	map.put("success", Integer.toString(response.getStatusLine().getStatusCode()));
+	        map.put("Id", jsonContent.get("Id").toString());
+	        map.put("IdEntrega", jsonContent.get("IdEntrega").toString());
+	        return map;
+	        	
+	    }else if (response.getStatusLine().getStatusCode() == 422) {        	
+	    	map.put("error", jsonContent.get("Message").toString() +",  "+ jsonContent.get("Errors").toString().replaceAll("[^ a-zA-Záéíóú]", ""));
+	        return map;
+	    }else {
+	       	map.put("error", jsonContent.get("Message").toString());
+	       	return map;
+	    }
+	}
+	
 	
 	//Se usa para hacer put en el web service de mipres REPORTE ENTREGA
 	private Map<String, String> guardarWebServiceMipresReporteEntrega(FarMipres farMipres, Integer estadoentrega) throws IOException {
@@ -1200,6 +1813,9 @@ public class FarMipresController {
                     	//buscamos la tecnologia para guardar                	  
                     	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString());  
                     	
+                    	//buscamos el ambito para guardar                	  
+                    	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
+                    	
                     	//validamos si el medicamento es vacio
                     	if(map.containsKey("nombreMedicamento0")) {
                     		farMipres.setNombreMedicamento(map.get("nombreMedicamento0").toString());
@@ -1216,6 +1832,7 @@ public class FarMipresController {
                         farMipres.setFechaEntrega(fechaEntregaCustomDate);
                         farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
                         farMipres.setComTipoTecnologia(comTipoTecnologia);
+                        farMipres.setComAmbito(comAmbito);
                         farMipres.setCodigoServicio("SIN INFORMACION");
                         farMipres.setNumeroEntrega(1);
                         farMipres.setEntregaTotal(1);
@@ -1229,11 +1846,11 @@ public class FarMipresController {
             	}else {
             		if(map.size() == 6 || map.size() == 8) {
             			int hasta = 2;
-            			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+            			procesarGuardarHosp(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion);
             		}
             		if(map.size() == 9 || map.size() == 12) {
             			int hasta = 3;
-            			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+            			procesarGuardarHosp(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion);
             		}
             	}
             }	
@@ -1243,8 +1860,8 @@ public class FarMipresController {
 	}	
 
 	//Se usa para gurdar la prescripcion en la la base de solution
-	private void procesarGuardar(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
-			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps) {
+	private void procesarGuardarHosp(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
+			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps, Integer codigoAmbitoAtencion) {
 		for(int z=0; z<hasta; z++) {
 			
 			String cantidadEntregada = map.get("cantidadEntregada"+z).toString();                    	
@@ -1270,7 +1887,10 @@ public class FarMipresController {
         	}                    	
         	
         	//buscamos la tecnologia para guardar                	  
-        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia);  
+        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia); 
+        	
+        	//buscamos el ambito para guardar                	  
+        	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
         	
         	//validamos si el medicamento es vacio
         	if(map.containsKey("nombreMedicamento"+z)) {
@@ -1288,6 +1908,7 @@ public class FarMipresController {
             farMipres.setFechaEntrega(fechaEntregaCustomDate);
             farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia"+z).toString()));                        
             farMipres.setComTipoTecnologia(comTipoTecnologia);
+            farMipres.setComAmbito(comAmbito);
             farMipres.setCodigoServicio("SIN INFORMACION");
             farMipres.setNumeroEntrega(1);
             farMipres.setEntregaTotal(0);
@@ -1300,8 +1921,75 @@ public class FarMipresController {
 			}		
 	}
 	
-	//Se usa para hacer get en el web service de mipres y sincronizar por numero de prescripcion
-	private String sincronizoPrescripcion(String numeroPrescripcion, Principal principal, RedirectAttributes flash) throws ClientProtocolException, IOException, ParseException {
+	
+	//Se usa para gurdar la prescripcion en la la base de solution
+	private void procesarGuardarAmb(int hasta, Map<String, Object> map, String numDocumento, String prescripcion, String tipoDocumento, String primerNombre, String segundoNombre, String primerApellido,
+			String segundoApellido, Date fechaEntregaCustomDate, String usuario, String codEps, Integer codigoAmbitoAtencion, Map<String, Object> direccionamiento) throws ParseException {
+	for(int z=0; z<hasta; z++) {
+				
+			String cantidadEntregada = map.get("cantidadEntregada"+z).toString();                    	
+	       	String tipoTecnologia = map.get("tipoTecnologia"+z).toString();
+	       	Integer consecutivoTecnologia = Integer.parseInt(map.get("consecutivoTecnologia"+z).toString());
+				
+			FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(numDocumento, prescripcion, cantidadEntregada, consecutivoTecnologia);
+	            
+	        if(buscarSolution == null) {                
+				
+				FarMipres farMipres = new FarMipres();
+	            
+	        	//buscamos el tipo documento paciente para guardar
+	        	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
+	        	
+	        	//buscamos el numero de documento del paciente para guardar
+	        	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
+	        	if(genPacien == null) {
+	        		GenPacien obtengoPaciente =  SicronizarPacientePorDocumento(tipoDocumento, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido);
+	        		farMipres.setGenPacien(obtengoPaciente);
+	        	}  else {
+	        		farMipres.setGenPacien(genPacien);
+	        	}                    	
+	        	
+	        	//buscamos la tecnologia para guardar                	  
+	        	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(tipoTecnologia); 
+	        	
+	        	//buscamos el ambito para guardar                	  
+	        	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
+	        	
+	        	//validamos si el medicamento es vacio
+	        	if(map.containsKey("nombreMedicamento"+z)) {
+	        		farMipres.setNombreMedicamento(map.get("nombreMedicamento"+z).toString());
+	        	}else {
+	        		farMipres.setNombreMedicamento("SIN INFORMACION");
+	        	}
+	        	
+	        	farMipres.setNumeroPrescripcion(prescripcion);
+	            farMipres.setCantidadEntregada(cantidadEntregada);
+	            farMipres.setProcesadoProgramacion(false);
+	            farMipres.setProcesadoEntrega(false);
+	            farMipres.setProcesadoReporteEntrega(false);
+	            farMipres.setProcesadoFacturacion(false);                    
+	            farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
+	            farMipres.setFechaEntrega(fechaEntregaCustomDate);
+	            farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia"+z).toString()));                        
+	            farMipres.setComTipoTecnologia(comTipoTecnologia);
+	            farMipres.setComAmbito(comAmbito);
+	            farMipres.setCodigoServicio("SIN INFORMACION");
+	            farMipres.setNumeroEntrega(1);
+	            farMipres.setEntregaTotal(0);
+	            farMipres.setCausaNoEntrega(0);
+	            farMipres.setLoginUsrAlta(usuario);
+	            farMipres.setCodEps(codEps);	            
+	            farMipres.setIdDireccionamientoTrazaMipress(direccionamiento.get("ID").toString());
+                farMipres.setIdDireccionamientoMipress(direccionamiento.get("IDDireccionamiento").toString());
+                farMipres.setFechaMaxEntrega(convertirFechaParametro(direccionamiento.get("FecMaxEnt").toString()));
+	        	iFarMipresService.save(farMipres);
+	        	
+	           	}
+		}		
+	}
+	
+	//Se usa para hacer get en el web service de mipres y sincronizar por numero de prescripcion hospitalizacion
+	private String sincronizoPrescripcionHosp(String numeroPrescripcion, Principal principal, RedirectAttributes flash) throws ClientProtocolException, IOException, ParseException {
 		
 		String success = "success"; 
 		String error = "error";
@@ -1411,6 +2099,9 @@ public class FarMipresController {
                 	//buscamos el tipo documento paciente para guardar
                 	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
                 	
+                	//buscamos el ambito para guardar                	  
+                	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
+                	
                 	//buscamos el numero de documento del paciente para guardar
                 	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
                 	if(genPacien == null) {
@@ -1439,6 +2130,7 @@ public class FarMipresController {
                     farMipres.setFechaEntrega(fechaEntregaCustomDate);
                     farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
                     farMipres.setComTipoTecnologia(comTipoTecnologia);
+                    farMipres.setComAmbito(comAmbito);
                     farMipres.setCodigoServicio("SIN INFORMACION");
                     farMipres.setNumeroEntrega(1);
                     farMipres.setEntregaTotal(1);
@@ -1455,12 +2147,12 @@ public class FarMipresController {
         	}else {
         		if(map.size() == 6 || map.size() == 8) {
         			int hasta = 2;
-        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        			procesarGuardarHosp(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion);
         			return success;	
         		}
         		if(map.size() == 9 || map.size() == 12) {
         			int hasta = 3;
-        			procesarGuardar(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps);
+        			procesarGuardarHosp(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion);
         			return success;	
         		}
         	}
@@ -1476,6 +2168,239 @@ public class FarMipresController {
         return error;
 	}
 	
+	
+	//Se usa para hacer get en el web service de mipres y sincronizar por numero de prescripcion ambulatorio
+	private String sincronizoPrescripcionAmb(String numeroPrescripcion, Principal principal, RedirectAttributes flash) throws ClientProtocolException, IOException, ParseException {
+			
+		String success = "success"; 
+		String error = "error";
+		String existe = "existe";		
+			
+		//Me sirve para guardar los tipos de tecnologias
+		Map<String, Object> map = new HashMap<>();		
+		
+		//obtengo los datos del token primario guardados en solution
+		ComTokenMipres comTokenMipresPrimario = iComTokenMipresService.findById(2L);
+		
+		//obtengo los datos del token secundario guardados en solution
+		ComTokenMipres comTokenMipresSecundario = iComTokenMipresService.findById(1L);
+		
+		Map<String, Object> direccionamiento = obtenerDireccionamiento(numeroPrescripcion, comTokenMipresSecundario.getNit(), comTokenMipresSecundario.getTokenSecundario());
+		
+		//map.get("tipoTecnologia0").toString()
+		if(direccionamiento.get("ID") != null) {
+			//genero la url para consultar
+			String urlEncadenada = MetodoGetConsultaFechaNumeroPrescripcion+comTokenMipresPrimario.getNit()+'/'+comTokenMipresPrimario.getTokenPrincipal()+'/'+numeroPrescripcion;		
+				
+			//Especificamos la URL y configuro el objeto HttpClient			
+			HttpClient httpclient = HttpClientBuilder.create().build();			
+			HttpResponse response = null;
+				
+			//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+			HttpGet httpGet = new HttpGet(urlEncadenada);			
+			httpGet.setHeader("Accept", "application/json");
+			httpGet.setHeader("Content-type", "application/json");			
+				
+			response = httpclient.execute(httpGet);		
+			
+			//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
+		    String content = EntityUtils.toString(response.getEntity());        
+		    JSONArray arregloJSON = new JSONArray(content);	        
+	        //recorro el arreglo para tranformarlo en un objeto JSON
+	        for (int i = 0; i < arregloJSON.length(); i++) {
+	        	//jsonContent = new JSONObject(content.replaceAll("\\[", "").replaceAll("\\]", ""));
+	        	JSONObject objetoJSON = arregloJSON.getJSONObject(i);
+	        	Integer codigoAmbitoAtencion = objetoJSON.getJSONObject("prescripcion").getInt("CodAmbAte");
+	        	if(codigoAmbitoAtencion == 11 || codigoAmbitoAtencion == 12 || codigoAmbitoAtencion == 21) {            	
+		        	
+	        		String prescripcion = objetoJSON.getJSONObject("prescripcion").getString("NoPrescripcion");            	
+		        	String tipoDocumento = objetoJSON.getJSONObject("prescripcion").getString("TipoIDPaciente");
+		        	String numDocumento = objetoJSON.getJSONObject("prescripcion").getString("NroIDPaciente");
+		        	String primerNombre = objetoJSON.getJSONObject("prescripcion").getString("PNPaciente");
+		        	String segundoNombre = objetoJSON.getJSONObject("prescripcion").getString("SNPaciente");
+		        	String primerApellido = objetoJSON.getJSONObject("prescripcion").getString("PAPaciente");
+		        	String segundoApellido = objetoJSON.getJSONObject("prescripcion").getString("SAPaciente");
+		        	String codEps = objetoJSON.getJSONObject("prescripcion").getString("CodEPS");
+		        	String fechaEntrega = objetoJSON.getJSONObject("prescripcion").getString("FPrescripcion");		        	
+		        	String fechaEntregaCustomString = fechaEntrega.replace("T00:00:00", "");
+		        	Date fechaEntregaCustomDate = convertirFechaParametro(fechaEntregaCustomString);        	
+		        	            	
+		        	//limpiamos el Map
+		        	map.clear();
+		        	
+		        	//contamos los medicamentos dados
+		        	JSONArray arrayMedicamentos = objetoJSON.getJSONArray("medicamentos");            	
+		        	if(arrayMedicamentos.length() >= 1) {
+		            	
+		        		for(int m=0; m < arrayMedicamentos.length(); m++) {          			
+		        			map.put("cantidadEntregada"+m, arrayMedicamentos.getJSONObject(m).getString("CantTotalF"));
+		        			map.put("nombreMedicamento"+m, arrayMedicamentos.getJSONObject(m).getString("DescMedPrinAct"));
+		                    map.put("tipoTecnologia"+m, "M");	
+		                    map.put("consecutivoTecnologia"+m, arrayMedicamentos.getJSONObject(m).getInt("ConOrden"));
+		            	}
+		        	} 
+		        	
+		        	//contamos los procedimientos dados
+		        	JSONArray arrayProcedimientos = objetoJSON.getJSONArray("procedimientos");            	
+		        	if(arrayProcedimientos.length() >= 1) {
+		        		
+		        		for(int p=0; p < arrayProcedimientos.length(); p++) {           			
+		        			map.put("cantidadEntregada"+p, arrayProcedimientos.getJSONObject(p).getString("CantTotal"));
+		                    map.put("tipoTecnologia"+p, "P");
+		                    map.put("consecutivoTecnologia"+p, arrayProcedimientos.getJSONObject(p).getInt("ConOrden"));
+		            	}
+		        	}
+		        	
+		        	//contamos los productos nutricionales dados
+		        	JSONArray arrayProductosNutricionales = objetoJSON.getJSONArray("productosnutricionales");            	
+		        	if(arrayProductosNutricionales.length() >= 1) {
+		        		
+		        		for(int n=0; n < arrayProductosNutricionales.length(); n++) {            			
+		        			map.put("cantidadEntregada"+n, arrayProductosNutricionales.getJSONObject(n).getString("CantTotalF"));
+		                    map.put("tipoTecnologia"+n, "N");
+		                    map.put("consecutivoTecnologia"+n, arrayProductosNutricionales.getJSONObject(n).getInt("ConOrden"));
+		            	}           		
+		        	}
+		        	
+		        	//contamos los servicios complementarios dados
+		        	JSONArray arrayServicioComplementario = objetoJSON.getJSONArray("serviciosComplementarios");            	
+		        	if(arrayServicioComplementario.length() >= 1) {
+		        		
+		        		for(int c=0; c < arrayServicioComplementario.length(); c++) {           			
+		        			map.put("cantidadEntregada"+c, arrayServicioComplementario.getJSONObject(c).getString("CantTotal"));
+		                    map.put("tipoTecnologia"+c, "S");
+		                    map.put("consecutivoTecnologia"+c, arrayServicioComplementario.getJSONObject(c).getInt("ConOrden"));
+		            	}          		
+		        	}
+		        	
+		        	//este if es cuando es solo una sola tecnologia
+		        	if(map.size() == 3 || map.size() == 4) {
+		        		
+		        		FarMipres buscarSolution = iFarMipresService.findByDocumentoPrescripcionConsecutivoTecnologiaCantidad(numDocumento, prescripcion, map.get("cantidadEntregada0").toString(), (Integer) map.get("consecutivoTecnologia0"));
+		                
+		                if(buscarSolution == null) {         	
+		                	
+		                	FarMipres farMipres = new FarMipres();
+		                    
+		                	//buscamos el tipo documento paciente para guardar
+		                	ComTipoDocumentoMipres comTipoDocumentoMipres = iComTipoDocumentoMipresService.tipoDocumento(tipoDocumento);
+		                	
+		                	//buscamos el ambito para guardar                	  
+		                	ComAmbito comAmbito = iComAmbitoService.ambitoCodigo(codigoAmbitoAtencion.toString());
+		                	
+		                	//buscamos el numero de documento del paciente para guardar
+		                	GenPacien genPacien = iGenPacienService.findByNumberDoc(numDocumento);
+		                	if(genPacien == null) {
+		                		GenPacien obtengoPaciente =  SicronizarPacientePorDocumento(tipoDocumento, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido);
+		                		farMipres.setGenPacien(obtengoPaciente);
+		                	}  else {
+		                		farMipres.setGenPacien(genPacien);
+		                	}
+		                	
+		                	//buscamos la tecnologia para guardar                	  
+		                	ComTipoTecnologia comTipoTecnologia = iComTipoTecnologiaService.tipoTecnologia(map.get("tipoTecnologia0").toString());  
+		                	
+		                	//validamos si el medicamento es vacio
+		                	if(map.containsKey("nombreMedicamento0")) {
+		                		farMipres.setNombreMedicamento(map.get("nombreMedicamento0").toString());
+		                	}else {
+		                		farMipres.setNombreMedicamento("SIN INFORMACION");
+		                	}
+		                	
+		                	farMipres.setNumeroPrescripcion(prescripcion);
+		                    farMipres.setCantidadEntregada(map.get("cantidadEntregada0").toString());
+		                    farMipres.setProcesadoProgramacion(false);
+		                    farMipres.setProcesadoEntrega(false);
+		                    farMipres.setProcesadoReporteEntrega(false);
+		                    farMipres.setProcesadoFacturacion(false);                    
+		                    farMipres.setComTipoDocumentoMipres(comTipoDocumentoMipres);                    
+		                    farMipres.setFechaEntrega(fechaEntregaCustomDate);
+		                    farMipres.setConsecutivoTecnologia(Integer.parseInt(map.get("consecutivoTecnologia0").toString()));
+		                    farMipres.setComTipoTecnologia(comTipoTecnologia);
+		                    farMipres.setComAmbito(comAmbito);
+		                    farMipres.setCodigoServicio("SIN INFORMACION");
+		                    farMipres.setNumeroEntrega(1);
+		                    farMipres.setEntregaTotal(1);
+		                    farMipres.setCausaNoEntrega(0);
+		                    farMipres.setLoginUsrAlta(principal.getName());
+		                    farMipres.setCodEps(codEps);		                    
+		                    farMipres.setIdDireccionamientoTrazaMipress(direccionamiento.get("ID").toString());
+		                    farMipres.setIdDireccionamientoMipress(direccionamiento.get("IDDireccionamiento").toString());
+		                    farMipres.setFechaMaxEntrega(convertirFechaParametro(direccionamiento.get("FecMaxEnt").toString()));
+		                	iFarMipresService.save(farMipres);
+		                	return success;                		
+		                }
+		                else {
+		                	return existe;
+		                }
+		            //este else es cuando son varias tecnologias
+		        	}else {
+		        		if(map.size() == 6 || map.size() == 8) {
+		        			int hasta = 2;
+		        			procesarGuardarAmb(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion, direccionamiento);
+		        			return success;	
+		        		}
+		        		if(map.size() == 9 || map.size() == 12) {
+		        			int hasta = 3;
+		        			procesarGuardarAmb(hasta, map, numDocumento, prescripcion, tipoDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaEntregaCustomDate, principal.getName(), codEps, codigoAmbitoAtencion, direccionamiento);
+		        			return success;	
+		        		}
+		        	}
+		        
+		        	}
+		        	//si prescripcion no cumple con el codigo ambito atencion
+		        	else {        		
+		        		return error;
+		        	}
+		    	 	
+		        }//fin for		
+		}else {
+			return error;
+		}
+		
+	      //si prescripcion esta vacia o nula
+		  return error;	        
+	}
+	
+	
+	//Se usa para hacer get en el web service de mipres DIRECCIONAMIENTO
+	private Map<String, Object> obtenerDireccionamiento(String numeroPrescripcion, String nit, String tokenSecundario) throws ClientProtocolException, IOException, ParseException {
+		
+		//Me sirve para guardar los tipos de tecnologias
+		Map<String, Object> map = new HashMap<>();	
+		
+		//genero la url para consultar
+		String urlEncadenada = MetodoGetDireccionamiento+nit+'/'+tokenSecundario+'/'+numeroPrescripcion;		
+					
+		//Especificamos la URL y configuro el objeto HttpClient			
+		HttpClient httpclient = HttpClientBuilder.create().build();			
+		HttpResponse response = null;
+					
+		//Se crea una solicitud GET (si es post HttpPost y si es es put) y pasamos el URL del recurso y también asigne encabezados a este objeto de colocación
+		HttpGet httpGet = new HttpGet(urlEncadenada);			
+		httpGet.setHeader("Accept", "application/json");
+		httpGet.setHeader("Content-type", "application/json");			
+					
+		response = httpclient.execute(httpGet);
+		
+		//creo un String para guardar la respuesta y convertir en un arreglo JSON	        
+	    String content = EntityUtils.toString(response.getEntity());        
+	    JSONArray arregloJSON = new JSONArray(content);	
+	    
+	    if(!arregloJSON.isEmpty()) {
+	    	for (int i = 0; i < arregloJSON.length(); i++) {	        	
+	        	JSONObject objetoJSON = arregloJSON.getJSONObject(i);   	
+	        	map.put("ID", objetoJSON.getInt("ID"));
+	        	map.put("IDDireccionamiento", objetoJSON.getInt("IDDireccionamiento"));
+	        	map.put("FecMaxEnt", objetoJSON.getString("FecMaxEnt"));      	
+		    }
+	    }else {
+	    	map.put("error", "error");
+	    }    
+		
+		return map;
+	}
+
 	//Se usa para hacer put anulacion en el web service de mipres ENTREGA
 	private Map<String, String> anulacionPrescripcion(FarMipres farMipres, String condicion) throws Exception {
 			
@@ -1643,8 +2568,8 @@ public class FarMipresController {
 		return agregarPaciente;
 	}
 	
-	//se usa para crear el certificado en PDF
-	private void crearPDF(List<FarMipres> farMipres, HttpServletResponse response) throws JRException, IOException, ParseException {
+	//se usa para crear el certificado hospitalario en PDF
+	private void crearPDFHosp(List<FarMipres> farMipres, HttpServletResponse response) throws JRException, IOException, ParseException {
 		
 		//parametros adicionales para el PDF
 		Map<String, Object> parameters = new HashMap<>();
@@ -1653,7 +2578,7 @@ public class FarMipresController {
 		String causaNoEntrega = causa(farMipres.get(0).getCausaNoEntrega());
 		
 		// Obteniendo el archivo .jrxml de la carpeta de recursos.
-		InputStream jrxmlInput = this.getClass().getResourceAsStream("/reports/certificadomipres.jrxml");
+		InputStream jrxmlInput = this.getClass().getResourceAsStream("/reports/certificadomipreshosp.jrxml");
 		
 		// Compilo el informe Jasper de .jrxml a .jasper
 		JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlInput);
@@ -1707,7 +2632,72 @@ public class FarMipresController {
 	    servletOutputStream.flush();
 	    servletOutputStream.close();
 	    
-	}	
+	}
+	
+	
+	//se usa para crear el certificado ambulatorio en PDF
+	private void crearPDFAmb(List<FarMipres> farMipres, HttpServletResponse response) throws JRException, IOException, ParseException {
+			
+		//parametros adicionales para el PDF
+		Map<String, Object> parameters = new HashMap<>();
+		
+		String entregadoTotal = entrega(farMipres.get(0).getEntregaTotal());
+		String causaNoEntrega = causa(farMipres.get(0).getCausaNoEntrega());
+			
+		// Obteniendo el archivo .jrxml de la carpeta de recursos.
+		InputStream jrxmlInput = this.getClass().getResourceAsStream("/reports/certificadomipresamb.jrxml");
+			
+		// Compilo el informe Jasper de .jrxml a .jasper
+		JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlInput);
+			
+		// Obteniendo a las prescipciones de la fuente de datos.
+		JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(farMipres);
+			
+		//Obtengo datos adicionales del web service Reporte Entrega
+		Map<String, Object> webServiceInfoEntrega =  obtenerReporteEntrega(farMipres.get(0).getNumeroPrescripcion());
+			
+		//Obtengo datos adicionales del web service Reporte Facturacion
+		Map<String, Object> webServiceInfoFacturacion =  obtenerReporteFacturacion(farMipres.get(0).getNumeroPrescripcion());
+					
+		//obtengo el estado del reporte de entrega desde el web service
+		String estadoReporteEntrega = estadoReporte(webServiceInfoEntrega.get("EstRepEntrega"));
+		//obtengo la fecha del reporte de entrega desde el web service
+		Date fecRepEntrega = convertirFechaWebService(webServiceInfoEntrega.get("FecRepEntrega").toString());
+		//obtengo el estado del reporte de facturacion desde el web service
+		String estadoReporteFacturacion = estadoReporte(webServiceInfoFacturacion.get("EstFacturacion"));
+		//obtengo la fecha del reporte de facturacion desde el web service
+		Date fecRepFacturacion = convertirFechaWebService(webServiceInfoFacturacion.get("FecFacturacion").toString());
+			
+		// Agregar los parámetros adicionales al pdf.
+		parameters.put("logo", this.getClass().getResourceAsStream("/static/dist/img/logohusj.png"));
+		parameters.put("entregaTotal", entregadoTotal);
+		parameters.put("causaNoEntrega", causaNoEntrega);
+		parameters.put("estadoReporteEntrega", estadoReporteEntrega);
+		parameters.put("fecRepEntrega", fecRepEntrega);
+		parameters.put("valorTotalEntrega", Integer.parseInt(farMipres.get(0).getValorEntregado()));
+		parameters.put("cantidadUnidadesMinimas", String.valueOf(webServiceInfoFacturacion.get("CantUnMinDis")).replaceAll(".0", ""));
+		parameters.put("estadoReporteFacturacion", estadoReporteFacturacion);
+		parameters.put("fecRepFacturacion", fecRepFacturacion);
+		parameters.put("valorUnitario", Integer.parseInt(farMipres.get(0).getValorUnitario()));
+		parameters.put("cuotaModeradora", Integer.parseInt(farMipres.get(0).getCuotaModeradora()));
+		parameters.put("copago", Integer.parseInt(farMipres.get(0).getCopago()));
+		parameters.put("valorTotal", Integer.parseInt(farMipres.get(0).getValorTotal()));	
+			
+			
+		// Rellenar el informe con los datos de la prescripcion y la información de parámetros adicionales.
+		JasperPrint jasperPrint  = JasperFillManager.fillReport(jasperReport, parameters, source);
+			
+			
+		//este me permite exportar y abrir dialogo para guardar el archivo
+		String fileName = farMipres.get(0).getNumeroPrescripcion()+".pdf";
+		response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+		response.setContentType("application/pdf");
+		ServletOutputStream servletOutputStream = response.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint,servletOutputStream);
+		servletOutputStream.flush();
+		servletOutputStream.close();
+		    
+	}
 
 	//se usa para transformar (entero) de la entrega en String 
 	private String entrega(Integer entregaTotal) {

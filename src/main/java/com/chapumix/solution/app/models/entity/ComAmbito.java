@@ -8,22 +8,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "com_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"nombre"})})
-public class ComRole implements Serializable {
+@Table(name = "com_ambito")
+public class ComAmbito implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	private String codigo;
 	private String nombre;
 	
-	public ComRole() {		
+	public ComAmbito() {		
 	}
 
 	@Id
-	@Column(name = "id_role")
+	@Column(name = "id_ambito")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
@@ -31,6 +31,15 @@ public class ComRole implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}	
+
+	@Column(name = "codigo", length = 10)
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	@Column(name = "nombre", length = 100)
@@ -40,6 +49,6 @@ public class ComRole implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
+	}	
 
 }

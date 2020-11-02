@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+    
+    <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div> 
+    
+    <!-- Lista para mostrar los errorer antes del formulario -->
+	<div class="col-md-12">
+		<div th:object="${farMipres}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+	</div>
+         
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Procesados</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">					
+					  	<div class="col-sm-6">
+							<!-- Toolbar Botones -->						
+						</div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-secondary" th:href="@{/procesadosmipresamb}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->        	
+         	
+         	<div class="col-md-12 mx-auto">
+         		<form id="editarconsolidadomipres" class="form-horizontal" th:object="${farMipres}" role="form" method="post">
+         		
+         		<div class="row">      	
+		      		<div class="col-md-4 mx-auto bg-gradient-primary text-center animacion mb-4">
+		      			<h5 class="mt-1">
+		      				<i class="fas fa-info-circle text-dark"></i> 
+		      					Número Prescripción 
+		      				<span th:text=${farMipres.numeroPrescripcion} class="badge badge-success"></span> 
+		      			</h5>
+		      		</div>      	      		
+		      	</div>
+		      	
+		      	
+		      	<!-- DIRECCIONAMIENTO -->
+	           <div class="col-md-12">
+		            <div class="card card-primary animacion">
+		              <div class="card-header custom-header">
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Direccionamiento</h3>
+		
+		                <div class="card-tools">
+		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+		                  </button>
+		                </div>
+		                <!-- /.card-tools -->
+		              </div>
+		              <!-- /.card-header -->
+		              <div class="card-body">
+		                
+		                <div class="row ml-1">		                
+		                	<div class="col-md-12">
+		                		<div class="row">
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="idtraza">ID Direccionamiento</label>
+								            <input id="idtraza" type="text" th:field="*{idDireccionamientoMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">Tipo Tecnología</label>
+								            <input id="identrega" type="text" th:field="*{comTipoTecnologia.descripcion}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorentregado">Código Tecnología</label>
+								            <input id="valorentregado" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>         	          	
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Maxima Entrega</label>
+								            <input id="fechaentrega" type="text" th:field="*{fechaMaxEntrega}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>              			
+		                		
+		                		</div>            	
+		                	</div>           
+		                </div>
+		                
+		              </div>
+		              <!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	           </div>
+	           
+	           <!-- PROGRAMACION -->
+	           <div class="col-md-12">
+		            <div class="card card-primary collapsed-card animacion">
+		              <div class="card-header custom-header">
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Programación</h3>
+		
+		                <div class="card-tools">
+		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+		                  </button>
+		                </div>
+		                <!-- /.card-tools -->
+		              </div>
+		              <!-- /.card-header -->
+		              <div class="card-body">
+		                
+		                <div class="row ml-1">		                
+		                	<div class="col-md-12">
+		                		<div class="row">
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="idtraza">ID Programación</label>
+								            <input id="idtraza" type="text" th:field="*{idProgramacionMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>        	     	          	
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Maxima Entrega</label>
+								            <input id="fechaentrega" type="text" th:field="*{fechaMaxEntrega}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorentregado">Código Tecnología</label>
+								            <input id="valorentregado" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorentregado">Cantidad A Entregar</label>
+								            <input id="valorentregado" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>                    			
+		                		
+		                		</div>            	
+		                	</div>           
+		                </div>
+		                
+		              </div>
+		              <!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	           </div>
+         		
+         		         		
+         		
+         		<!-- ENTREGA -->
+         		<div class="col-md-12">
+		            <div class="card card-primary collapsed-card animacion">
+		              <div class="card-header custom-header">
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Entrega</h3>
+		
+		                <div class="card-tools">
+		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+		                  </button>
+		                </div>
+		                <!-- /.card-tools -->
+		              </div>
+		              <!-- /.card-header -->
+		              <div class="card-body">
+		                
+		                <div class="row ml-1">		                
+		                	<div class="col-md-12">
+		                		<div class="row">
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">ID Entrega</label>
+								            <input id="identrega" type="text" th:field="*{idEntregaMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="tecnologia">Código Tecnología</label>
+								            <input id="tecnologia" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="cantidadentregada">Cantidad Entregada</label>
+								            <input id="cantidadentregada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Entrega</label>
+								            <input id="fechaentrega" type="text" th:field="*{fechaEntrega}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>						          
+						          
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="entregatotal">Entrega Total</label>
+								            <input id="entregatotal" type="text" th:field="*{entregaTotal}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="noentrega">Causa No Entrega</label>
+								            <div th:if="${farMipres.causaNoEntrega eq 0}">
+								            	<input id="noentrega" type="text" value="NINGUNA" class="form-control form-control-sm" readonly>
+								            </div>
+								            <div th:if="${farMipres.causaNoEntrega eq 7}">
+								            	<input id="noentrega" type="text" value="NO FUE POSIBLE CONTACTAR AL PACIENTE" class="form-control form-control-sm" readonly>
+								            </div>
+								            <div th:if="${farMipres.causaNoEntrega eq 8}">
+								            	<input id="noentrega" type="text" value="PACIENTE FALLECIDO" class="form-control form-control-sm" readonly>
+								            </div>
+								            <div th:if="${farMipres.causaNoEntrega eq 9}">
+								            	<input id="noentrega" type="text" value="PACIENTE SE NIEGA A RECIBIR EL SUMINISTRO" class="form-control form-control-sm" readonly>
+								            </div>								            							            
+						                </div>
+						          	</div>	
+		                		
+		                		</div>            	
+		                	</div>           
+		                </div>
+		                
+		              </div>
+		              <!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	           </div>
+	           
+	           
+	           <!-- REPORTE ENTREGA -->
+	           <div class="col-md-12">
+		            <div class="card card-primary collapsed-card animacion">
+		              <div class="card-header custom-header">
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Reporte Entrega</h3>
+		
+		                <div class="card-tools">
+		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+		                  </button>
+		                </div>
+		                <!-- /.card-tools -->
+		              </div>
+		              <!-- /.card-header -->
+		              <div class="card-body">
+		                
+		                <div class="row ml-1">		                
+		                	<div class="col-md-12">
+		                		<div class="row">
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="idtraza">ID Traza</label>
+								            <input id="idtraza" type="text" th:field="*{idTraza}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">ID Reporte Entrega</label>
+								            <input id="identrega" type="text" th:field="*{idReporteEntregaMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorentregado">Valor Entregado</label>
+								            <input id="valorentregado" type="text" th:field="*{valorEntregado}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>         	          	
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Entrega</label>
+								            <input id="fechaentrega" type="text" th:field="*{fechaEntrega}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>              			
+		                		
+		                		</div>            	
+		                	</div>           
+		                </div>
+		                
+		              </div>
+		              <!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	           </div>
+	           
+	           <!-- FACTURACION -->
+	           <div class="col-md-12">
+		            <div class="card card-primary collapsed-card animacion">
+		              <div class="card-header custom-header">
+		                <h3 class="card-title"><i class="far fa-address-card mr-1"></i>Facturación</h3>
+		
+		                <div class="card-tools">
+		                  <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+		                  </button>
+		                </div>
+		                <!-- /.card-tools -->
+		              </div>
+		              <!-- /.card-header -->
+		              <div class="card-body">
+		                
+		                <div class="row ml-1">		                
+		                	<div class="col-md-12">
+		                		<div class="row">
+		                		
+		                			<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">ID</label>
+								            <input id="identrega" type="text" th:field="*{idFacturacionMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="identrega">ID Reporte Facturación</label>
+								            <input id="identrega" type="text" th:field="*{idReporteFacturacionMipress}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="factura">Número Factura</label>
+								            <input id="factura" type="text" th:field="*{numeroFactura}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="tecnologia">Código Tecnología</label>
+								            <input id="tecnologia" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="fechaentrega">Fecha Reporte</label>
+								            <input id="fechaentrega" type="text" th:value="${#dates.format(farMipres.fechaAltaAct, 'dd-MM-yyyy HH:mm:ss')}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valorunitario">Valor Unitario</label>
+								            <input id="valorunitario" type="text" th:field="*{valorUnitario}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="cantidadreportada">Cantidad Reportada</label>
+								            <input id="cantidadreportada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="copago">Copago</label>
+								            <input id="copago" type="text" th:field="*{copago}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="cuotamoderadora">Cuota Moderadora</label>
+								            <input id="cuotamoderadora" type="text" th:field="*{cuotaModeradora}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>
+						          	
+						          	<div class="col-md-3">
+							          	<div class="form-group">
+								            <label class="control-label" for="valortotal">Valor Total</label>
+								            <input id="valortotal" type="text" th:field="*{valorTotal}" class="form-control form-control-sm" readonly>
+						                </div>
+						          	</div>                	             			
+		                		
+		                		</div>            	
+		                	</div>           
+		                </div>
+		                
+		              </div>
+		              <!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	           </div>
+	           
+	           
+	           
+	           
+         		</form>         		      	
+         	</div>  	   
+         	     
+                
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+</body>
+</html>

@@ -88,92 +88,196 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="card-body pad table-responsive">                 
                 	<div class="row">
                 	
-                		<!-- MODULOS --> 					    
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ENTREGA')" class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/entrega.jpg" alt="entrega"/>
-							  <figcaption>
-							    <h3>Pendientes</h3>
-							    <div>
-							      <p></p>
-							    </div><a th:href="@{/pendientesmipres}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PROCESADO')" class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/ok.jpg" alt="procesado"/>
-							  <figcaption>
-							    <h3>Procesados</h3>
-							    <div>
-							      <p></p>
-							    </div><a th:href="@{/procesadosmipres}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_RIPS')" class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/consolidado.jpg" alt="reporte_rips"/>
-							  <figcaption>
-							    <h3>Reporte</h3>
-							    <div>
-							      <p>Rips</p>
-							    </div><a th:href="@{/ripsmipres}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR')" class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/sincronizarusuarios.jpg" alt="sincronizar_prescripcion"/>
-							  <figcaption>
-							    <h3>Sincronizar</h3>
-							    <div>
-							      <p>Prescripción</p>
-							    </div><a th:href="@{/sincronizaprescripcionform}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ANULAR')" class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/anular.jpg" alt="anular"/>
-							  <figcaption>
-							    <h3>Anular</h3>
-							    <div>
-							      <p></p>
-							    </div><a th:href="@{/anulaprescripcionform}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    		    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_PRINCIPAL')" class="col-md-3">		
-							<figure class="snip1166 navy">
-							  <img src="dist/img/parametros.jpg" alt="reporte"/>
-							  <figcaption>
-							    <h3>Parámetros</h3>
-							    <div>
-							      <p>Token Principal</p>
-							    </div><a th:href="@{/tokenformprimario(id=2)}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>
-					    
-					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_SECUNDARIO')" class="col-md-3">				
-							<figure class="snip1166 navy">
-							  <img src="dist/img/parametros.jpg" alt="reporte"/>
-							  <figcaption>
-							    <h3>Parámetros</h3>
-							    <div>
-							      <p>Token Secundario</p>
-							    </div><a th:href="@{/tokenformsecundario(id=1)}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>				    
-					   
+                	<!-- MODULOS -->               		
+                		
+                		<!-- Seccion ambito hospitalización internación - urgencias-->
+                		
+                		<div class="col-md-12 mt-3">
+                		 <div class="card card-dark card-outline animacion">
+                			<div class="card-header">
+                				<h3 class="card-title">
+				                  <i class="fas fa-angle-right fa-xs"></i>
+				                  Hospitalización Internación - Urgencias
+				                </h3>
+                			</div>
+                			<div class="card-body pad table-responsive">
+                				<div class="row">
+                					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ENTREGA_URGENCIAS')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/entregah.jpg" alt="entrega"/>
+										  <figcaption>
+										    <h3>Pendientes</h3>
+										    <div>
+										      <p></p>
+										    </div><a th:href="@{/pendientesmipreshosp}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PROCESADO_URGENCIAS')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/okh.jpg" alt="procesado"/>
+										  <figcaption>
+										    <h3>Procesados</h3>
+										    <div>
+										      <p></p>
+										    </div><a th:href="@{/procesadosmipreshosp}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>					   
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_URGENCIAS')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/sincronizarusuarios.jpg" alt="sincronizar_prescripcion"/>
+										  <figcaption>
+										    <h3>Sincronizar</h3>
+										    <div>
+										      <p>Prescripción</p>
+										    </div><a th:href="@{/sincronizaprescripcionhospform}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ANULAR_URGENCIAS')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/anular.jpg" alt="anular"/>
+										  <figcaption>
+										    <h3>Anular</h3>
+										    <div>
+										      <p></p>
+										    </div><a th:href="@{/anulaprescripcionhospform}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>		    		    
+								   
+			                	</div>		
+			                </div>			                			
+			              </div>
+			             </div>
+			             
+			             <!-- Linea Separadora Cards -->
+						 <div class="form-group col-md-12 mt-0 mb-0">
+					             <hr>
+					     </div>
+			             
+			             
+			             <!-- Seccion ambulatorio-->
+			             
+			             <div class="col-md-12 mt-3">
+                		 <div class="card card-dark card-outline animacion">
+                			<div class="card-header">
+                				<h3 class="card-title">
+				                  <i class="fas fa-angle-right fa-xs"></i>
+				                  Ambulatorio
+				                </h3>
+                			</div>
+                			<div class="card-body pad table-responsive">
+                				<div class="row">
+                					
+                					
+                					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_ENTREGA_AMBULATORIO')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/entregaa.jpg" alt="entrega"/>
+										  <figcaption>
+										    <h3>Pendientes</h3>
+										    <div>
+										      <p></p>
+										    </div><a th:href="@{/pendientesmipresamb}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PROCESADO_AMBULATORIO')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/oka.jpg" alt="procesado"/>
+										  <figcaption>
+										    <h3>Procesados</h3>
+										    <div>
+										      <p></p>
+										    </div><a th:href="@{/procesadosmipresamb}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_AMBULATORIO')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+										  <img src="dist/img/sincronizarotro.jpg" alt="sincronizar_prescripcion"/>
+										  <figcaption>
+										    <h3>Sincronizar</h3>
+										    <div>
+										      <p>Prescripción</p>
+										    </div><a th:href="@{/sincronizaprescripcionambform}"></a>
+										  </figcaption>
+										</figure>					    
+								    </div>	   
+								    	    		    
+								   
+			                	</div>		
+			                </div>			                			
+			              </div>
+			             </div>
+			                         
+			             
+			             <!-- Linea Separadora Cards -->
+						 <div class="form-group col-md-12 mt-0 mb-0">
+					             <hr>
+					     </div>			             
+			             
+			             <!-- Seccion general-->
+			             
+			             <div class="col-md-12 mt-3">
+                		 <div class="card card-dark card-outline animacion">
+                			<div class="card-header">
+                				<h3 class="card-title">
+				                  <i class="fas fa-angle-right fa-xs"></i>
+				                  General
+				                </h3>
+                			</div>
+                			<div class="card-body pad table-responsive">
+                				<div class="row">
+                					
+                					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_RIPS')" class="col-md-3">					    	
+										<figure class="snip1166 navy">
+											<img src="dist/img/consolidado.jpg" alt="reporte_rips"/>
+											<figcaption>
+												<h3>Reporte</h3>
+												<div>
+													<p>Rips</p>
+												</div><a th:href="@{/ripsmipres}"></a>
+											</figcaption>
+										</figure>					    
+									</div>
+                					
+                					
+                					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_PRINCIPAL')" class="col-md-3">		
+										<figure class="snip1166 navy">
+									    	<img src="dist/img/parametros.jpg" alt="reporte"/>
+											<figcaption>
+												<h3>Parámetros</h3>
+												<div>
+													<p>Token Principal</p>
+												</div><a th:href="@{/tokenformprimario(id=2)}"></a>
+											</figcaption>
+										</figure>					    
+								    </div>
+								    
+								    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_PARAMETRO_SECUNDARIO')" class="col-md-3">				
+										<figure class="snip1166 navy">
+											<img src="dist/img/parametros.jpg" alt="reporte"/>
+											<figcaption>
+												<h3>Parámetros</h3>
+												<div>
+													<p>Token Secundario</p>
+												</div><a th:href="@{/tokenformsecundario(id=1)}"></a>
+											</figcaption>
+										</figure>					    
+									</div>        
+								    	    		    
+								   
+			                	</div>		
+			                </div>			                			
+			              </div>
+			             </div>
 					    
 				    </div><!-- /.row -->          
               </div>         

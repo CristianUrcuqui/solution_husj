@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Reporte De Entrega</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Entrega</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<div class="btn-toolbar float-right" role="toolbar">
 							<div class="btn-group btn-group-justified" role="group">
 								<div class="btn-group btn-group-sm" role="group">									
-									<a class="btn bg-gradient-secondary" th:href="@{/pendientesmipres}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+									<a class="btn bg-gradient-secondary" th:href="@{/pendientesmipresamb}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
 										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
 									</a>
 								</div>																									
@@ -94,19 +94,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
          	<div class="col-md-8 mx-auto">
          		<div class="card card-primary animacion">
          			<div class="card-header custom-header p-0">
-                          <h4 class="ml-3 mt-1">Reporte Entrega Mipres</h4>
+                          <h4 class="ml-3 mt-1">Entrega Mipres</h4>
                     </div>
                     <div class="card-body">
                     
-                    <form id="editarreporteentrega"  class="form-horizontal" th:action="@{/reporteentregaform}" th:object="${farMipres}" role="form" method="post">
+                    <form id="editarentrega"  class="form-horizontal" th:action="@{/entregaambform}" th:object="${farMipres}" role="form" method="post">
                     
-                       <div class="form-group row">
-                           <label class="control-label col-md-4" for="idtraza">Id Traza</label>
-                           <div class="col-md-8">                           		
-                           		<input id="idtraza" type="text" th:field="*{idTraza}" class="form-control form-control-sm" readonly>
-                           </div>
-                       </div>  
-                       
                        <div class="form-group row">
                            <label class="control-label col-md-4" for="numeroprescripcion">Número Prescripción</label>
                            <div class="col-md-8">                           		
@@ -115,38 +108,45 @@ scratch. This page gets rid of all links and provides the needed markup only.
                        </div>
                        
                        <div class="form-group row">
+                           <label class="control-label col-md-4" for="tecnologia">Tipo De Tecnología</label>
+                           <div class="col-md-8">                           		
+                           		<select id="tecnologia"  th:field="*{comTipoTecnologia}" class="form-control form-control-sm" disabled>
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tecn : ${tecnologia}" th:value="${tecn.id}" th:text="${tecn.descripcion}"></option>	                          
+		                        </select>
+                           </div>
+                       </div>                      
+                       
+                       <div class="form-group row">
                            <label class="control-label col-md-4" for="tipodocumento">Tipo De Documento Paciente</label>
                            <div class="col-md-8">                           		
-                           		<input id="tipodocumento" type="text" th:field="*{genPacien.comTipoDocumento.descripcion}" class="form-control form-control-sm" readonly>
+                           		<select id="tipodocumento"  th:field="*{comTipoDocumentoMipres}" class="form-control form-control-sm" disabled>
+		                          <option value="" selected="selected">Seleccione</option>
+		                            <option th:each="tipodoc : ${tipodocumento}" th:value="${tipodoc.id}" th:text="${tipodoc.descripcion}"></option>	                          
+		                        </select>
                            </div>
                        </div>
                        
                        <div class="form-group row">
-                           <label class="control-label col-md-4" for="numerodocumento">Número Documento Paciente</label>
+                           <label class="control-label col-md-4" for="numeroidentificacion">Número Identificación Paciente</label>
                            <div class="col-md-8">                           		
-                           		<input id="numerodocumento" type="text" th:field="*{genPacien.pacNumDoc}" class="form-control form-control-sm" readonly>
+                           		<input id="numeroidentificacion" type="text" th:field="*{genPacien.pacNumDoc}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>                       
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="codigoservicio">Código Servicio o Tecnología Entregado</label>
+                           <div class="col-md-8">                           		
+                           		<input id="codigoservicio" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm">
                            </div>
                        </div>
                        
                        <div class="form-group row required">
-                           <label class="control-label col-md-4" for="numerofactura">Número Factura Ó Cufe</label>
+                           <label class="control-label col-md-4" for="catidadentregada">Cantidad Total Entregada</label>
                            <div class="col-md-8">                           		
-                           		<input id="numerofactura" type="text" th:field="*{numeroFactura}" class="form-control form-control-sm">
+                           		<input id="catidadentregada" type="text" th:field="*{cantidadEntregada}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
                            </div>
                        </div>                
-                       
-                       <div class="form-group row required">
-                           <label class="control-label col-md-4" for="estadoentrega">Estado De Entrega</label>
-                           <div class="col-md-8">                           		
-                           		<select id="estadoentrega"  th:name="estadoentrega" class="form-control form-control-sm">
-		                          <option value="" selected="selected">Seleccione</option>		                            
-		                            <option th:value="'0'">NO SE ENTREGA</option>
-		                            <option th:value="'1'">SI SE ENTREGA</option>		                            	                          
-		                        </select>
-                           </div>
-                       </div> 
-                       
-                                     
                        
                        <div class="form-group row required">
                            <label class="control-label col-md-4" for="causanoentrega">Causa De No Entrega</label>
@@ -159,19 +159,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                            <option th:value="'9'">PACIENTE SE NIEGA A RECIBIR EL SUMINISTRO</option>	                          
 		                        </select>
                            </div>
-                       </div>                 
+                       </div>                  
                        
                        <div class="form-group row required">
-                           <label class="control-label col-md-4" for="valor">Valor Entregado</label>
+                       		<label class="control-label col-md-4" for="entregatotal">Entrega Total</label>
+                       		<div class="form-check form-check-inline ml-2">
+                       			<input  id="entregatotal1" type="radio" th:field="*{entregaTotal}" value="1" name="inlineRadioOptions" class="form-check-input">
+  								<label class="form-check-label" for="entregatotal1">SI</label>
+                       		</div>
+                       		
+                       		<div class="form-check form-check-inline">
+                       			<input id="entregatotal2" type="radio" th:field="*{entregaTotal}" value="0" name="inlineRadioOptions" class="form-check-input">
+  								<label class="form-check-label" for="entregatotal2">NO</label>
+                       		</div>
+                       		
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="fechaentrega">Fecha De Entrega</label>
                            <div class="col-md-8">                           		
-                           		<input id="valor" type="text" th:field="*{valorEntregado}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           		<input id="fechaentrega" type="text" th:field="*{fechaEntrega}" class="form-control form-control-sm" autocomplete="off">                           		
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="lote">Lote Entregado (Compra Directa Hepatitis C)</label>
+                           <div class="col-md-8">                           		
+                           		<input id="lote" type="text" th:field="*{loteEntregado}" class="form-control form-control-sm">
                            </div>
                        </div> 
                        
                        <div class="row ml-1 mb-1 float-right">
 					    <div class="col-md-12">					      
-					      <button type="submit" form="editarreporteentrega" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
-					      <button type="reset" form="editarreporteentrega" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					      <button type="submit" form="editarentrega" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+					      <button type="reset" form="editarentrega" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
 					    </div>
 					   </div>   
                     

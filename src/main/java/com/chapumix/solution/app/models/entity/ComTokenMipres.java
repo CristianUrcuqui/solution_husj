@@ -20,6 +20,7 @@ public class ComTokenMipres implements Serializable {
 	private Long id;
 	private String url;
 	private String nit;
+	private String codigoHabilitacion;
 	private String tokenPrincipal;
 	private String tokenSecundario;
 	private Date fechaAlta;	
@@ -56,6 +57,16 @@ public class ComTokenMipres implements Serializable {
 
 	public void setNit(String nit) {
 		this.nit = nit;
+	}	
+
+	@NotEmpty
+	@Column(name = "codigo_habilitacion", length = 12)
+	public String getCodigoHabilitacion() {
+		return codigoHabilitacion;
+	}
+
+	public void setCodigoHabilitacion(String codigoHabilitacion) {
+		this.codigoHabilitacion = codigoHabilitacion;
 	}
 
 	@NotEmpty

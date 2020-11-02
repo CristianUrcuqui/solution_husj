@@ -33,27 +33,53 @@ public class FarMipresServiceImpl implements IFarMipresService{
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public Page<FarMipres> findAllCustomPendientes(Pageable pageable) {
-		return farMipresDao.findAllCustomPendientes(pageable);
+	public Page<FarMipres> findAllCustomPendientesHosp(Pageable pageable) {
+		return farMipresDao.findAllCustomPendientesHosp(pageable);
 	}
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public Page<FarMipres> findAllCustomSearchPendientes(Pageable pageable, String prescripcion) {
-		return farMipresDao.findAllCustomSearchPendientes(pageable, prescripcion)		;
+	public Page<FarMipres> findAllCustomSearchPendientesHosp(Pageable pageable, String prescripcion) {
+		return farMipresDao.findAllCustomSearchPendientesHosp(pageable, prescripcion)		;
 	}
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public Page<FarMipres> findAllCustomProcesados(Pageable pageable) {
-		return farMipresDao.findAllCustomProcesados(pageable);
+	public Page<FarMipres> findAllCustomProcesadosHosp(Pageable pageable) {
+		return farMipresDao.findAllCustomProcesadosHosp(pageable);
 	}
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
-	public Page<FarMipres> findAllCustomSearchProcesados(Pageable pageable, String prescripcion) {
-		return farMipresDao.findAllCustomSearchProcesados(pageable, prescripcion)		;
+	public Page<FarMipres> findAllCustomSearchProcesadosHosp(Pageable pageable, String prescripcion) {
+		return farMipresDao.findAllCustomSearchProcesadosHosp(pageable, prescripcion)		;
 	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<FarMipres> findAllCustomPendientesAmb(Pageable pageable) {
+		return farMipresDao.findAllCustomPendientesAmb(pageable);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<FarMipres> findAllCustomSearchPendientesAmb(Pageable pageable, String prescripcion) {
+		return farMipresDao.findAllCustomSearchPendientesAmb(pageable, prescripcion);
+	}	
+	
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<FarMipres> findAllCustomProcesadosAmb(Pageable pageable) {
+		return farMipresDao.findAllCustomProcesadosAmb(pageable);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public Page<FarMipres> findAllCustomSearchProcesadosAmb(Pageable pageable, String prescripcion) {		
+		return farMipresDao.findAllCustomSearchProcesadosAmb(pageable, prescripcion);
+	}
+	
 	
 	@Override
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura

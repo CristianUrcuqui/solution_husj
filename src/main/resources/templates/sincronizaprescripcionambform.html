@@ -88,57 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container py-5">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->         				
         
-         	<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_FECHA')" class="col-md-6 mx-auto">
-         	
-         		<div class="card card-primary animacion">         		
-         			<div class="card-header custom-header p-0">
-	        			<h4 class="ml-3 mt-1">Por Rango De Fecha</h4>   		
-	        		</div>
-	        		
-	        		<div class="card-body">
-	        			
-	        			<form id="prescripcionsincronizafecha"  class="form-horizontal" th:action="@{/sincronizaprescripcionporfecha}" th:object="${farMipres}" role="form" method="post">					   
-					   
-						   <div class="form-row">
-						   		
-						   		<!--fila1--> 
-	                    		<div class="pb-3 required input-group">	                      	                            
-		                            <span class="input-group-prepend ml-1">
-					                    <div class="input-group-text badge-primary rounded-left border-right-0">
-					                    	<i class="far fa-calendar-alt"></i>
-					                    </div>
-					                </span>		                
-			                		<input id="fechaInicial" type="text" th:name="fechaInicial" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Inicial" autocomplete="off"> 	                            
-		                        </div>
-		                        
-		                        <!--fila2--> 
-	                    		<div class="pb-3 required input-group">	                      	                            
-		                            <span class="input-group-prepend ml-1">
-					                    <div class="input-group-text badge-primary rounded-left border-right-0">
-					                    	<i class="far fa-calendar-alt"></i>
-					                    </div>
-					                </span>		                
-			                		<input id="fechaFinal" type="text" th:name="fechaFinal" class="form-control form-control-sm py-2 border-left-0 border" placeholder="Fecha Final" autocomplete="off"> 	                            
-		                        </div>  
-						   </div>     
-						   
-						   <div class="row mb-1">
-							    <div class="col-md-12">					      
-							      <button type="submit" form="prescripcionsincronizafecha" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Sincronizar">Sincronizar</button>					      
-							      <button type="reset" form="prescripcionsincronizafecha" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
-							    </div>
-						  	</div> 
-						                           
-			                                    
-		              	</form>
-	        		
-	        		</div><!-- /.card-body -->        		
-         		</div><!-- /.card -->        	
-         	</div>
-         	
-         	
-         	
-         	<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_PRESCRIPCION')" class="col-md-6 mx-auto">
+         	<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_MIPRES_SINCRONIZAR_AMBULATORIO_PRESCRIPCION')" class="col-md-6 mx-auto">
          	
          		<div class="card card-primary animacion">         		
          			<div class="card-header custom-header p-0">
@@ -147,7 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	        		
 	        		<div class="card-body">
 	        			
-	        			<form id="prescripcionsincronizanumero"  class="form-horizontal" th:action="@{/sincronizaprescripcionpornumero}" th:object="${farMipres}" role="form" method="post">					   
+	        			<form id="prescripcionsincronizanumero"  class="form-horizontal" th:action="@{/sincronizaprescripcionambpornumero}" th:object="${farMipres}" role="form" method="post">					   
 					   
 						   <div class="form-row">
 						   		

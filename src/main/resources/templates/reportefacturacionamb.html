@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+    
+    <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div> 
+    
+    <!-- Lista para mostrar los errorer antes del formulario -->
+	<div class="col-md-12">
+		<div th:object="${farMipres}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+	</div>
+         
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Reporte De Facturación</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">					
+					  	<div class="col-sm-6">
+							<!-- Toolbar Botones -->						
+						</div>
+					  	<div class="col-sm-6">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-secondary" th:href="@{/pendientesmipreshosp}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->        	
+         	
+         	<div class="col-md-8 mx-auto">
+         		<div class="card card-primary animacion">
+         			<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Reporte Facturación Mipres</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    <form id="editarreportefacturacion"  class="form-horizontal" th:action="@{/reportefacturacionamb}" th:object="${farMipres}" role="form" method="post">
+                    	
+                    	<div class="form-group row">
+                           <label class="control-label col-md-4" for="numeroprescripcion">Número Prescripción</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroprescripcion" type="text" th:field="*{numeroPrescripcion}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="tecnologia">Tipo De Tecnología</label>
+                           <div class="col-md-8">                           		
+                           		<input id="tecnologia" type="text" th:field="*{comTipoTecnologia.descripcion}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="nombretecnologia">Nombre Medicamento</label>
+                           <div class="col-md-8">                           		
+                           		<input id="nombretecnologia" type="text" th:field="*{nombreMedicamento}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>                       
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="consecutivoservicio">Consecutivo Orden Servicio o Tecnología</label>
+                           <div class="col-md-8">                           		
+                           		<input id="consecutivoservicio" type="text" th:field="*{consecutivoTecnologia}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="tipodocumento">Tipo De Documento Paciente</label>
+                           <div class="col-md-8">                           		
+                           		<input id="tipodocumento" type="text" th:field="*{comTipoDocumentoMipres.descripcion}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>              
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="numeroidentificacion">Número Identificación Paciente</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroidentificacion" type="text" th:field="*{genPacien.pacNumDoc}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="numeroentrega">Número Entrega</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numeroentrega" type="text" th:field="*{numeroEntrega}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                    
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="numerofactura">Número Factura</label>
+                           <div class="col-md-8">                           		
+                           		<input id="numerofactura" type="text" th:field="*{numeroFactura}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="nit">Nit EPS</label>
+                           <div class="col-md-8">                           		
+                           		<input id="nit" type="text" th:field="*{nitEps}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>  	  	
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="eps">Código EPS</label>
+                           <div class="col-md-8">                           		
+                           		<input id="eps" type="text" th:field="*{codEps}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>  	
+                       
+                       <div class="form-group row">
+                           <label class="control-label col-md-4" for="codigoservicio">Código Servicio o Tecnología Entregado</label>
+                           <div class="col-md-8">                           		
+                           		<input id="codigoservicio" type="text" th:field="*{codigoServicio}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div>                           
+                       
+                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'M'}" class="form-group row required">
+                           <label class="control-label col-md-4" for="cantidaddispensacion">Cantidad En Unidades Minimas Dispensación</label>
+                           <div class="col-md-8">                           		
+                           		<select id="cantidaddispensacion"  th:name="cdispensacion" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>		                            
+		                            <option th:value="'1'">AMPOLLA</option>
+		                            <option th:value="'2'">APLICADOR</option>
+		                            <option th:value="'3'">BOLSA</option>
+		                            <option th:value="'4'">BARRA</option>
+		                            <option th:value="'10'">ENVASE</option>
+		                            <option th:value="'11'">CAJA</option>
+		                            <option th:value="'12'">LATA</option>
+		                            <option th:value="'13'">FRASCO</option>
+		                            <option th:value="'14'">CAPSULA</option>
+		                            <option th:value="'16'">CARTUCHO</option>
+		                            <option th:value="'21'">CONTENEDOR</option>
+		                            <option th:value="'24'">CILINDRO</option>
+		                            <option th:value="'27'">DISCO</option>
+		                            <option th:value="'37'">INHALADOR</option>
+		                            <option th:value="'43'">KIT</option>
+		                            <option th:value="'49'">PARCHE</option>
+		                            <option th:value="'54'">ANILLO</option>
+		                            <option th:value="'61'">TIRA</option>
+		                            <option th:value="'63'">SUPOSITORIO</option>
+		                            <option th:value="'65'">JERINGA</option>
+		                            <option th:value="'66'">TABLETA</option>
+		                            <option th:value="'73'">TUBO</option>
+		                            <option th:value="'74'">UNIDADES</option>
+		                            <option th:value="'75'">VIAL</option>
+		                            <option th:value="'78'">SOBRE</option>
+		                            <option th:value="'80'">LITRO</option>		                            		                            	                          
+		                        </select>
+                           </div>
+                       </div>
+                       
+                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'N'}" class="form-group row required">
+                           <label class="control-label col-md-4" for="cantidaddispensacion">Cantidad En Unidades Minimas Dispensación</label>
+                           <div class="col-md-8">                           		
+                           		<select id="cantidaddispensacion"  th:name="cdispensacion" class="form-control form-control-sm">
+		                          <option value="" selected="selected">Seleccione</option>		                            
+		                            <option th:value="'1'">BOLSA</option>
+		                            <option th:value="'2'">BOLSA ULTRAPACK</option>
+		                            <option th:value="'3'">BOTELLA</option>
+		                            <option th:value="'4'">EASYBAG</option>
+		                            <option th:value="'5'">LATA</option>
+		                            <option th:value="'6'">LOC</option>
+		                            <option th:value="'7'">LPC</option>
+		                            <option th:value="'8'">LPM</option>
+		                            <option th:value="'9'">SOBRE</option>
+		                            <option th:value="'10'">TETRAPRISMA</option>
+		                            <option th:value="'11'">ULTRAPACK</option>
+		                            <option th:value="'12'">FRASCO</option>
+		                                                  		                            	                          
+		                        </select>
+                           </div>
+                       </div>
+                       
+                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'P'}" class="form-group row required">
+                           <label class="control-label col-md-4" for="cantidaddispensacion">Digite Cantidad De Procedimientos</label>
+                           <div class="col-md-8">                           		
+                           		<input id="cantidaddispensacion" type="text" th:name="cdispensacion" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>   
+                       
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="valorunitario">Valor Unitario</label>
+                           <div class="col-md-8">                           		
+                           		<input id="valorunitario" type="text" th:field="*{valorUnitario}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="valortotal">Valor Total</label>
+                           <div class="col-md-8">                           		
+                           		<input id="valortotal" type="text" th:field="*{valorTotal}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="cuota">Cuota Moderadora</label>
+                           <div class="col-md-8">                           		
+                           		<input id="cuota" type="text" th:field="*{cuotaModeradora}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>
+                       
+                       <div class="form-group row required">
+                           <label class="control-label col-md-4" for="copago">Copago</label>
+                           <div class="col-md-8">                           		
+                           		<input id="copago" type="text" th:field="*{copago}" class="form-control form-control-sm" oninput="this.value = this.value.replace(/[^0-9.,]/g, '');">
+                           </div>
+                       </div>      
+                       
+                       <div class="row ml-1 mb-1 float-right">
+					    <div class="col-md-12">					      
+					      <button type="submit" form="editarreportefacturacion" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+					      <button type="reset" form="editarreportefacturacion" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+					    </div>
+					   </div>   
+                    
+                    
+                    </form>                    
+                    </div><!-- /.card-body -->     
+         		</div>  <!-- /.card -->       	
+         	</div>  	   
+         	     
+                
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+
+
+<script>
+    //parametros para el datepicker
+    $( "#fechaentrega" ).datepicker({
+    	// Mostrar animacion
+	    showAnim: "drop",
+	    // Modificar el mes
+	    changeMonth: true,
+	    // Modificar el año
+	    changeYear: true,
+	    // Formato de la fecha
+	    dateFormat: "dd-mm-yy",              
+	    // Primer dia de la semana - lunes
+	    firstDay: 1,
+	    // Días largo traducido
+	    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+	    // Dias cortos traducido
+	    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+	    // Nombres largos de los meses traducido
+	    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+	    // Nombres cortos de los meses traducido 
+	    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+	    // Al selecconar fecha, se escribe en el campo de texto
+	    onSelect: function(dateText) { 
+	    $('#fechaFinal').val(dateText);
+	     }
+    });
+</script>
+
+<script>
+	//metodo para quitar espacios en los input
+	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
+	$('input').keyup(function(){
+    /* Obtengo el valor contenido dentro del input */
+    var value = $(this).val();
+ 
+    /* Elimino todos los espacios en blanco que tenga la cadena delante y detrás */
+    var value_without_space = $.trim(value);
+ 
+    /* Muestro una alerta al usuario */
+    ////alert('El texto que ha ingresado contiene espacios y serán eliminados');
+ 
+    /* Cambio el valor contenido por el valor sin espacios */
+    $(this).val(value_without_space);
+});
+</script>
+
+</body>
+</html>

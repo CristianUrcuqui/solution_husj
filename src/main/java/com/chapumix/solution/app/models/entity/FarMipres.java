@@ -50,6 +50,11 @@ public class FarMipres implements Serializable {
 	private String idReporteEntregaMipress;
 	private String idFacturacionMipress;
 	private String idReporteFacturacionMipress;
+	private String idDireccionamientoTrazaMipress;
+	private String idDireccionamientoMipress;
+	private String idProgramacionMipress;	
+	private Date fechaMaxEntrega;
+	private Boolean procesadoProgramacion;
 	private Boolean procesadoEntrega;
 	private Boolean procesadoReporteEntrega;
 	private Boolean procesadoFacturacion;
@@ -62,7 +67,8 @@ public class FarMipres implements Serializable {
 	private Date fechaAltaAct;	
 	private ComTipoTecnologia comTipoTecnologia;
 	private ComTipoDocumentoMipres comTipoDocumentoMipres;
-	private GenPacien genPacien;	
+	private GenPacien genPacien;
+	private ComAmbito comAmbito;
 	
 	public FarMipres() {		
 	}
@@ -296,8 +302,58 @@ public class FarMipres implements Serializable {
 
 	public void setIdReporteFacturacionMipress(String idReporteFacturacionMipress) {
 		this.idReporteFacturacionMipress = idReporteFacturacionMipress;
+	}	
+
+	@Column(name = "id_direccionamiento_traza_mipres")
+	public String getIdDireccionamientoTrazaMipress() {
+		return idDireccionamientoTrazaMipress;
 	}
 
+
+	public void setIdDireccionamientoTrazaMipress(String idDireccionamientoTrazaMipress) {
+		this.idDireccionamientoTrazaMipress = idDireccionamientoTrazaMipress;
+	}
+
+
+	@Column(name = "id_direccionamiento_mipres")
+	public String getIdDireccionamientoMipress() {
+		return idDireccionamientoMipress;
+	}
+
+
+	public void setIdDireccionamientoMipress(String idDireccionamientoMipress) {
+		this.idDireccionamientoMipress = idDireccionamientoMipress;
+	}	
+	
+	@Column(name = "id_programacion_mipres")
+	public String getIdProgramacionMipress() {
+		return idProgramacionMipress;
+	}
+
+	public void setIdProgramacionMipress(String idProgramacionMipress) {
+		this.idProgramacionMipress = idProgramacionMipress;
+	}
+
+	@Column(name = "fecha_max_entrega")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	public Date getFechaMaxEntrega() {
+		return fechaMaxEntrega;
+	}
+
+
+	public void setFechaMaxEntrega(Date fechaMaxEntrega) {
+		this.fechaMaxEntrega = fechaMaxEntrega;
+	}
+
+	@Column(name = "procesado_programacion", columnDefinition="BIT")
+	public Boolean getProcesadoProgramacion() {
+		return procesadoProgramacion;
+	}
+
+	public void setProcesadoProgramacion(Boolean procesadoProgramacion) {
+		this.procesadoProgramacion = procesadoProgramacion;
+	}
 
 	@Column(name = "procesado_entrega", columnDefinition="BIT")
 	public Boolean getProcesadoEntrega() {
@@ -426,4 +482,17 @@ public class FarMipres implements Serializable {
 	public void setGenPacien(GenPacien genPacien) {
 		this.genPacien = genPacien;
 	}
+
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)	
+	@JoinColumn(name = "id_ambito")
+	public ComAmbito getComAmbito() {
+		return comAmbito;
+	}
+
+
+	public void setComAmbito(ComAmbito comAmbito) {
+		this.comAmbito = comAmbito;
+	}	
+	
 }

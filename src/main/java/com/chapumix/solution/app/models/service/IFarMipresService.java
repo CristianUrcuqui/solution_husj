@@ -14,13 +14,21 @@ public interface IFarMipresService {
 
 	public Page<FarMipres> findAll(Pageable pageable);
 	
-	public Page<FarMipres> findAllCustomPendientes(Pageable pageable);
+	public Page<FarMipres> findAllCustomPendientesHosp(Pageable pageable);
 	
-	public Page<FarMipres> findAllCustomSearchPendientes(Pageable pageable, String prescripcion);
+	public Page<FarMipres> findAllCustomSearchPendientesHosp(Pageable pageable, String prescripcion);
 	
-	public Page<FarMipres> findAllCustomProcesados(Pageable pageable);
+	public Page<FarMipres> findAllCustomProcesadosHosp(Pageable pageable);
 	
-	public Page<FarMipres> findAllCustomSearchProcesados(Pageable pageable, String prescripcion);	
+	public Page<FarMipres> findAllCustomSearchProcesadosHosp(Pageable pageable, String prescripcion);
+	
+	public Page<FarMipres> findAllCustomPendientesAmb(Pageable pageable);
+	
+	public Page<FarMipres> findAllCustomProcesadosAmb(Pageable pageable);
+	
+	public Page<FarMipres> findAllCustomSearchProcesadosAmb(Pageable pageable, String prescripcion);
+	
+	public Page<FarMipres> findAllCustomSearchPendientesAmb(Pageable pageable, String prescripcion);
 	
 	public void save(FarMipres farMipres);
 	
