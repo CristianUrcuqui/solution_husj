@@ -82,8 +82,7 @@ public class FarMipresComp {
 	
 	
 	//metodo que se ejecuta de forma automatica todos los dias a las 11:58PM   	
-	//@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")
-	@Scheduled(cron = "00 02 10 * * *", zone="America/Bogota")
+	@Scheduled(cron = "00 58 23 * * *", zone="America/Bogota")	
 	public void cronSincronizaPrescripciones() throws Exception {    	
     	
 		//convierto String a Date 
