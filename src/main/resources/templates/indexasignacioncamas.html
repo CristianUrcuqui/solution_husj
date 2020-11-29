@@ -80,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 	<div class="row">
                 	
                 		<!-- MODULOS --> 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_INTERNACION_ASIGNACIONCAMAS_SOLICITUDES')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/solicitud.jpg" alt="solicitud"/>
@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</figure>					    
 					    </div>
 					    
-					    <div class="col-md-3">
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_INTERNACION_ASIGNACIONCAMAS_TRAMITADAS')" class="col-md-3">
 					    	</figure>
 							<figure class="snip1166 navy">
 							  <img src="dist/img/tramitada.jpg" alt="tramitada"/>
@@ -101,24 +101,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							    <h3>Tramitadas</h3>
 							    <div>
 							      <p></p>
-							    </div><a th:href="@{/empleadohoy}"></a>
+							    </div><a th:href="@{/camatramitada}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>
-					    
-					    <div class="col-md-3">
-					    	</figure>
-							<figure class="snip1166 navy">
-							  <img src="dist/img/rechazado.jpg" alt="rechazado"/>
-							  <figcaption>
-							    <h3>Rechazadas</h3>
-							    <div>
-							      <p></p>
-							    </div><a th:href="@{/cumplecarform}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>				    
-					   
+					    </div>					   
 					    
 				    </div><!-- /.row -->          
               </div>         

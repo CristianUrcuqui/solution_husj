@@ -12,6 +12,10 @@ public interface IMedIntCamaService {
 	
 	public MedIntCama findById(Long id);
 	
+	public MedIntCama findByIngreso(String ingreso);
+	
+	public List<MedIntCama> findByDocumentoIngreso(String keyword);
+	
 	public void delete(Long id);
 
 }

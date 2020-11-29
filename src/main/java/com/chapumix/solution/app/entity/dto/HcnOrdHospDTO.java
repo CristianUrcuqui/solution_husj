@@ -35,6 +35,7 @@ public class HcnOrdHospDTO implements Serializable {
 	private String hcoMotivo;
 	private String gdeNombre;
 	private String gmeNomCom;
+	private String gasNombre;	
 	
 
 	public HcnOrdHospDTO() {
@@ -219,4 +220,15 @@ public class HcnOrdHospDTO implements Serializable {
 	public void setGmeNomCom(String gmeNomCom) {
 		this.gmeNomCom = gmeNomCom;
 	}
+
+
+	public String getGasNombre() {
+		return gasNombre;
+	}
+
+
+	public void setGasNombre(String gasNombre) {
+		this.gasNombre = gasNombre;
+	}	
+	
 }

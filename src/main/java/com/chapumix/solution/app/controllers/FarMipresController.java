@@ -1190,7 +1190,7 @@ public class FarMipresController {
 			model.addAttribute("farmacia", enlaceprincipalfarmacia);
 			model.addAttribute("enlace10", enlace10);
 			model.addAttribute("error", "El número de prescripción es requerida");
-			return "anulaprescripcionform";
+			return "anulaprescripcionhospform";
 		}		
 		
 		try {
@@ -1205,7 +1205,7 @@ public class FarMipresController {
 		} catch (NumberFormatException ex) {
 			model.addAttribute("error", "ID no valido");
 		}		
-		return  "anulaprescripcionform";			
+		return  "anulaprescripcionhospform";			
 	}
 	
 	// Este metodo me permite anular la entrega
@@ -1229,7 +1229,7 @@ public class FarMipresController {
 				iFarMipresService.save(farMipres);
 				status.setComplete();
 				flash.addFlashAttribute("success", "La entrega fue anulada correctamente");
-				return "redirect:/anulaprescripcionform";
+				return "redirect:/anulaprescripcionhospform";
 			}
 
 			if (StringUtils.equals(webServiceInfo.get("success"), "200") && webServiceInfo.get("condicion").equals("reporteentrega")) {				
@@ -1245,7 +1245,7 @@ public class FarMipresController {
 				iFarMipresService.save(farMipres);
 				status.setComplete();
 				flash.addFlashAttribute("success", "El reporte de entrega fue anulada correctamente");
-				return "redirect:/anulaprescripcionform";
+				return "redirect:/anulaprescripcionhospform";
 			}
 			
 			if (StringUtils.equals(webServiceInfo.get("success"), "200") && webServiceInfo.get("condicion").equals("reportefacturacion")) {				
@@ -1263,16 +1263,16 @@ public class FarMipresController {
 				iFarMipresService.save(farMipres);
 				status.setComplete();
 				flash.addFlashAttribute("success", "El reporte de facturación fue anulada correctamente");
-				return "redirect:/anulaprescripcionform";
+				return "redirect:/anulaprescripcionhospform";
 			}
 			
 			else {
 				flash.addFlashAttribute("error", webServiceInfo.get("error"));
-				return "redirect:/anulaprescripcionform";
+				return "redirect:/anulaprescripcionhospform";
 			}
 
 		}
-		return "redirect:/anulaprescripcionform";
+		return "redirect:/anulaprescripcionhospform";
 	}
 	
 

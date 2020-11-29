@@ -1,6 +1,7 @@
 package com.chapumix.solution.app.utils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,8 +39,10 @@ public class PacienteDinamica {
 			// proceso API para buscar el paciente
 			ResponseEntity<List<GenPacienDTO>> respuestaa = restTemplate.exchange(URLPaciente + '/' + pacNumDoc, HttpMethod.GET, null,new ParameterizedTypeReference<List<GenPacienDTO>>() {});
 			List<GenPacienDTO> dinamica = respuestaa.getBody();
-				
-			GenPacien guardarPaciente = pacienteAgregar(dinamica);					
+			
+			List<GenPacienDTO> dinamicaFiltro = dinamica.stream().filter(g -> g.getPacNumDoc().equals(pacNumDoc)).collect(Collectors.toList());
+			
+			GenPacien guardarPaciente = pacienteAgregar(dinamicaFiltro);					
 			iGenPacienService.save(guardarPaciente);
 			GenPacien obtengoPaciente = iGenPacienService.findByNumberDoc(pacNumDoc);		
 			return obtengoPaciente;

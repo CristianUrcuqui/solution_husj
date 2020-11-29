@@ -29,7 +29,7 @@ public interface IFarMipresDao extends PagingAndSortingRepository<FarMipres, Lon
 	Page<FarMipres> findAllCustomPendientesHosp(Pageable pageable);
 	
 	//query personalizado para consultar mipres no procesados hospitalarios con paginacion y busqueda por documento y prescripcion
-	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 0 OR f.procesadoReporteEntrega = 0 OR f.procesadoFacturacion = 0) AND a.codigo IN (22,30) AND  f.numeroPrescripcion LIKE %?1% OR g.pacNumDoc LIKE %?1% ORDER BY f.fechaEntrega ASC")
+	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 0 OR f.procesadoReporteEntrega = 0 OR f.procesadoFacturacion = 0) AND a.codigo IN (22,30) AND  CONCAT(f.numeroPrescripcion, g.pacNumDoc) LIKE %?1% ORDER BY f.fechaEntrega ASC")
 	Page<FarMipres> findAllCustomSearchPendientesHosp(Pageable pageable, String prescripcion);	
 	
 	//query personalizado para consultar mipres procesados hospitalarios con paginacion
@@ -37,7 +37,7 @@ public interface IFarMipresDao extends PagingAndSortingRepository<FarMipres, Lon
 	Page<FarMipres> findAllCustomProcesadosHosp(Pageable pageable);
 	
 	//query personalizado para consultar mipres procesados hospitalarios con paginacion y busqueda por documento y prescripcion
-	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 1 AND f.procesadoReporteEntrega = 1 AND f.procesadoFacturacion = 1) AND a.codigo IN (22,30) AND f.numeroPrescripcion LIKE %?1% OR g.pacNumDoc LIKE %?1% ORDER BY f.fechaEntrega ASC")
+	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 1 AND f.procesadoReporteEntrega = 1 AND f.procesadoFacturacion = 1) AND a.codigo IN (22,30) AND CONCAT(f.numeroPrescripcion, g.pacNumDoc) LIKE %?1%  ORDER BY f.fechaEntrega ASC")
 	Page<FarMipres> findAllCustomSearchProcesadosHosp(Pageable pageable, String prescripcion);
 	
 	//query personalizado para consultar mipres no procesados ambulatorio con paginacion
@@ -45,7 +45,7 @@ public interface IFarMipresDao extends PagingAndSortingRepository<FarMipres, Lon
 	Page<FarMipres> findAllCustomPendientesAmb(Pageable pageable);
 	
 	//query personalizado para consultar mipres no procesados ambulatorio con paginacion y busqueda por documento y prescripcion
-	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 0 OR f.procesadoReporteEntrega = 0 OR f.procesadoFacturacion = 0) AND a.codigo IN (11,12,21) AND  f.numeroPrescripcion LIKE %?1% OR g.pacNumDoc LIKE %?1% ORDER BY f.fechaEntrega ASC")
+	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 0 OR f.procesadoReporteEntrega = 0 OR f.procesadoFacturacion = 0) AND a.codigo IN (11,12,21) AND CONCAT(f.numeroPrescripcion, g.pacNumDoc) LIKE %?1% ORDER BY f.fechaEntrega ASC")
 	Page<FarMipres> findAllCustomSearchPendientesAmb(Pageable pageable, String prescripcion);
 	
 	//query personalizado para consultar mipres procesados ambulatorio con paginacion
@@ -54,7 +54,7 @@ public interface IFarMipresDao extends PagingAndSortingRepository<FarMipres, Lon
 	
 	
 	//query personalizado para consultar mipres procesados ambulatorios con paginacion y busqueda por documento y prescripcion
-	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 1 AND f.procesadoReporteEntrega = 1 AND f.procesadoFacturacion = 1) AND a.codigo IN (11,12,21) AND f.numeroPrescripcion LIKE %?1% OR g.pacNumDoc LIKE %?1% ORDER BY f.fechaEntrega ASC")
+	@Query("SELECT f FROM FarMipres f JOIN f.genPacien g JOIN f.comAmbito a WHERE (f.procesadoEntrega = 1 AND f.procesadoReporteEntrega = 1 AND f.procesadoFacturacion = 1) AND a.codigo IN (11,12,21) AND CONCAT(f.numeroPrescripcion, g.pacNumDoc) LIKE %?1% ORDER BY f.fechaEntrega ASC")
 	Page<FarMipres> findAllCustomSearchProcesadosAmb(Pageable pageable, String prescripcion);
 	
 	

@@ -26,7 +26,19 @@ public class MedIntCamaServiceImpl implements IMedIntCamaService{
 	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
 	public MedIntCama findById(Long id) {
 		return medIntCamaDao.findById(id).orElse(null);//.orElse es que si lo encuentra retorna el objeto y no devuelve null
-	}	
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public MedIntCama findByIngreso(String ingreso) {		
+		return medIntCamaDao.findByIngreso(ingreso);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)//El reanOnly se usa para que la consulta sea solo de lectura
+	public List<MedIntCama> findByDocumentoIngreso(String keyword) {
+		return medIntCamaDao.findByDocumentoIngreso(keyword);
+	}
 		
 	
 	@Override

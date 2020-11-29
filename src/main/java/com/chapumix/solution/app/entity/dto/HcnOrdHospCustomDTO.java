@@ -35,6 +35,7 @@ public class HcnOrdHospCustomDTO implements Serializable {
 	private String hcoMotivo;
 	private String gdeNombre;
 	private String gmeNomCom;
+	private String gasNombre;	
 	
 
 	public HcnOrdHospCustomDTO() {
@@ -45,7 +46,7 @@ public class HcnOrdHospCustomDTO implements Serializable {
 	public HcnOrdHospCustomDTO(Integer ainConsec, String pacNumDoc, String pacPriNom, String pacSegNom,
 			String pacPriApe, String pacSegApe, Integer gpasexpac, Integer gpafecnac, String gdeNombre, String hcaCodigo, 
 			String hcaNombre, Integer hcoTipAisl, Integer hcoTipHosp, String diaCodigo,	String diaNombre, Date hcofecdoc,
-			String hcoObserv, String hcoMotivo, String gmeNomCom) {		
+			String ccCodigo, String ccNombre, String hcoObserv, String hcoMotivo, String gmeNomCom, String gasNombre) {		
 		this.ainConsec = ainConsec;
 		this.pacNumDoc = pacNumDoc;
 		this.pacPriNom = pacPriNom;
@@ -62,9 +63,12 @@ public class HcnOrdHospCustomDTO implements Serializable {
 		this.diaCodigo = diaCodigo;
 		this.diaNombre = diaNombre;
 		this.hcofecdoc = hcofecdoc;
+		this.ccCodigo = ccCodigo;
+		this.ccNombre = ccNombre;
 		this.hcoObserv = hcoObserv;
 		this.hcoMotivo = hcoMotivo;
 		this.gmeNomCom = gmeNomCom;
+		this.gasNombre = gasNombre;
 	}
 
 
@@ -96,9 +100,6 @@ public class HcnOrdHospCustomDTO implements Serializable {
 		this.gdeNombre = gdeNombre;
 		this.gmeNomCom = gmeNomCom;
 	}
-
-
-
 
 	public Integer getAinConsec() {
 		return ainConsec;
@@ -276,4 +277,15 @@ public class HcnOrdHospCustomDTO implements Serializable {
 	public void setGmeNomCom(String gmeNomCom) {
 		this.gmeNomCom = gmeNomCom;
 	}
+
+
+	public String getGasNombre() {
+		return gasNombre;
+	}
+
+
+	public void setGasNombre(String gasNombre) {
+		this.gasNombre = gasNombre;
+	}
+	
 }
