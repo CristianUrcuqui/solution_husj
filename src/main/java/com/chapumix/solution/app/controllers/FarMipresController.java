@@ -685,10 +685,10 @@ public class FarMipresController {
 			iFarMipresService.save(farMipres);
 			status.setComplete();
 			flash.addFlashAttribute("success", mensajeFlash);
-			return "redirect:reporteentregaambform";
+			return "redirect:pendientesmipresamb";
 			}else {
 				flash.addFlashAttribute("error", webServiceInfo.get("error"));
-				return "redirect:reporteentregaambform";
+				return "redirect:pendientesmipresamb";
 			}	
 	}
 	
