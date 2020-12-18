@@ -177,7 +177,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            </div>
                        </div>                           
                        
-                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'M'}" class="form-group row required">
+                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'M' and farMipres.codEps != 'ESS062'}" class="form-group row required">
                            <label class="control-label col-md-4" for="cantidaddispensacion">Cantidad En Unidades Minimas Dispensación</label>
                            <div class="col-md-8">                           		
                            		<select id="cantidaddispensacion"  th:name="cdispensacion" class="form-control form-control-sm">
@@ -212,7 +212,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                            </div>
                        </div>
                        
-                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'N'}" class="form-group row required">
+                       <div th:if="${farMipres.comTipoTecnologia.tipo eq 'N' and farMipres.codEps != 'ESS062'}" class="form-group row required">
                            <label class="control-label col-md-4" for="cantidaddispensacion">Cantidad En Unidades Minimas Dispensación</label>
                            <div class="col-md-8">                           		
                            		<select id="cantidaddispensacion"  th:name="cdispensacion" class="form-control form-control-sm">
@@ -233,6 +233,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		                        </select>
                            </div>
                        </div>
+                       
+                       <div th:if="${farMipres.codEps eq 'ESS062'}" class="form-group row">
+                           <label class="control-label col-md-4" for="codigoservicio">Cantidad <span class="text-danger"> (exclusivo asmet)</span></label>
+                           <div class="col-md-8">                           		
+                           		<input id="cantidaddispensacion" type="text" th:name="cdispensacion" th:value="${farMipres.cantidadEntregada}" class="form-control form-control-sm" readonly>
+                           </div>
+                       </div> 
                        
                        <div th:if="${farMipres.comTipoTecnologia.tipo eq 'P'}" class="form-group row required">
                            <label class="control-label col-md-4" for="cantidaddispensacion">Digite Cantidad De Procedimientos</label>
