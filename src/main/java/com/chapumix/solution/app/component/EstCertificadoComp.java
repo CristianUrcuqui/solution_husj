@@ -39,7 +39,8 @@ public class EstCertificadoComp {
 	
 	private Logger logger = LoggerFactory.getLogger(EstCertificadoComp.class);
 	//private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-	private static final String SMTP_SERVER = "correo.dongee.com";
+	private static final String SMTP_SERVER = "smtp.gmail.com";
+	private static final String PORT = "465";
     private static final String USERNAME = "desarrollo.sistemas@hospitalsanjose.gov.co";
     private static final String PASSWORD = "HusjequiposP0";
     private static final String EMAIL_FROM = "desarrollo.sistemas@hospitalsanjose.gov.co";
@@ -87,7 +88,10 @@ public class EstCertificadoComp {
 			
 			
 			prop = System.getProperties();
+			prop.put("mail.smtp.port", PORT);
             prop.put("mail.smtp.auth", "true");
+            prop.put("mail.smtp.socketFactory.port", PORT);
+            prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             session = Session.getInstance(prop, (Authenticator)null);
             msg = (Message)new MimeMessage(session);
             msg.setFrom((Address)new InternetAddress(EMAIL_FROM));

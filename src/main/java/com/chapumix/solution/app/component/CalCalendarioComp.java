@@ -48,9 +48,10 @@ public class CalCalendarioComp {
 	
 	private Logger logger = LoggerFactory.getLogger(CalCalendarioComp.class);
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-	private static final String SMTP_SERVER = "correo.dongee.com";
+	private static final String SMTP_SERVER = "smtp.gmail.com";
+	private static final String PORT = "465";
     private static final String USERNAME = "humanizacion@hospitalsanjose.gov.co";
-    private static final String PASSWORD = "Migracion2018";
+    private static final String PASSWORD = "Migracion2020";
     private static final String EMAIL_FROM = "humanizacion@hospitalsanjose.gov.co";
     private static final String EMAIL_SUBJECT = "FELIZ CUMPLEA\u00d1OS te desea HOSPITAL UNIVERSITARIO SAN JOSE";    
     private static final String EMAIL_TEXT = "";
@@ -71,7 +72,7 @@ public class CalCalendarioComp {
     public SMTPTransport t;
 	
 	//metodo que se ejecuta de forma automatica todos los dias a la 7:00 AM formato de 24 horas
-    @Scheduled(cron = "00 00 07 * * *", zone="America/Bogota")    
+    @Scheduled(cron = "00 00 07 * * *", zone="America/Bogota")      
     public void cronCumpSch() {
 	    
     	    //verificamos la hora y fecha de ejecucion
@@ -99,8 +100,13 @@ public class CalCalendarioComp {
 		                    diaHoy = cal.get(5);		                    
 		                    
 		                    if(diaCumple == diaHoy && mesCumple == mesHoy) {		                    	
-		                    	prop = System.getProperties();
-		                        prop.put("mail.smtp.auth", "true");		                        
+		                    	prop = System.getProperties();	                  	
+		                    	prop.put("mail.smtp.port", PORT);
+		                        prop.put("mail.smtp.auth", "true");
+		                        prop.put("mail.smtp.socketFactory.port", PORT);
+		                        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		                    	
+		                    	
 		                        session = Session.getInstance(prop, (Authenticator)null);
 		                        msg = (Message)new MimeMessage(session);
 		                        msg.setFrom((Address)new InternetAddress(EMAIL_FROM));
@@ -109,8 +115,8 @@ public class CalCalendarioComp {
 		                        p1 = new MimeBodyPart();		                        
 		                        p1.setText(EMAIL_TEXT);		                        
 		                        p2 = new MimeBodyPart();		                        
-		                        //Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg");
-		                        Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg");		                        
+		                        Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg");
+		                        //Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg");		                        
 		                        File dbAsFile = resource.getFile();                    
 		                        fds = new FileDataSource(dbAsFile);
 		                        p2.setDataHandler(new DataHandler((DataSource)fds));
