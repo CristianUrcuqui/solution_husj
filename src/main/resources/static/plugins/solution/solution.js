@@ -35,3 +35,10 @@ window.onload = function(){
 	}	
 }
 
+$('select').select2({
+		placeholder: 'Seleccione',		
+		theme: 'bootstrap4',
+		width: '100%',
+		language: "es"
+	});	
+

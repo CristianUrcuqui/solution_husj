@@ -57,6 +57,17 @@ public class GenPacienDTO implements Serializable {
 		this.pacSegApe = pacSegApe;
 		this.gpafecnac = gpafecnac;
 		this.gpasexpac = gpasexpac;
+	}	
+
+	public GenPacienDTO(String pacNumDoc, Integer pacTipDoc, String pacPriNom, String pacSegNom, String pacPriApe,
+			String pacSegApe, Date gpafecnac) {		
+		this.pacNumDoc = pacNumDoc;
+		this.pacTipDoc = pacTipDoc;
+		this.pacPriNom = pacPriNom;
+		this.pacSegNom = pacSegNom;
+		this.pacPriApe = pacPriApe;
+		this.pacSegApe = pacSegApe;
+		this.gpafecnac = gpafecnac;
 	}
 
 	public Integer getOid() {

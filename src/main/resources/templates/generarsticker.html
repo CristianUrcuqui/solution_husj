@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+    
+    <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	<div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	<div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	<div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	<div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div> 	
+     
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Generar Sticker</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					
+					<!-- Toolbar Botones Derecho-->
+					  <div class="col-md-12">			
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-primary" th:href="@{/indexstickers}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>						  				
+					</div>
+				</div>
+			</div>
+			
+			
+		<!-- Div para colocar los botones busqueda-->	
+		
+		
+		<div class="mx-auto mt-4">		
+			<div class="card ml-3 mr-3">			
+				<div class="card-header custom-header p-0">
+					<h6>
+						<span class="fas fa-filter m-1"></span>Filtro Avanzado
+					</h6>
+				</div>
+				
+				<div class="card-body">
+					<form id="buscarmipres" class="form-inline mb-3" th:action="@{/crearsticker}" role="form" method="get">
+						<div class="input-group">
+							<label class="control-label text-center align-middle">Documento Paciente:</label>			                              
+			                <input id="pacienteingreso" type="text" name="keyword" class="form-control form-control-sm ml-1" onkeyup="this.value = this.value.toUpperCase();">        
+			            </div>    
+			            
+			             <div class="input-group">						
+			                <button type="submit" class="btn bg-gradient-warning btn-sm ml-2">Consultar</button>      
+			            </div>	             
+					</form>
+				</div>			
+			</div>		
+		</div>          
+	
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>	
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->         				
+        
+	        <div th:if="${listado} == true" class="col-md-8 mx-auto" >
+	        	
+	        	<div class="card card-primary animacion">
+	        		<div class="card-header custom-header p-0">
+                          <h4 class="text-center mt-1">PACIENTE <span th:text="${pacienteGenerado}"></span></h4>
+                    </div>
+                    
+                    <div class="card-body texr-center">
+                    	<div>         		
+         		
+			         		<iframe th:src="@{/dist/pdf/}+${docPaciente}+${navpanes}" height="280px" width="100%"></iframe>		         	
+			              
+			            </div><!-- /.card -->   
+                    </div>
+	        	</div>
+	        
+	        </div>
+        	
+         	     	
+         	    
+                    
+        </div><!-- /.row -->
+      </div><!-- /.container -->
+    </div><!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+
+<script>
+	//metodo para quitar espacios en los input
+	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
+	$('input').keyup(function(){
+	    /* Obtengo el valor contenido dentro del input */
+	    var value = $(this).val();
+	 
+	    /* Elimino todos los espacios en blanco que tenga la cadena delante y detrás */
+	    var value_without_space = $.trim(value);
+	 
+	    /* Muestro una alerta al usuario */
+	    ////alert('El texto que ha ingresado contiene espacios y serán eliminados');
+	 
+	    /* Cambio el valor contenido por el valor sin espacios */
+	    $(this).val(value_without_space);
+	});	
+	
+</script>
+</body>
+</html>

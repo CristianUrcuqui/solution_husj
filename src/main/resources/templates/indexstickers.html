@@ -28,7 +28,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">            
-            <h1><span class="m-0 badge badge-pill badge-dark">Farmacia</span></h1>
+            <h1><span class="m-0 badge badge-pill badge-dark">Stickers</span></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -40,54 +40,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-      
+    
+    
+   			<!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">
+					<!-- Toolbar Botones Derecho-->
+					  <div class="col-sm-12">			
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-primary" th:href="@{/indexfarmacia}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>						  				
+					</div>
+				</div>
+			</div>
+        
+
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row"><!-- CONTENIDO DESDE AQUI-->
         
-        
-        <div class="col-md-12 mt-3">
+           <div class="col-md-12 mt-3">
             <div class="card card-primary card-outline animacion">
               <div class="card-header">
                 <h3 class="card-title">
-                  <i class="fas fa-mobile-alt"></i>
-                  Apps
+                  <i class="fas fa-boxes"></i>
+                  Modulos
                 </h3>
               </div>
               <div class="card-body pad table-responsive">                 
                 	<div class="row">
                 	
-                		<!-- APPS --> 					    
-					    <div class="col-md-3">					    	
+                		<!-- MODULOS --> 					    
+					    <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_FARMACIA_STICKERS_GENERAR')" class="col-md-3">
+					    	</figure>
 							<figure class="snip1166 navy">
-							  <img src="dist/img/mipress.jpg" alt="mipress"/>
+							  <img src="dist/img/generarsticker.jpg" alt="solicitud"/>
 							  <figcaption>
-							    <h3>Mipres</h3>
+							    <h3>Generar</h3>
 							    <div>
 							      <p></p>
-							    </div><a th:href="@{/indexmipres}"></a>
+							    </div><a th:href="@{/generarsticker}"></a>
 							  </figcaption>
 							</figure>					    
-					    </div>
-					    
-					    <div class="col-md-3">					    	
-							<figure class="snip1166 navy">
-							  <img src="dist/img/stickers.jpg" alt="mipress"/>
-							  <figcaption>
-							    <h3>Stickers</h3>
-							    <div>
-							      <p></p>
-							    </div><a th:href="@{/indexstickers}"></a>
-							  </figcaption>
-							</figure>					    
-					    </div>  	  				    
-					   
+					    </div>					    				   
 					    
 				    </div><!-- /.row -->          
               </div>         
             </div><!-- /.card -->
-          </div>	     
+          </div> 		
 			                
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

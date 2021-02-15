@@ -32,6 +32,10 @@
 		<div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
 		<div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
 		<div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>
+		
+		<!--  <div class="alert alert-success" th:if="${param.expired != null}">
+			<strong>Sesion Terminada</strong>
+		</div>-->
 </header>
 
 <body class="hold-transition sidebar-mini">	
@@ -96,8 +100,7 @@
 <script th:src="@{/plugins/datatables/dataTables.bootstrap4.js}"></script>
 <!-- AdminLTE App -->
 <script th:src="@{/dist/js/adminlte.min.js}"></script>
-<!-- Solution JS -->
-<script th:src="@{/plugins/solution/solution.js}"></script>
+
 
 <!--  <script>
 		function actualizar(){location.reload(true);}
@@ -107,19 +110,33 @@
 -->
 
 <script> 
-	var totalCount = 7;
+
+	let nodes = document.querySelectorAll('.alert-success, .alert-danger')
+	
+	//funciones, metodos, validaciones
+	
+	//me permite eliminar los mensajes de alerta despues de 8 segundos
+	if (nodes != null){
+		setTimeout(() => {
+			for(let i = 0, j = nodes.length; i < j; i++) {
+			    nodes[i].remove()
+			    //nodes[i].style.visibility = "hidden";		    
+			}	
+		}, 8000);
+	}
+
+	//me permite cargar imagenes aleatorias por medio de una API gratuito
 	function ChangeIt() 
 	{
-	var num = Math.ceil( Math.random() * totalCount );
-	document.body.background = '../../dist/img/fondo'+num+'.jpg';
-	document.body.style.backgroundRepeat = "no-repeat";// Background repeat
-	document.body.style.backgroundSize = "cover";
-	document.body.style.height = "100%";	
+		//document.body.background = 'https://source.unsplash.com/random/1920x1280';
+		document.body.background = 'https://picsum.photos/1920/1280/?blur';		
+		document.body.style.backgroundRepeat = "no-repeat";// Background repeat
+		document.body.style.backgroundSize = "cover";
+		document.body.style.height = "100%";		 
 	}
-</script>
 
-<script type="text/javascript"> 
-	ChangeIt();
+	ChangeIt();	
+	
 </script> 
 
 </body>

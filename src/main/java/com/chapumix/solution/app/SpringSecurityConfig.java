@@ -35,7 +35,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/indexcalendario/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_APP") 		
 		.antMatchers("/empleadocumple/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_EMPLEADOS")
 		.antMatchers("/empleadohoy/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_HOY")
-		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_CARGAR") 
+		.antMatchers("/cumplecarform/**").hasAnyRole("ADMIN", "CALIDAD_CUMPLEANOS_CARGAR")
+		//servicio calidad eventos clinicos
+		.antMatchers("/indexeventosclinicos/**").hasAnyRole("ADMIN", "CALIDAD_EVENTOSCLINICOS_APP")
+		.antMatchers("/eventoclinicoregform/**").hasAnyRole("ADMIN", "CALIDAD_EVENTOSCLINICOS_REGISTRO")
 		//servicio estadistica certificado
 		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "INDEX_ESTADISTICA") 
 		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_APP") 
@@ -59,7 +62,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/sincronizaprescripcionambform/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_SINCRONIZAR_AMBULATORIO")
 		.antMatchers("/ripsmipres/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_RIPS")
 		.antMatchers("/tokenformprimario/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_PARAMETRO_PRINCIPAL")
-		.antMatchers("/tokenformsecundario/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_PARAMETRO_SECUNDARIO") 			
+		.antMatchers("/tokenformsecundario/**").hasAnyRole("ADMIN", "FARMACIA_MIPRES_PARAMETRO_SECUNDARIO")
+		//servicio farmacia stickers
+		.antMatchers("/indexstickers/**").hasAnyRole("ADMIN", "FARMACIA_STICKERS_APP")
+		.antMatchers("/generarsticker/**").hasAnyRole("ADMIN", "FARMACIA_STICKERS_GENERAR")
+		
 		//servicio medicina interna
 		.antMatchers("/indexmedicinainterna/**").hasAnyRole("ADMIN", "INDEX_INTERNACION") 
 		.antMatchers("/indexasignacioncamas/**").hasAnyRole("ADMIN", "INTERNACION_ASIGNACIONCAMAS_APP") 
@@ -87,14 +94,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 			.loginPage("/login")
 			.defaultSuccessUrl("/index")
 			.permitAll()
-		.and()
+		.and()			
 			.rememberMe().key("uniqueAndSecret").rememberMeParameter("remember-me").tokenValiditySeconds(7200)//el cookie durara dos horas y se llamara remember-me
 		.and()
 			.logout()
 			.permitAll()
 			.deleteCookies("JSESSIONID")
 		.and()
-		.exceptionHandling().accessDeniedPage("/error_403");		
+		.exceptionHandling().accessDeniedPage("/error_403")
+		.and()
+		.headers().frameOptions().sameOrigin().httpStrictTransportSecurity().disable();//puede ser usado para indicar si debería permitírsele a un navegador renderizar una página en un <frame>	
 		
 	}
 
