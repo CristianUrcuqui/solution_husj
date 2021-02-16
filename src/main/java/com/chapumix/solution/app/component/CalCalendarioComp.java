@@ -115,8 +115,8 @@ public class CalCalendarioComp {
 		                        p1 = new MimeBodyPart();		                        
 		                        p1.setText(EMAIL_TEXT);		                        
 		                        p2 = new MimeBodyPart();		                        
-		                        //Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg");
-		                        Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg");		                        
+		                        //Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg"); //windows 
+		                        Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg"); //linux		                         
 		                        File dbAsFile = resource.getFile();                    
 		                        fds = new FileDataSource(dbAsFile);
 		                        p2.setDataHandler(new DataHandler((DataSource)fds));

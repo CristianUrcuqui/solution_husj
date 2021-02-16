@@ -1,9 +1,7 @@
 package com.chapumix.solution.app.controllers;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,11 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -40,7 +33,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRSaver;
 
 
 @Controller
@@ -64,10 +56,7 @@ public class FarStickersController {
 	private String enlace10;
 	
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Autowired
-	private ServletContext context;
+	private RestTemplate restTemplate;	
 	
 	
 	/* ----------------------------------------------------------
@@ -209,14 +198,18 @@ public class FarStickersController {
 		// Rellenar el informe con los datos de la prescripcion y la información de parámetros adicionales.
 		JasperPrint jasperPrint  = JasperFillManager.fillReport(jasperReport, parameters, source);		
 		
-		//este me permite exportar y abrir dialogo para guardar el archivo
-		String fileName = dinamica.get(0).getPacNumDoc()+".pdf";		
+		//este me permite armar el nombre del archivo
+		String fileName = dinamica.get(0).getPacNumDoc()+".pdf";
 		
-		String path = "src/main/resources/static/dist/pdf";
-
-		File file = new File(path);
-		String absolutePath = file.getAbsolutePath();		
-		JasperExportManager.exportReportToPdfFile(jasperPrint, absolutePath + '/' + fileName);		
+		//Resource resource = loader.getResource("classpath:static/dist/img/cumpleanos.jpg"); //windows 
+        //Resource resource = loader.getResource("file:/home/jar/cumpleanos.jpg"); //linux
+          
+        //String path = "C://tmp//pdf"; //Windows		
+		String path = "/home/jar/pdf/";	//Linux		
+		
+		//File file = new File(path);
+		//String absolutePath = file.getAbsolutePath();		
+		JasperExportManager.exportReportToPdfFile(jasperPrint, path +'/'+ fileName);		
 		
 	}
 		
