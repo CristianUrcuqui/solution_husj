@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout ::head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+	<!-- div para spinner de carga de pagina -->
+	<div id="contenedor_carga">
+  		<div id="carga">
+  		</div>
+  	</div>
+
+<div class="wrapper">
+
+  <header th:replace="layout/layout ::header"></header>
+
+  <aside th:replace="layout/layout ::menulateral" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+
+  <!-- INICIO CONTENIDO -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+     
+     <!--  ESTOS DIV ME PERMITEN MOSTRAR LOS DIFERENTES MENSAJES DE ACCION  	-->  	
+  	  <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>  	
+	  <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+	  <div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+	  <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>     
+     
+     <!-- Lista para mostrar los errorer antes del formulario -->
+	 <div class="col-sm-12">
+		 <div th:object="${calEvento}" th:remove="tag">
+			 <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+			 	<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			 </ul>
+		 </div>
+	 </div>
+     
+          
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">            
+            <h1><span class="m-0 badge badge-pill badge-dark">Nuevo Evento</span></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li th:text="${titulo}" class="breadcrumb-item active"></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+    <!-- TOOLBAR BOTONES -->
+			<div class="content-header py-0">
+			  <div class="container-fluid">
+				<div class="row">					
+					  	<div class="col-md-12">
+						<!-- Toolbar Botones -->
+						<div class="btn-toolbar float-right" role="toolbar">
+							<div class="btn-group btn-group-justified" role="group">
+								<div class="btn-group btn-group-sm" role="group">									
+									<a class="btn bg-gradient-secondary" th:href="@{/indexeventosclinicos}" data-toggle="tooltip" data-placement="top" title="Regresar" role="button">
+										<i class="fas fa-arrow-circle-left fa-lg mt-1"></i>
+									</a>
+								</div>																									
+							</div>
+						</div>
+					  </div>				  				
+					</div>
+				</div>
+			</div>
+			
+	<!-- Linea Separadora Botones - Contenido Principal -->
+	<div class="form-group col-12-md mt-0 mb-0">
+            <hr>
+    </div>   
+
+    <!-- Main content -->    
+    <div class="content">
+      <div class="container py-5">
+        <div class="row"><!-- CONTENIDO DESDE AQUI-->    
+			
+			
+			<div class="col-md-12 mx-auto">
+				
+				<div class="card card-primary animacion">
+					<div class="card-header custom-header p-0">
+                          <h4 class="ml-3 mt-1">Nuevo Evento</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                    	<form id="editarevento"  class="form-horizontal" th:action="@{/eventoclinicoregform}" th:object="${calEvento}" role="form" method="post">
+                    	
+                    	 <!-- QUIEN REPORTA -->
+                    	 <div class="col-md-12">
+                    	 	<div class="card card-primary animacion">
+                    	 	
+                    	 		<div class="card-header custom-header">
+				                	<h3 class="card-title"><i class="fas fa-user mr-2"></i>Reportado Por</h3>
+				
+				                	<div class="card-tools">
+				                  		<button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+				                  		</button>
+				                	</div><!-- /.card-tools -->
+				              	</div><!-- /.card-header -->
+				              	<div class="card-body">
+				              	
+				              		<div class="row">
+				              			<div class="col-md-3">				              				
+				              					<div class="form-group">								                    
+									                	<label class="col-form-label">¿Es anónimo?</label>									                	
+									                	<div class="form-check">
+											            	<input id="si" type="radio" name="anonimo" value="312" class="form-check-input" checked>
+											            	<label class="form-check-label" for="si">Si</label>										            	
+											            </div>
+											            
+											            <div class="form-check">
+											            	<input id="no" type="radio" name="anonimo" value="NO" class="form-check-input" checked>
+											            	<label class="form-check-label" for="no">No</label>										            	
+											            </div>									            
+								                </div>				              				
+				              			</div>
+				              		</div>
+				              		
+				              		<div class="row">
+				              			<div class="col-md-4 ocultar">
+				              				<div class="form-group">
+				              					<label class="control-label custom-label" for="persona">Usuario</label>
+				              					<div class="w-100"></div><!-- ME SIRVE PARA CREAR ESPACIOS ENTRE COMPONENTES -->
+				              					<span sec:authentication="principal.nombreCompleto" class="product-description"></span>            					                     				
+				              				</div>
+				              			</div>
+				              			<div class="col-md-4">
+				              				<div class="form-group required">
+				              					<label class="control-label custom-label" for="profesion">Profesión</label>				              					
+				              					<select id="profesion" th:field="*{comProfesion}" class="form-control form-control-sm">
+						                            <option value="" selected="selected">Seleccione</option>
+						                             <option th:each="prof : ${profesion}" th:value="${prof.id}" th:text="${prof.nombre}"></option>	                          
+						                        </select>                     				
+				              				</div>
+				              			</div>
+				              		</div>             	
+				              	</div><!-- /.card-body -->			              	            	 	
+                    	 	</div><!-- /.card -->
+                    	 </div>
+                    	 
+                    	 
+                    	 <!-- EVENTO CLINICO -->
+                    	 <div class="col-md-12">
+                    	 	<div class="card card-primary animacion">
+                    	 	
+                    	 		<div class="card-header custom-header">
+				                	<h3 class="card-title"><i class="fas fa-heartbeat mr-2"></i>Evento Clínico</h3>
+				
+				                	<div class="card-tools">
+				                  		<button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-plus"></i>
+				                  		</button>
+				                	</div><!-- /.card-tools -->
+				              	</div><!-- /.card-header -->
+				              	<div class="card-body">
+				              	
+				              		<div class="row">
+				              			<div class="col-md-4">
+				              				<div class="form-group required">
+				              					<label class="control-label custom-label" for="evento">Tipo de evento</label>				              					
+				              					<select id="evento" class="form-control form-control-sm">
+						                            <option value="" selected="selected">Seleccione</option>
+						                             <option th:each="tevento : ${tipoevento}" th:value="${tevento.id}" th:text="${tevento.nombre}"></option>	                          
+						                        </select>                     				
+				              				</div>
+				              			</div>
+				              			
+				              			<div class="col-md-12">
+				              				<div class="form-group clasificacion">
+				              					<label class="control-label custom-label" for="clasificacion">Subtipo de evento</label>				              								              					
+				              					<select id="clasificacion" class="form-control form-control-sm" th:field="*{comCatalogoEvento}" >
+						                            <option value="" selected="selected">Seleccione</option>						                                                    
+						                        </select>                     				
+				              				</div>
+				              			</div>
+				              		</div>
+				              		
+				              		             	
+				              	</div><!-- /.card-body -->			              	            	 	
+                    	 	</div><!-- /.card -->
+                    	 </div>
+                    	
+                    	
+					  
+					 
+                    
+                    	</form>             
+                    </div><!-- /.card-body -->
+                    <div class="card-footer">
+				        <div class="col-md-12 text-right">					      
+							<button type="submit" form="editarevento" class="btn bg-gradient-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Guardar">Guardar</button>					      
+							<button type="reset" form="editarevento" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Limpiar">Limpiar formulario</button>
+						</div>                    
+			        </div><!-- /.card-footer -->  				
+				</div><!-- /.card -->
+			
+			</div> 
+         	         
+          </div>    
+        <!-- /.row -->      
+        
+      </div><!-- /.container-->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- FIN CONTENIDO -->
+
+ <!-- Main Footer -->
+  <footer th:replace="layout/layout ::footer" class="main-footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<div th:replace="layout/layout ::scripts"></div>
+<script>		
+		//buscar paciente por un autocompletar	
+		$(function () {			
+			$("#paciente").autocomplete({
+					minLength: 4,
+					source : function(request, response) {
+					$.ajax({
+						url : "/pacientemortalidad/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								//console.log(item);
+								//console.log(data);
+								return {									
+									value : item.pacNumDoc,
+									label : item.pacNombre +" "+ item.pacApellido,
+									nombres : item.pacNombre,
+									apellidos : item.pacApellido,
+									ingreso : item.ingreso,
+									edad : item.edad,
+									genero : item.genero,
+									municipio : item.municipio,
+									regimen : item.regimen,
+									tipoingreso : item.tipoIngreso,
+									diagnostico : item.diagnostico,
+									entidad : item.entidad,
+									fechaingreso : item.fechaIngreso,
+									fechadefuncion : item.fechaDefuncion,
+								};
+							}));
+						},
+					});
+				},
+				select : function(event, ui) {
+					
+					let matched = $(".pacienteinfo p");
+					//console.log(matched.length);
+					//console.log(ui);
+					if(matched.length == 0){
+						let pass = $("#paciente").val();
+						if(pass.length > 0){
+							$("#paciente").val(ui.item.value);
+							$("#nombre").val(ui.item.nombres);
+							$("#apellido").val(ui.item.apellidos);
+							$("#ingreso").val(ui.item.ingreso);
+							$("#edad").val(ui.item.edad);
+							$("#genero").val(ui.item.genero);
+							$("#municipio").val(ui.item.municipio);
+							$("#regimen").val(ui.item.regimen);
+							$("#tipoingreso").val(ui.item.tipoingreso);
+							$("#diagprincipal").val(ui.item.diagnostico);
+							$("#entidad").val(ui.item.entidad);
+							$("#fechaingreso").val(ui.item.fechaingreso);
+							$("#fechadefuncion").val(ui.item.fechadefuncion);				
+							return false;
+						}
+					}				
+				}
+			});
+		});
+		
+		
+		//me permite al seleccionar el anonimo deshabilitar el nombre de usuario y la profesion
+		$("input[name='anonimo']").click(function() {			
+			
+			if ($("#si").is(":checked")) {
+				$(".ocultar").hide('fast');
+			}else{
+					$(".ocultar").show('fast');
+			}			
+		});
+		
+		
+		$('.clasificacion').hide('fast');
+		$('#evento').change(function() {
+			sendAjaxRequestNuevo();
+		});
+		
+		
+		//combos dinamicos de el evento y el subtipo
+		function sendAjaxRequestNuevo() {	
+		let id = $('#evento').val();
+		//console.log(id);
+	    if(id > 0){    	
+	    	$.get( "/cargarCatalogoEvento?id=" + id, function( data ) {        
+	    		$('.clasificacion').show('fast'); 
+	    		$("#clasificacion").empty();    		  		
+	    		
+	    		//se arma el select html con la data ordenada
+	    		Object.entries(data).forEach(function(item, i) {	    			
+	    			let option = "<option value = "+ item[0] + ">" + item[1] +  "</option>";	        		
+	                $("#clasificacion").append(option);
+	    		});
+	        });
+	    }else{
+	    	$('.clasificacion').hide('fast');
+	    }   
+	};	
+		
+		
+</script>
+</body>
+</html>

@@ -39,6 +39,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		//servicio calidad eventos clinicos
 		.antMatchers("/indexeventosclinicos/**").hasAnyRole("ADMIN", "CALIDAD_EVENTOSCLINICOS_APP")
 		.antMatchers("/eventoclinicoregform/**").hasAnyRole("ADMIN", "CALIDAD_EVENTOSCLINICOS_REGISTRO")
+		
 		//servicio estadistica certificado
 		.antMatchers("/indexestadistica/**").hasAnyRole("ADMIN", "INDEX_ESTADISTICA") 
 		.antMatchers("/indexcertificado/**").hasAnyRole("ADMIN", "ESTADISTICA_CERTIFICADO_APP") 
