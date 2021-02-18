@@ -1416,3 +1416,30 @@ Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'ap
 2021-02-18 09:50:27.493  INFO 1096 --- [Thread-24] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-02-18 09:50:27.493  INFO 1096 --- [Thread-24] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
 2021-02-18 09:50:27.494  INFO 1096 --- [Thread-24] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2021-02-18 09:50:27.571  INFO 1096 --- [restartedMain] c.c.s.app.SpringSolutionApplication      : Starting SpringSolutionApplication on desarrollo2 with PID 1096 (D:\Aplicacion-solution\spring-solution\target\classes started by desarrollo2 in D:\Aplicacion-solution\spring-solution)
+2021-02-18 09:50:27.571  INFO 1096 --- [restartedMain] c.c.s.app.SpringSolutionApplication      : No active profile set, falling back to default profiles: default
+2021-02-18 09:50:27.786  INFO 1096 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-02-18 09:50:27.864  INFO 1096 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78ms. Found 34 JPA repository interfaces.
+2021-02-18 09:50:27.981  INFO 1096 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9001 (http)
+2021-02-18 09:50:27.981  INFO 1096 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-02-18 09:50:27.981  INFO 1096 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.34]
+2021-02-18 09:50:28.012  INFO 1096 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2021-02-18 09:50:28.012  INFO 1096 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 439 ms
+2021-02-18 09:50:28.045  INFO 1096 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2021-02-18 09:50:28.048  INFO 1096 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2021-02-18 09:50:28.059  INFO 1096 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-02-18 09:50:28.062  INFO 1096 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-02-18 09:50:28.248  INFO 1096 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-02-18 09:50:28.248  INFO 1096 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-02-18 09:50:28.262  WARN 1096 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-02-18 09:50:28.684  INFO 1096 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-02-18 09:50:28.697  INFO 1096 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2021-02-18 09:50:28.735  INFO 1096 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@216f2c4, org.springframework.security.web.context.SecurityContextPersistenceFilter@110b3ea0, org.springframework.security.web.header.HeaderWriterFilter@3095e839, org.springframework.security.web.csrf.CsrfFilter@21eb1693, org.springframework.security.web.authentication.logout.LogoutFilter@4f69e4e5, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@4106a0df, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1f2b496a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@60be96, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@4e3effc9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@473953ef, org.springframework.security.web.session.SessionManagementFilter@68adf2a8, org.springframework.security.web.access.ExceptionTranslationFilter@10f3dbb0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5bb3cb32]
+2021-02-18 09:50:28.737  INFO 1096 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2021-02-18 09:50:28.849  WARN 1096 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2021-02-18 09:50:28.862  INFO 1096 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9001 (http) with context path ''
+2021-02-18 09:50:28.863  INFO 1096 --- [restartedMain] c.c.s.app.SpringSolutionApplication      : Started SpringSolutionApplication in 1.307 seconds (JVM running for 2680.828)
+2021-02-18 09:50:28.864  INFO 1096 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2021-02-18 09:50:57.475  INFO 1096 --- [http-nio-9001-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-02-18 09:50:57.475  INFO 1096 --- [http-nio-9001-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-02-18 09:50:57.477  INFO 1096 --- [http-nio-9001-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
